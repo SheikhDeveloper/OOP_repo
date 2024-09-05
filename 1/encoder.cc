@@ -3,11 +3,9 @@
 #include <string>
 #include <sstream>
 #include <algorithm>
-#include <regex>
 
 using std::pair;
 using std::string;
-using std::regex;
 
 struct _tencoder {
     char *encode(const char *input) {
