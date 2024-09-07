@@ -3,16 +3,13 @@
 
 #include <string>
 
-using std::pair;
-using std::string;
-
 typedef struct _tencoder {
     char *encode(const char *input);
-    pair<char *, size_t> encode(const char *input, size_t input_size);
-    string encode(string input);
+    std::pair<char *, size_t> encode(const char *input, size_t input_size);
+    std::string encode(std::string input);
     char *decode(const char *input);
-    pair<const char *, size_t> decode(const char *input, size_t input_size);
-    string decode(string input);
+    std::pair<const char *, size_t> decode(const char *input, size_t input_size);
+    std::string decode(std::string input);
 } TEncoder;
 
 #endif
