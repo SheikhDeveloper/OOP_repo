@@ -8,7 +8,7 @@ typedef struct _tencoder {
     std::pair<char *, size_t> encode(const char *input, size_t input_size);
     std::string encode(std::string input);
     char *decode(const char *input);
-    std::pair<const char *, size_t> decode(const char *input, size_t input_size);
+    std::pair<char *, size_t> decode(const char *input, size_t input_size);
     std::string decode(std::string input);
 } TEncoder;
 

@@ -10,7 +10,7 @@ char *TEncoder::encode(const char *input) {
     std::stringstream encoding_stream;
     for (const char *c = input; *c != 0; c++) {
         if (!isalpha(*c) && !isdigit(*c) && *c != '-' && *c != '_') {
-            encoding_stream << "%" << std::hex << (int)*c;
+            encoding_stream << "%" << std::hex << static_cast<int>(*c);
         }
         else encoding_stream << std::dec << *c;
     }
@@ -22,7 +22,7 @@ pair<char *, size_t> TEncoder::encode(const char *input, size_t input_size) {
     std::stringstream encoding_stream;
     for (size_t i= 0; i < input_size; i++) {
         if (!isalpha(input[i]) && !isdigit(input[i]) && input[i] != '-' && input[i] != '_') {
-            encoding_stream << "%" << std::hex << (int)input[i];
+            encoding_stream << "%" << std::hex << static_cast<int>(input[i]);
         }
         else encoding_stream << std::dec << input[i];
     }
@@ -37,7 +37,7 @@ string TEncoder::encode(string input) {
     std::stringstream encoding_stream;
     for (auto c : input) {
         if (!isalpha(c) && !isdigit(c) && c != '-' && c != '_') {
-            encoding_stream << "%" << std::hex << (int)c;
+            encoding_stream << "%" << std::hex << static_cast<int>(c);
         }
         else encoding_stream << std::dec << c;
     }
@@ -55,7 +55,7 @@ char *TEncoder::decode(const char *input) {
             else decoded_input << *c;
         }
         else if (cur_state == 1) {
-            if (('0' <= *c && *c <= '9') || ('A' <= *c && *c <= 'F') || 'A' < *c && *c <= 'F') {
+            if (('0' <= *c && *c <= '9') || ('A' <= *c && *c <= 'F')) {
                 cur_state = 2;
                 hex_string << *c;
             }
@@ -67,7 +67,7 @@ char *TEncoder::decode(const char *input) {
         else if (cur_state == 2) {
             if (('0' <= *c && *c <= '9') || ('A' <= *c && *c <= 'F')) {
                 hex_string << *c;
-                char ascii_char = stoul(hex_string.str(), nullptr, 16);
+                char ascii_char = static_cast<char>(stoul(hex_string.str(), nullptr, 16));
                 decoded_input << ascii_char;
             }
             hex_string.str("");
@@ -78,7 +78,7 @@ char *TEncoder::decode(const char *input) {
     char *result = result_str.data();
     return result;
 }    
-pair<const char *, size_t> TEncoder::decode(const char *input, size_t input_size) {
+pair<char *, size_t> TEncoder::decode(const char *input, size_t input_size) {
     std::stringstream decoded_input;
     size_t cur_state = 0;
     std::stringstream hex_string;
@@ -102,7 +102,7 @@ pair<const char *, size_t> TEncoder::decode(const char *input, size_t input_size
         else if (cur_state == 2) {
             if (('0' <= input[i] && input[i] <= '9') || ('A' <= input[i] && input[i] <= 'F')) {
                 hex_string << input[i];
-                char ascii_char = stoul(hex_string.str(), nullptr, 16);
+                char ascii_char = static_cast<char>(stoul(hex_string.str(), nullptr, 16));
                 decoded_input << ascii_char;
             }
             hex_string.str("");
@@ -111,7 +111,7 @@ pair<const char *, size_t> TEncoder::decode(const char *input, size_t input_size
     }
     string result_str = decoded_input.str();
     size_t result_size = result_str.size();
-    char *result;
+    char *result = nullptr;
     std::copy_if(result_str.begin(), result_str.end(), result,
             [](char x) { return x != 0; } );
     return {result, result_size};
@@ -140,7 +140,7 @@ string TEncoder::decode(string input) {
         else if (cur_state == 2) {
             if (('0' <= c && c <= '9') || ('A' <= c && c <= 'F')) {
                 hex_string << c;
-                char ascii_char = stoul(hex_string.str(), nullptr, 16);
+                char ascii_char = static_cast<char>(stoul(hex_string.str(), nullptr, 16));
                 decoded_input << ascii_char;
             }
             hex_string.str("");
