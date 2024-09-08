@@ -1,5 +1,5 @@
-#ifndef LAB1_ENCODER_HPP
-#define LAB1_ENCODER_HPP
+#ifndef LAB1_LIB_ENCODER_HPP
+#define LAB1_LIB_ENCODER_HPP
 
 #include <string>
 
