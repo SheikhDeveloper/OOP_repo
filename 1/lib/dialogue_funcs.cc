@@ -5,30 +5,86 @@
 
 using std::cout;
 using std::string;
+using std:: cin;
 
 const char *menu_items[5]{"Specify string type[0-const char*/1-std::string]: ",
-                          "Do you want your string to have fixed size?[Y/n]: ",
+                          "Do you want your string to have fixed size?[0-Y/1-n]: ",
                            "Input string size: ",
-                           "Input string: "};
+                           "Input string: ",
+                           "Specify action to perform on string[0-decode/1-encode]: "};
 
-void choose_string_type(TEncoder &encoder) {
+bool choose_action(TEncoder &encoder) {
+    cout << menu_items[4];
+    bool encode;
+    bool eof = valid_input<bool>(encode);
+    if (eof) return 1;
+    eof = choose_string_type(encoder, encode);
+    return eof;
+}
+
+bool choose_string_type(TEncoder &encoder, bool encode) {
     bool type;
     cout << menu_items[0];
-    valid_input<bool>(type); 
-    if (type) dialogue_encode_string(encoder);
-    else dialogue_encode_c_string(encoder);
+    bool eof = valid_input<bool>(type); 
+    if (eof) return 1;
+    if (type) eof = dialogue_action_on_string(encoder, encode);
+    else eof = dialogue_action_on_c_string(encoder);
+    return eof;
 }
 
-void dialogue_encode_string(TEncoder &encoder) {
+bool dialogue_action_on_string(TEncoder &encoder, bool encode) {
     string input;
     cout << menu_items[3];
-    valid_input<string>(input);
-    string encoded_input = encoder.encode(input);
-    cout << encoded_input << std::endl;
+    bool eof = valid_input<string>(input);
+    if (eof) return 1;
+    string output;
+    if (encode) output = encoder.encode(input);
+    else output = encoder.decode(input);
+    cout << output << std::endl;
+    return 0;
 }
 
-void dialogue_encode_c_string(TEncoder &encoder) {
+bool dialogue_action_on_c_string(TEncoder &encoder, bool encode) {
     cout << menu_items[1];
-    char fixed_size;
-    valid_input<char>(fixed_size);
+    bool fixed_size;
+    bool eof = valid_input<bool>(fixed_size);
+    if (eof) return 1;
+    if (fixed_size) eof = dialogue_action_on_char_array(encoder);
+    else {
+        eof = 0;
+        std::string str_input;
+        cout << menu_items[3];
+        std::getline(cin, str_input);
+        const char *input = str_input.c_str();
+        char *output;
+        if (encode) output = encoder.encode(input);
+        else output = encoder.decode(input);
+        cout << output << std::endl;
+    }
+    return eof;
+}
+
+bool dialogue_action_on_char_array(TEncoder &encoder, bool encode) {
+    size_t array_size;
+    cout << menu_items[2];
+    bool eof = valid_input(array_size);
+    if (eof) return 1;
+    char *array = new char[array_size];
+    string input;
+    cout << menu_items[3];
+    std::getline(cin, input);
+    for (size_t i = 0; i < array_size; i++) {
+        array[i] = input[i];
+    }    
+    std::pair<char *, size_t> output;
+    if (encode) output = encoder.encode(array, array_size);
+    else output = encoder.decode(array, array_size);
+    auto encoded_inp = output.first;
+    auto encoded_size = output.second;
+    delete [] array;
+    for (size_t i = 0; i < encoded_size; i++) {
+        cout << encoded_inp[i];
+    }
+    cout << std::endl;
+    return 0;
 }

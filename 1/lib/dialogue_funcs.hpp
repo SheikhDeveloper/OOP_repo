@@ -3,8 +3,10 @@
 
 #include "encoder.hpp"
 
-void choose_string_type(TEncoder &encoder);
-void dialogue_encode_string(TEncoder &encoder);
-void dialogue_encode_c_string(TEncoder &encoder);
+bool choose_action(TEncoder &encoder);
+bool choose_string_type(TEncoder &encoder, bool encode=1);
+bool dialogue_action_on_string(TEncoder &encoder, bool encode=1);
+bool dialogue_action_on_c_string(TEncoder &encoder, bool encode=1);
+bool dialogue_action_on_char_array(TEncoder &encoder, bool encode=1);
 
 #endif
