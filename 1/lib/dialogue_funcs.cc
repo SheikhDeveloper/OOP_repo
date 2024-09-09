@@ -2,6 +2,7 @@
 #include "utils.hpp"
 
 #include <iostream>
+#include <algorithm>
 
 using std::cout;
 using std::string;
@@ -76,9 +77,8 @@ bool dialogue_action_on_char_array(TEncoder &encoder, bool encode) {
     string input;
     cout << menu_items[3];
     std::getline(cin, input);
-    for (size_t i = 0; i < array_size; i++) {
-        array[i] = input[i];
-    }    
+    std::copy_if(input.begin(), input.end(), array, 
+                 [](char x) { return x != 0; });
     std::pair<char *, size_t> output;
     if (encode) output = encoder.encode(array, array_size);
     else output = encoder.decode(array, array_size);
