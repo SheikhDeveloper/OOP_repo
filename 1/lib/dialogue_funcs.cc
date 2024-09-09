@@ -8,7 +8,7 @@ using std::string;
 using std:: cin;
 
 const char *menu_items[5]{"Specify string type[0-const char*/1-std::string]: ",
-                          "Do you want your string to have fixed size?[0-Y/1-n]: ",
+                          "Do you want your string to have fixed size?[0-N/1-Y]: ",
                            "Input string size: ",
                            "Input string: ",
                            "Specify action to perform on string[0-decode/1-encode]: "};
@@ -28,7 +28,7 @@ bool choose_string_type(TEncoder &encoder, bool encode) {
     bool eof = valid_input<bool>(type); 
     if (eof) return 1;
     if (type) eof = dialogue_action_on_string(encoder, encode);
-    else eof = dialogue_action_on_c_string(encoder);
+    else eof = dialogue_action_on_c_string(encoder, encode);
     return eof;
 }
 
@@ -48,8 +48,9 @@ bool dialogue_action_on_c_string(TEncoder &encoder, bool encode) {
     cout << menu_items[1];
     bool fixed_size;
     bool eof = valid_input<bool>(fixed_size);
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     if (eof) return 1;
-    if (fixed_size) eof = dialogue_action_on_char_array(encoder);
+    if (fixed_size) eof = dialogue_action_on_char_array(encoder, encode);
     else {
         eof = 0;
         std::string str_input;
@@ -60,6 +61,7 @@ bool dialogue_action_on_c_string(TEncoder &encoder, bool encode) {
         if (encode) output = encoder.encode(input);
         else output = encoder.decode(input);
         cout << output << std::endl;
+        delete [] output;
     }
     return eof;
 }
@@ -69,6 +71,7 @@ bool dialogue_action_on_char_array(TEncoder &encoder, bool encode) {
     cout << menu_items[2];
     bool eof = valid_input(array_size);
     if (eof) return 1;
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     char *array = new char[array_size];
     string input;
     cout << menu_items[3];
@@ -86,5 +89,6 @@ bool dialogue_action_on_char_array(TEncoder &encoder, bool encode) {
         cout << encoded_inp[i];
     }
     cout << std::endl;
+    delete [] encoded_inp;
     return 0;
 }
