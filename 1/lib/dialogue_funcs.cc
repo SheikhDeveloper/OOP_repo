@@ -35,8 +35,8 @@ bool choose_string_type(TEncoder &encoder, bool encode) {
 bool dialogue_action_on_string(TEncoder &encoder, bool encode) {
     string input;
     cout << menu_items[3];
-    bool eof = valid_input<string>(input);
-    if (eof) return 1;
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    std::getline(cin, input);
     string output;
     if (encode) output = encoder.encode(input);
     else output = encoder.decode(input);
