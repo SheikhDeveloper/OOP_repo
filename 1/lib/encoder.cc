@@ -72,6 +72,7 @@ char *TEncoder::decode(const char *input) {
                 char ascii_char = static_cast<char>(stoul(hex_string.str(), nullptr, 16));
                 decoded_input << ascii_char;
             }
+            else decoded_input << *c;
             hex_string.str("");
             cur_state = 0;
         }
@@ -109,6 +110,7 @@ pair<char *, size_t> TEncoder::decode(const char *input, size_t input_size) {
                 char ascii_char = static_cast<char>(stoul(hex_string.str(), nullptr, 16));
                 decoded_input << ascii_char;
             }
+            else decoded_input << input[i];
             hex_string.str("");
             cur_state = 0;
         }
@@ -147,6 +149,7 @@ string TEncoder::decode(string input) {
                 char ascii_char = static_cast<char>(stoul(hex_string.str(), nullptr, 16));
                 decoded_input << ascii_char;
             }
+            else decoded_input << c;
             hex_string.str("");
             cur_state = 0;
         }
