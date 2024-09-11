@@ -54,6 +54,13 @@ char *TEncoder::decode(const char *input) {
             if (*c == '%') {
                 cur_state = 1;
             }
+            else if ((*c < 'A' && *c != '-') || (*c > 'Z' && *c < 'a' && *c != '_') || (*c > 'z')) { 
+                try { throw std::runtime_error("Invalid string passed to decoder"); } 
+                catch (const std::runtime_error& e) {
+                    decoded_input.str("");
+                    break;
+                }
+            }
             else decoded_input << *c;
         }
         else if (cur_state == 1) {
@@ -64,6 +71,11 @@ char *TEncoder::decode(const char *input) {
             else {
                 cur_state = 0;
                 hex_string.str("");
+                try { throw std::runtime_error("Invalid string passed to decoder"); }
+                catch (const std::runtime_error& e) {
+                    decoded_input.str("");
+                    break;
+                }
             }
         }
         else if (cur_state == 2) {
@@ -72,7 +84,13 @@ char *TEncoder::decode(const char *input) {
                 char ascii_char = static_cast<char>(stoul(hex_string.str(), nullptr, 16));
                 decoded_input << ascii_char;
             }
-            else decoded_input << *c;
+            else {
+                try {throw std::runtime_error("Invalid string passed to decoder"); }
+                catch (const std::runtime_error& e) {
+                    decoded_input.str("");
+                    break;
+                }
+            }
             hex_string.str("");
             cur_state = 0;
         }
@@ -92,6 +110,13 @@ pair<char *, size_t> TEncoder::decode(const char *input, size_t input_size) {
             if (input[i] == '%') {
                 cur_state = 1;
             }
+            else if ((input[i] < 'A' && input[i] != '-') || (input[i] > 'Z' && input[i] < 'a' && input[i] != '_') || (input[i] > 'z')) { 
+                try { throw std::runtime_error("Invalid string passed to decoder"); }
+                catch (const std::runtime_error& e) {
+                    decoded_input.str("");
+                    break;
+                }
+            }
             else decoded_input << input[i];
         }
         else if (cur_state == 1) {
@@ -102,6 +127,11 @@ pair<char *, size_t> TEncoder::decode(const char *input, size_t input_size) {
             else {
                 cur_state = 0;
                 hex_string.str("");
+                try { throw std::runtime_error("Invalid string passed to decoder"); }
+                catch (const std::runtime_error& e) {
+                    decoded_input.str("");
+                    break;
+                }
             }
         }
         else if (cur_state == 2) {
@@ -110,7 +140,13 @@ pair<char *, size_t> TEncoder::decode(const char *input, size_t input_size) {
                 char ascii_char = static_cast<char>(stoul(hex_string.str(), nullptr, 16));
                 decoded_input << ascii_char;
             }
-            else decoded_input << input[i];
+            else {
+                try { throw std::runtime_error("Invalid string passed to decoder"); }
+                catch (const std::runtime_error& e) {
+                    decoded_input.str("");
+                    break;
+                }
+            }
             hex_string.str("");
             cur_state = 0;
         }
@@ -131,6 +167,13 @@ string TEncoder::decode(string input) {
             if (c == '%') {
                 cur_state = 1;
             }
+            else if ((c < 'A' && c != '-') || (c > 'Z' && c < 'a' && c != '_') || (c > 'z')) {
+                try { throw std::runtime_error("Invalid string passed to decoder"); }
+                catch (const std::runtime_error& e) {
+                    decoded_input.str("");
+                    break;
+                }
+            }
             else decoded_input << c;
         }
         else if (cur_state == 1) {
@@ -141,6 +184,11 @@ string TEncoder::decode(string input) {
             else {
                 cur_state = 0;
                 hex_string.str("");
+                try { throw std::runtime_error("Invalid string passed to decoder"); }
+                catch (const std::runtime_error& e) {
+                    decoded_input.str("");
+                    break;
+                }
             }
         }
         else if (cur_state == 2) {
@@ -149,7 +197,13 @@ string TEncoder::decode(string input) {
                 char ascii_char = static_cast<char>(stoul(hex_string.str(), nullptr, 16));
                 decoded_input << ascii_char;
             }
-            else decoded_input << c;
+            else {
+                try { throw std::runtime_error("Invalid string passed to decoder"); }
+                catch (const std::runtime_error& e) {
+                    decoded_input.str("");
+                    break;
+                }
+            }
             hex_string.str("");
             cur_state = 0;
         }

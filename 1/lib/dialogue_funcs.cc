@@ -3,10 +3,12 @@
 
 #include <iostream>
 #include <algorithm>
+#include <cstring>
 
 using std::cout;
 using std::string;
 using std:: cin;
+using std::cerr;
 
 const char *menu_items[5]{"Specify string type[0-const char*/1-std::string]: ",
                           "Do you want your string to have fixed size?[0-N/1-Y]: ",
@@ -41,7 +43,10 @@ bool dialogue_action_on_string(TEncoder &encoder, bool encode) {
     string output;
     if (encode) output = encoder.encode(input);
     else output = encoder.decode(input);
-    cout << output << std::endl;
+    if (output.size() > 0) {
+        cout << output << std::endl;
+    }
+    else cerr << "Error: Invalid string passed to decoder" << std::endl;
     return 0;
 }
 
@@ -61,7 +66,10 @@ bool dialogue_action_on_c_string(TEncoder &encoder, bool encode) {
         char *output;
         if (encode) output = encoder.encode(input);
         else output = encoder.decode(input);
-        cout << output << std::endl;
+        if (strlen(output) > 0) {
+            cout << output << std::endl;
+        }
+        else cerr << "Error: Invalid string passed to decoder" << std::endl;
         delete [] output;
     }
     return eof;
@@ -82,13 +90,16 @@ bool dialogue_action_on_char_array(TEncoder &encoder, bool encode) {
     std::pair<char *, size_t> output;
     if (encode) output = encoder.encode(array, array_size);
     else output = encoder.decode(array, array_size);
-    auto encoded_inp = output.first;
-    auto encoded_size = output.second;
+    auto resulting_inp = output.first;
+    auto resulting_size = output.second;
     delete [] array;
-    for (size_t i = 0; i < encoded_size; i++) {
-        cout << encoded_inp[i];
+    if (resulting_size > 0) {
+        for (size_t i = 0; i < resulting_size; i++) {
+            cout << resulting_inp[i];
+        }
     }
+    else cerr << "Error: Invalid string passed to decoder" << std::endl;
     cout << std::endl;
-    delete [] encoded_inp;
+    delete [] resulting_inp;
     return 0;
 }
