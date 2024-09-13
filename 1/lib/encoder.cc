@@ -20,6 +20,7 @@ char *TEncoder::encode(const char *input) {
     std::copy(encoded_inp_c_str, encoded_inp_c_str + encoded_inp_str.size() + 1, encoded_input);
     return encoded_input;
 }    
+
 pair<char *, size_t> TEncoder::encode(const char *input, size_t input_size) {
     std::stringstream encoding_stream;
     for (size_t i= 0; i < input_size; i++) {
@@ -35,6 +36,7 @@ pair<char *, size_t> TEncoder::encode(const char *input, size_t input_size) {
                  [](char x) { return x != 0; });
     return {encoded_input, encoded_inp_size};
 }
+
 string TEncoder::encode(string input) {
     std::stringstream encoding_stream;
     for (auto c : input) {
@@ -45,6 +47,7 @@ string TEncoder::encode(string input) {
     }
     return encoding_stream.str();
 }
+
 char *TEncoder::decode(const char *input) {
     std::stringstream decoded_input;
     size_t cur_state = 0;
@@ -101,6 +104,7 @@ char *TEncoder::decode(const char *input) {
     std::copy(result_c_str, result_c_str + result_str.size() + 1, result);
     return result;
 }    
+
 pair<char *, size_t> TEncoder::decode(const char *input, size_t input_size) {
     std::stringstream decoded_input;
     size_t cur_state = 0;
@@ -158,6 +162,7 @@ pair<char *, size_t> TEncoder::decode(const char *input, size_t input_size) {
             [](char x) { return x != 0; } );
     return {result, result_size};
 }
+
 string TEncoder::decode(string input) {
     std::stringstream decoded_input;
     size_t cur_state = 0;
