@@ -10,7 +10,7 @@ char *TEncoder::encode(const char *input) {
     std::stringstream encoding_stream;
     for (const char *c = input; *c != 0; c++) {
         if (!isalpha(*c) && !isdigit(*c) && *c != '-' && *c != '_') {
-            encoding_stream << "%" << std::hex << static_cast<int>(*c);
+            encoding_stream << "%" << std::uppercase << std::hex << static_cast<int>(*c);
         }
         else encoding_stream << std::dec << *c;
     }
@@ -25,7 +25,7 @@ pair<char *, size_t> TEncoder::encode(const char *input, size_t input_size) {
     std::stringstream encoding_stream;
     for (size_t i= 0; i < input_size; i++) {
         if (!isalpha(input[i]) && !isdigit(input[i]) && input[i] != '-' && input[i] != '_') {
-            encoding_stream << "%" << std::hex << static_cast<int>(input[i]);
+            encoding_stream << "%" << std::uppercase << std::hex << static_cast<int>(input[i]);
         }
         else encoding_stream << std::dec << input[i];
     }
@@ -41,7 +41,7 @@ string TEncoder::encode(string input) {
     std::stringstream encoding_stream;
     for (auto c : input) {
         if (!isalpha(c) && !isdigit(c) && c != '-' && c != '_') {
-            encoding_stream << "%" << std::hex << static_cast<int>(c);
+            encoding_stream << "%" << std::uppercase << std::hex << static_cast<int>(c);
         }
         else encoding_stream << std::dec << c;
     }
