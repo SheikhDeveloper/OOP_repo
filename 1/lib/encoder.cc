@@ -159,7 +159,7 @@ pair<char *, size_t> TEncoder::decode(const char *input, size_t input_size) {
     size_t result_size = result_str.size();
     char *result = new char[result_size];
     std::copy_if(result_str.begin(), result_str.end(), result,
-            [](char x) { return x != 0; } );
+            [result_size](char x) { return (x != 0 && result_size > 0); } );
     return {result, result_size};
 }
 

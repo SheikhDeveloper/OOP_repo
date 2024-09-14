@@ -14,8 +14,11 @@ TEST(TEncoderTest, EncodeCharPtrWithSize) {
     const char* input = "Hello, World!";
     size_t inputSize = strlen(input);
     auto encoded = encoder.encode(input, inputSize);
-    EXPECT_STREQ(encoded.first, "Hello%2C%20World%21");
-    EXPECT_EQ(encoded.second, strlen("Hello%2C%20World%21"));
+    const char* test_str = "Hello%2C%20World%21";
+    EXPECT_EQ(encoded.second, strlen(test_str));
+    for (size_t i = 0; i < encoded.second; ++i) {
+      EXPECT_EQ(encoded.first[i], test_str[i]);
+    }
     delete[] encoded.first;
 }
 
@@ -39,8 +42,11 @@ TEST(TEncoderTest, DecodeCharPtrWithSize) {
     const char* input = "Hello%2C%20World%21";
     size_t inputSize = strlen(input);
     auto decoded = encoder.decode(input, inputSize);
-    EXPECT_STREQ(decoded.first, "Hello, World!");
-    EXPECT_EQ(decoded.second, strlen("Hello, World!"));
+    const char *test_str = "Hello, World!";
+    EXPECT_EQ(decoded.second, strlen(test_str));
+    for (size_t i = 0; i < decoded.second; ++i) {
+      EXPECT_EQ(decoded.first[i], test_str[i]);
+    }
     delete[] decoded.first;
 }
 
@@ -67,8 +73,10 @@ TEST(TEncoderTest, EncodeDecodeCharPtrWithSize) {
     size_t inputSize = strlen(input);
     auto encoded = encoder.encode(input, inputSize);
     auto decoded = encoder.decode(encoded.first, encoded.second);
-    EXPECT_STREQ(decoded.first, input);
     EXPECT_EQ(decoded.second, inputSize);
+    for (size_t i = 0; i < decoded.second; ++i) {
+      EXPECT_EQ(decoded.first[i], input[i]);
+    } 
     delete[] encoded.first;
     delete[] decoded.first;
 }
