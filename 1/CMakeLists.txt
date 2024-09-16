@@ -31,6 +31,4 @@ add_library(dialogue_funcs lib/dialogue_funcs.hpp lib/dialogue_funcs.cc)
 target_link_libraries(dialogue_funcs encoder utils)
 target_link_libraries(lab1 dialogue_funcs)
 
-enable_testing()
-
 add_subdirectory(test)
