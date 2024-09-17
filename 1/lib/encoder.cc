@@ -57,7 +57,7 @@ string TEncoder::decode(string input) {
             if (c == '%') {
                 cur_state = 1;
             }
-            else if ((c < 'A' && c != '-' && (c > '9' || c < '0')) || (c > 'Z' && c < 'a' && c != '_') || (c > 'z')) {
+            else if (!isalnum(c) && c != '-' && c != '_') {
                 try { throw std::runtime_error("Invalid string passed to decoder"); }
                 catch (const std::runtime_error& e) {
                     decoded_input.str("");
@@ -67,7 +67,7 @@ string TEncoder::decode(string input) {
             else decoded_input << c;
         }
         else if (cur_state == 1) {
-            if (('0' <= c && c <= '9') || ('A' <= c && c <= 'F')) {
+            if (isdigit(c) || ('A' <= c && c <= 'F')) {
                 cur_state = 2;
                 hex_string << c;
             }
@@ -82,7 +82,7 @@ string TEncoder::decode(string input) {
             }
         }
         else if (cur_state == 2) {
-            if (('0' <= c && c <= '9') || ('A' <= c && c <= 'F')) {
+            if (isdigit(c) || ('A' <= c && c <= 'F')) {
                 hex_string << c;
                 char ascii_char = static_cast<char>(stoul(hex_string.str(), nullptr, 16));
                 decoded_input << ascii_char;
