@@ -21,7 +21,7 @@ typedef struct _tencoder {
  * @param input The null-terminated C-style string to be encoded.
  * @return A new C-style string containing the encoded result.
  */
-    char *encode(const char *input);
+    const char *encode(const char *input);
 
 /**
  * @brief Encodes a C-style string of a specified length using a url encoding scheme.
@@ -36,7 +36,7 @@ typedef struct _tencoder {
  * @param input_size The length of the input string.
  * @return A pair containing the encoded result as a C-style string and its length.
  */
-    std::pair<char *, size_t> encode(const char *input, size_t input_size);
+    std::pair<const char *, size_t> encode(const char *input, size_t input_size);
 
 /**
  * @brief Encodes a C++ string using a url encoding scheme.
@@ -60,7 +60,7 @@ typedef struct _tencoder {
  * @param input The null-terminated C-style string to be decoded.
  * @return A new C-style string containing the decoded result.
  */
-    char *decode(const char *input);
+    const char *decode(const char *input);
 
 /**
  * @brief Decodes a C-style string of a specified length that was previously encoded 
@@ -73,7 +73,7 @@ typedef struct _tencoder {
  * @param input_size The length of the input string.
  * @return A pair containing the decoded result as a C-style string and its length.
  */
-    std::pair<char *, size_t> decode(const char *input, size_t input_size);
+    std::pair<const char *, size_t> decode(const char *input, size_t input_size);
 
 /**
  * @brief Decodes a C++ string that was previously encoded using the url encoding scheme.

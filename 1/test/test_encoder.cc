@@ -4,7 +4,7 @@
 TEST(TEncoderTest, EncodeCharPtr) {
     TEncoder encoder;
     const char* input = "Hello, World!";
-    char* encoded = encoder.encode(input);
+    auto encoded = encoder.encode(input);
     EXPECT_STREQ(encoded, "Hello%2C%20World%21");
     delete[] encoded;
 }
@@ -25,14 +25,14 @@ TEST(TEncoderTest, EncodeCharPtrWithSize) {
 TEST(TEncoderTest, EncodeStdString) {
     TEncoder encoder;
     std::string input = "Hello, World!";
-    std::string encoded = encoder.encode(input);
+    auto encoded = encoder.encode(input);
     EXPECT_EQ(encoded, "Hello%2C%20World%21");
 }
 
 TEST(TEncoderTest, DecodeCharPtr) {
     TEncoder encoder;
     const char* input = "Hello%2C%20World%21";
-    char* decoded = encoder.decode(input);
+    auto decoded = encoder.decode(input);
     EXPECT_STREQ(decoded, "Hello, World!");
     delete[] decoded;
 }
@@ -53,15 +53,15 @@ TEST(TEncoderTest, DecodeCharPtrWithSize) {
 TEST(TEncoderTest, DecodeStdString) {
     TEncoder encoder;
     std::string input = "Hello%2C%20World%21";
-    std::string decoded = encoder.decode(input);
+    auto decoded = encoder.decode(input);
     EXPECT_EQ(decoded, "Hello, World!");
 }
 
 TEST(TEncoderTest, EncodeDecodeCharPtr) {
     TEncoder encoder;
     const char* input = "Hello, World!";
-    char* encoded = encoder.encode(input);
-    char* decoded = encoder.decode(encoded);
+    auto encoded = encoder.encode(input);
+    auto decoded = encoder.decode(encoded);
     EXPECT_STREQ(decoded, input);
     delete[] encoded;
     delete[] decoded;
@@ -84,15 +84,15 @@ TEST(TEncoderTest, EncodeDecodeCharPtrWithSize) {
 TEST(TEncoderTest, EncodeDecodeStdString) {
     TEncoder encoder;
     std::string input = "Hello, World!";
-    std::string encoded = encoder.encode(input);
-    std::string decoded = encoder.decode(encoded);
+    auto encoded = encoder.encode(input);
+    auto decoded = encoder.decode(encoded);
     EXPECT_EQ(decoded, input);
 }
 
 TEST(TEncoderTest, InvalidDecodeCharPtr) {
     TEncoder encoder;
     const char* input = "Invalid%Input";
-    char* decoded = encoder.decode(input);
+    auto decoded = encoder.decode(input);
     EXPECT_STREQ(decoded, "");
     delete[] decoded;
 }
@@ -109,7 +109,7 @@ TEST(TEncoderTest, InvalidDecodeCharPtrWithSize) {
 TEST(TEncoderTest, InvalidDecodeStdString) {
     TEncoder encoder;
     std::string input = "Invalid%Input";
-    std::string decoded = encoder.decode(input);
+    auto decoded = encoder.decode(input);
     EXPECT_EQ(decoded, "");
 }
 
