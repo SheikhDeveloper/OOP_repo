@@ -9,11 +9,10 @@ private:
     std::unordered_map<std::wstring, TCocktail> card;
 
     void addCocktail(const TCocktail &cocktail);
-    TCocktail& findCocktail(const std::wstring &name) const;
-    void printCard() const;
+    const TCocktail& findCocktail(const std::wstring &name) const;
 public:
     TCocktailCard() = default;
-    TCocktailCard(const TCocktailCard *cocktails, size_t cocktails_count);
+    TCocktailCard(const TCocktail *cocktails, size_t cocktails_count);
     TCocktailCard(const TCocktailCard &other) = default;
     TCocktailCard(TCocktailCard &&other) = default;
     ~TCocktailCard() = default;
@@ -24,12 +23,13 @@ public:
 
     void removeCocktail(const std::wstring &name);
 
-    TCocktail& getCocktail(const double &alcohol_percentage, const double &volume=500.) const;
+    const TCocktail getCocktail(const std::pair<const double, const double> alc_percentage_range, const double &volume=500.) const;
     const double getVolumeByQuartile(const std::pair<const double, const double> &quartile) const;
     void renameCocktail(const std::wstring &old_name, const std::wstring &new_name);
+    void printCard() const;
 
     void operator+=(const TCocktail &cocktail);
-    TCocktail& operator[](const std::wstring &name);
+    const TCocktail& operator[](const std::wstring &name);
     std::wostream& operator<<(std::wostream& out) const;
     std::wistream& operator>>(std::wistream& in);
     TCocktailCard& operator=(const TCocktailCard &other) = default;
