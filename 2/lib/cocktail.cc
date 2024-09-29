@@ -46,7 +46,8 @@ void TCocktail::setVolume(double vol) {
 }
 
 TCocktail TCocktail::operator+(const TCocktail &cocktail2) const {
-    return TCocktail(name + L" and " + cocktail2.name, alcohol_percentage + cocktail2.alcohol_percentage, volume + cocktail2.volume);
+    const double new_alc_percentage = (alcohol_percentage * volume + cocktail2.alcohol_percentage * cocktail2.volume) / (volume + cocktail2.volume);
+    return TCocktail(name + L" and " + cocktail2.name, new_alc_percentage, volume + cocktail2.volume);
 }
 
 void TCocktail::operator>>(TCocktail &cocktail2) {
