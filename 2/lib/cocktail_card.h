@@ -30,8 +30,8 @@ public:
 
     void operator+=(const TCocktail &cocktail);
     const TCocktail& operator[](const std::wstring &name);
-    std::wostream& operator<<(std::wostream& out) const;
-    std::wistream& operator>>(std::wistream& in);
+    friend std::wostream& operator<<(std::wostream& out, const TCocktailCard& card);
+    friend std::wistream& operator>>(std::wistream& in, TCocktailCard& card);
     TCocktailCard& operator=(const TCocktailCard &other) = default;
 };
 
