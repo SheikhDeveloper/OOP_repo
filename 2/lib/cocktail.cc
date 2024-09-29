@@ -1,6 +1,7 @@
 #include "cocktail.h"
 
 #include <string>
+#include <iostream>
 
 TCocktail::TCocktail() {
     name = L"";
@@ -48,3 +49,27 @@ TCocktail TCocktail::operator+(const TCocktail &cocktail2) const {
     return TCocktail(name + L" and " + cocktail2.name, alcohol_percentage + cocktail2.alcohol_percentage, volume + cocktail2.volume);
 }
 
+void TCocktail::operator>>(TCocktail &cocktail2) {
+    if (cocktail2.volume <= 100.) {
+        volume += cocktail2.volume;
+        cocktail2.setVolume(0.);
+    }
+    else {
+        cocktail2.setVolume(cocktail2.volume - 100.);
+        volume += 100.;
+    }
+}
+
+TCocktail TCocktail::operator*(const double &multiplier) const {
+    return TCocktail(name, alcohol_percentage, volume * multiplier);
+}
+
+std::wostream &operator<<(std::wostream &out, const TCocktail &cocktail) {
+    out << cocktail.name << L" - " << cocktail.alcohol_percentage << L"%" << L" - " << cocktail.volume << L"ml";
+    return out;
+}
+
+std::wistream &operator>>(std::wistream &in, TCocktail &cocktail) {
+    in >> cocktail.name >> cocktail.alcohol_percentage >> cocktail.volume;
+    return in;
+}
