@@ -21,7 +21,6 @@ void TCocktailCard::addCocktail(const TCocktail &cocktail) {
     card[cocktail.getName()] = cocktail;
 }
 
-
 bool TCocktailCard::isEmpty() const {
     return card.size() == 0;
 }

@@ -102,6 +102,14 @@ public:
     void printCard(std::wostream &out);
 
     /**
+     * Finds a cocktail in the collection by name.
+     *
+     * @param name Name of the cocktail to find
+     * @return Found cocktail
+     */
+    const TCocktail& findCocktail(const std::wstring &name);
+
+    /**
      * Adds a cocktail to the collection.
      *
      * @param cocktail Cocktail to add
@@ -163,13 +171,6 @@ private:
      */
     void addCocktail(const TCocktail &cocktail);
 
-    /**
-     * Finds a cocktail in the collection by name.
-     *
-     * @param name Name of the cocktail to find
-     * @return Found cocktail
-     */
-    const TCocktail& findCocktail(const std::wstring &name);
 };
 
 #endif //LAB2_LIB_COCKTAIL_CARD_H
