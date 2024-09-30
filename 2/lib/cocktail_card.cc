@@ -21,16 +21,17 @@ void TCocktailCard::addCocktail(const TCocktail &cocktail) {
     card[cocktail.getName()] = cocktail;
 }
 
-bool TCocktailCard::isFull() const {
-    return card.size() == 37;
-}
-
-bool TCocktailCard::isPartiallyFull() const {
-    return card.size() > 0 && card.size() < 37;
-}
 
 bool TCocktailCard::isEmpty() const {
     return card.size() == 0;
+}
+
+size_t TCocktailCard::size() const {
+    return card.size();
+}
+
+size_t TCocktailCard::capacity() const {
+    return card.capacity();
 }
 
 void TCocktailCard::removeCocktail(const std::wstring &name) {

@@ -47,7 +47,19 @@ public:
      * @return True if the collection is empty, false otherwise
      */
     bool isEmpty() const;
+
+    /**
+     * Gets the size of the collection.
+     *
+     * @return Size of the collection
+     */
     size_t size() const;
+
+    /**
+     * Gets the capacity of the collection.
+     *
+     * @return Capacity of the collection
+     */
     size_t capacity() const;
 
     /**
