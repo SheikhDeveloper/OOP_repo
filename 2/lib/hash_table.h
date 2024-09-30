@@ -52,9 +52,10 @@ public:
         Node *ptr = nullptr;
     };
 
-        virtual T2 &operator[](const T1 &key) {
+    virtual T2 &operator[](const T1 &key) {
         return (*find(key)).value;
     }
+
     void operator=(THashTable &other) {
         table = new Node[other.capacity_];
         capacity_ = other.capacity_;
@@ -62,7 +63,16 @@ public:
         for (auto &i : other) {
             insert(i.key, i.value);            
         }        
-    };
+    }
+
+    void operator=(const THashTable &other) {
+        table = new Node[other.capacity_];
+        capacity_ = other.capacity_;
+        size_ = other.size_;
+        for (auto &i : other) {
+            insert(i.key, i.value);            
+        }        
+    }
     
     THashTable() = default;
     THashTable(size_t capacity) {
