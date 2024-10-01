@@ -45,14 +45,37 @@ TEST(THashTableTest, Insert) {
     EXPECT_EQ((*(table.find(2))).value, 2);
 }
 
-TEST(THashTableTest, Remove) {
-    THashTable<int, int> table(10);
-    table.insert(1, 1);
-    table.insert(2, 2);
-    table.remove(1);
-    EXPECT_EQ(table.size(), 1);
-    EXPECT_EQ(table.capacity(), 10);
-    EXPECT_EQ((*(table.find(2))).value, 2);
+TEST(HashTableTest, RemoveExistingKey_FirstElement) {
+    THashTable<int, int> hashTable(10);
+    hashTable.insert(1, 1);
+    hashTable.insert(2, 2);
+    hashTable.insert(3, 3);
+
+    hashTable.remove(1);
+
+    EXPECT_EQ(hashTable.size(), 2);
+    EXPECT_THROW(hashTable[1], std::out_of_range);
+}
+
+TEST(HashTableTest, RemoveExistingKey_NotFirstElement) {
+    THashTable<int, int> hashTable(10);
+    hashTable.insert(1, 1);
+    hashTable.insert(2, 2);
+    hashTable.insert(3, 3);
+
+    hashTable.remove(2);
+
+    EXPECT_EQ(hashTable.size(), 2);
+    EXPECT_THROW(hashTable[2], std::out_of_range);
+}
+
+TEST(HashTableTest, RemoveNonExistingKey) {
+    THashTable<int, int> hashTable(10);
+    hashTable.insert(1, 1);
+    hashTable.insert(2, 2);
+
+    EXPECT_THROW(hashTable.remove(3), std::out_of_range);
+    EXPECT_EQ(hashTable.size(), 2);
 }
 
 TEST(THashTableTest, Contains) {
