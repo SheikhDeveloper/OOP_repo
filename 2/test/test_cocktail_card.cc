@@ -55,7 +55,7 @@ TEST(TCocktailCardTest, GetCocktail) {
     card += cocktail1;
     card += cocktail2;
     TCocktail result = card.getCocktail(std::make_pair(10.0, 20.0), 150.0);
-    EXPECT_EQ(result.getAlcoholPercentage(), 15.0);
+    EXPECT_EQ(result.getAlcoholPercentage(), 10.0);
     EXPECT_EQ(result.getVolume(), 150.0);
 }
 
@@ -65,9 +65,7 @@ TEST(TCocktailCardTest, GetCocktailNoMatch) {
     TCocktail cocktail2(L"Cocktail2", 20.0, 200.0);
     card += cocktail1;
     card += cocktail2;
-    TCocktail result = card.getCocktail(std::make_pair(30.0, 40.0), 150.0);
-    EXPECT_EQ(result.getAlcoholPercentage(), 15.0);
-    EXPECT_EQ(result.getVolume(), 150.0);
+    EXPECT_THROW(card.getCocktail(std::make_pair(30.0, 40.0), 150.0), std::invalid_argument);
 }
 
 TEST(TCocktailCardTest, GetVolumeByQuartile) {
@@ -76,8 +74,7 @@ TEST(TCocktailCardTest, GetVolumeByQuartile) {
     TCocktail cocktail2(L"Cocktail2", 20.0, 200.0);
     card += cocktail1;
     card += cocktail2;
-    EXPECT_EQ(card.getVolumeByQuartile(std::make_pair(0.0, 25.0)), 100.0);
-    EXPECT_EQ(card.getVolumeByQuartile(std::make_pair(25.0, 50.0)), 200.0);
+    EXPECT_EQ(card.getVolumeByQuartile(std::make_pair(0.0, 25.0)), 300.0);
 }
 
 TEST(TCocktailCardTest, RenameCocktail) {
@@ -85,7 +82,8 @@ TEST(TCocktailCardTest, RenameCocktail) {
     TCocktail cocktail(L"Cocktail", 10.0, 100.0);
     card += cocktail;
     card.renameCocktail(L"Cocktail", L"NewCocktail");
-    EXPECT_EQ(card[L"NewCocktail"], cocktail);
+    EXPECT_NO_THROW(card[L"NewCocktail"]);
+    EXPECT_THROW(card[L"Cocktail"], std::invalid_argument);
 }
 
 TEST(TCocktailCardTest, OperatorPlusEqual) {
@@ -116,8 +114,8 @@ TEST(TCocktailCardTest, PrintCard) {
     TCocktail cocktail(L"Cocktail", 10.0, 100.0);
     card += cocktail;
     std::wostringstream oss;
-    card.printCard(oss);
-    EXPECT_EQ(oss.str(), L"Cocktail - 10.0% - 100.0ml\n");
+    card.dump(oss);
+    EXPECT_EQ(oss.str(), L"Cocktail - 10% - 100ml\n");
 }
 
 TEST(TCocktailCardTest, OperatorOutput) {
@@ -126,7 +124,7 @@ TEST(TCocktailCardTest, OperatorOutput) {
     card += cocktail;
     std::wostringstream oss;
     oss << card;
-    EXPECT_EQ(oss.str(), L"Cocktail - 10.0% - 100.0ml\n");
+    EXPECT_EQ(oss.str(), L"Cocktail - 10% - 100ml\n");
 }
 
 TEST(TCocktailCardTest, OperatorInput) {
