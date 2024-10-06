@@ -54,7 +54,7 @@ public:
          * @param next Next node with the same hash index
          * @param is_last Whether the node is the last node
          */
-        Node(const T1 &key, const T2 &value, bool is_taken, size_t prev, size_t next, bool is_last) : key(key), value(value), is_taken_(is_taken), prev_(prev), next_(next), is_last_(is_last) {}
+        Node(const T1 &key, const T2 &value, bool is_taken, bool is_last, size_t prev, size_t next) : key(key), value(value), is_taken_(is_taken), is_last_(is_last), prev_(prev), next_(next) {}
 
         bool isTaken() const {
             return is_taken_;
@@ -153,6 +153,10 @@ public:
          * @return Reference to the iterator
          */
         virtual Iterator &operator++() {
+            if ((*ptr).isLast()) {
+                ++ptr;
+                return *this;
+            }
             ++ptr;
             while (!(*ptr).isTaken() && !(*ptr).isLast()) {
                 ++ptr;
@@ -199,13 +203,13 @@ public:
      * @param other Hash table to assign from
      */
     void operator=(THashTable &other) {
-        try { table = new Node[other.capacity_]; }
+        try { table_ = new Node[other.capacity_]; }
         catch (...) {
             other.~THashTable();
             throw std::bad_alloc();
         }
         capacity_ = other.capacity_;
-        size_ = other.size_;
+        size_ = 0;
         for (auto &i : other) {
             insert(i.key, i.value);            
         }        
@@ -217,14 +221,15 @@ public:
      * @param other Hash table to assign from
      */
     void operator=(const THashTable &other) {
-        try { table = new Node[other.capacity_]; }
+        try { table_ = new Node[other.capacity_]; }
         catch (...) {
             other.~THashTable();
             throw std::bad_alloc();
         }
         capacity_ = other.capacity_;
-        size_ = other.size_;
-        for (auto &i : other) {
+        size_ = 0;
+        auto other_not_const = const_cast<THashTable &>(other);
+        for (auto &i : other_not_const) {
             insert(i.key, i.value);            
         }        
     }
@@ -233,17 +238,18 @@ public:
      * Default constructor.
      */
     THashTable() = default;
+
     /**
      * Constructor with a capacity.
      *
      * @param capacity Capacity of the hash table
      */
     THashTable(size_t capacity) {
-        table = new Node[capacity];
+        table_ = new Node[capacity];
         capacity_ = capacity;
         for (size_t i = 0; i < capacity_; ++i) {
-            table[i].setNext(i);
-            table[i].setPrev(i);
+            table_[i].setNext(i);
+            table_[i].setPrev(i);
         }
     }
     /**
@@ -252,7 +258,7 @@ public:
      * @param other Hash table to copy from
      */
     THashTable(THashTable &other) {
-        try { table = new Node[other.capacity_]; }
+        try { table_ = new Node[other.capacity_]; }
         catch (...) {
             other.~THashTable();
             throw std::bad_alloc();
@@ -271,7 +277,7 @@ public:
      * @param size Size of the hash table
      * @param capacity Capacity of the hash table
      */
-    THashTable(Node *table, size_t size, size_t capacity) : table(table), size_(size), capacity_(capacity) {}
+    THashTable(Node *table, size_t size, size_t capacity) : table_(table), capacity_(capacity), size_(size) {}
 
     /**
      * Move constructor.
@@ -280,20 +286,18 @@ public:
      * 
      * @param other The THashTable object to move from.
      */
-    THashTable(THashTable &&other) : table(other.table), size_(other.size_), capacity_(other.capacity_) {
-        other.table = nullptr;
+    THashTable(THashTable &&other) : table_(other.table_), capacity_(other.capacity_), size_(other.size_) {
+        other.table_ = nullptr;
         other.size_ = 0;
         other.capacity_ = 0;
     }
-
     /**
      * Destructor.
      * 
      * Releases the memory allocated for the hash table.
      */
     virtual ~THashTable() {
-        delete[] table;
-        table = nullptr;
+        clear();
     }
 
     /**
@@ -305,8 +309,8 @@ public:
      */
     virtual Iterator begin() {
         for (size_t i = 0; i < capacity_; ++i) {
-            if (table[i].isTaken()) {
-                return Iterator(table + i);
+            if (table_[i].isTaken()) {
+                return Iterator(table_ + i);
             }
         }
         return end();
@@ -320,7 +324,7 @@ public:
      * @return An iterator pointing to the end of the hash table.
      */
     virtual Iterator end() {
-        return Iterator(table + capacity_);
+        return Iterator(table_ + capacity_);
     }
 
     /**
@@ -332,14 +336,17 @@ public:
      * @return An iterator pointing to the element with the given key, or to the end of the hash table if the key is not found.
      */
     virtual Iterator find(const T1 &key) {
+        if (size_ == 0) {
+            return end();
+        }
         auto index = hash(key) % capacity_;
-        while (table[index].key != key || !table[index].isTaken()) {
-            index = table[index].getNext();
+        while (table_[index].key != key || !table_[index].isTaken()) {
+            index = table_[index].getNext();
             if (index == (hash(key) % capacity_)) {
                 return end();
             }
         }
-        return Iterator(table + index);
+        return Iterator(table_ + index);
     }
 
     /**
@@ -355,16 +362,16 @@ public:
             resize();
         }
         auto index = hash(key) % capacity_;
-        auto prev_index = table[index].getPrev();
+        auto prev_index = table_[index].getPrev();
         auto next_index = index;
-        while (table[index].isTaken()) {
+        while (table_[index].isTaken()) {
             index = (index + 1) % capacity_;
         }
         if (index == (hash(key) % capacity_)) {
             prev_index = index;
         }
-        auto is_last_ = index == capacity() - 1;
-        table[index] = Node(key, value, true, prev_index, next_index, is_last_);
+        auto is_last_ = (index == capacity() - 1) ? true : false;
+        table_[index] = Node(key, value, true, is_last_, prev_index, next_index);
         ++size_;
     }
 
@@ -381,22 +388,19 @@ public:
         if (element == end()) {
             throw std::out_of_range("Key not found");
         }
-        if ((*element).key == table[hash_index].key) {
-            auto next = table[hash_index].getNext();
-            table[hash_index].key = table[next].key;
-            table[hash_index].value = table[next].value;
-            table[hash_index].setNext(table[next].getNext());
-            table[next].setNotTaken();
-            auto new_next = table[hash_index].getNext();
-            table[new_next].setPrev(hash_index);
-            if (table[hash_index].isLast()) {
-                table[hash_index].setNotLast();
-            }
+        if ((*element).key == table_[hash_index].key) {
+            auto next = table_[hash_index].getNext();
+            table_[hash_index].key = table_[next].key;
+            table_[hash_index].value = table_[next].value;
+            table_[hash_index].setNext(table_[next].getNext());
+            table_[next].setNotTaken();
+            auto new_next = table_[hash_index].getNext();
+            table_[new_next].setPrev(hash_index);
         }
         else {
-            auto new_next_ = table[(*element).getNext()].getNext();
-            table[new_next_].setPrev((*element).getPrev());
-            table[(*element).key].setNotTaken();
+            auto new_next_ = table_[(*element).getNext()].getNext();
+            table_[new_next_].setPrev((*element).getPrev());
+            table_[hash_index].setNotTaken();
         }
         --size_;
     }
@@ -437,8 +441,8 @@ public:
     virtual void clear() {
         size_ = 0;
         capacity_ = 0;
-        delete[] table;
-        table = nullptr;
+        delete[] table_;
+        table_ = nullptr;
     }
 private:
     /**
@@ -446,7 +450,7 @@ private:
      * 
      * Each node represents an element in the hash table, and contains a key, value, and pointers to the next and previous nodes.
      */
-    Node *table = nullptr;
+    Node *table_ = nullptr;
 
     /**
      * The capacity of the hash table.
@@ -470,26 +474,29 @@ private:
      * This function is called when the hash table is full and a new element needs to be inserted.
      */
     void resize() {
-        capacity_ *= 2;
+        auto old_capacity = capacity_;
+        if (capacity_ == 0)
+            capacity_ = 1;
+        else capacity_ *= 2;
         Node *new_table;
         try { new_table = new Node[capacity_]; }
         catch (...) { 
-            delete[] table;
+            delete[] table_;
             throw std::bad_alloc(); 
         }
-        auto *old_table = table;
-        auto old_size = size_;
-        table = new_table;
+        auto *old_table = table_;
+        table_ = new_table;
         size_ = 0;
-        for (size_t i = 0; i < old_size; ++i) {
-            insert(table[i].key, table[i].value);
+        for (size_t i = 0; i < old_capacity; ++i) {
+            insert(old_table[i].key, old_table[i].value);
         }
-        for (size_t i = 0; i < size_; ++i) {
-            if (!new_table[i].isTaken()) {
-                new_table[i].setNext(i);
-                new_table[i].setPrev(i);                
+        for (size_t i = 0; i < capacity_; ++i) {
+            if (!table_[i].isTaken()) {
+                table_[i].setNext(i);
+                table_[i].setPrev(i);                
             }       
         }
+        table_[capacity_ - 1].setLast();
         delete[] old_table;
     }
 };
