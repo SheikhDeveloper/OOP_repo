@@ -23,6 +23,9 @@ public:
      */
     TCocktail(std::wstring &name, double alchol_percentage, double volume);
 
+
+    TCocktail(std::wstring &&custom_name_, double alc_percentage, double vol);
+
     /**
      * Constructor with a single parameter. Initializes a new TCocktail object with the given volume and default values for name and alcohol percentage.
      *
@@ -40,9 +43,7 @@ public:
      *
      * @return Name of the cocktail
      */
-    const std::wstring &getName() const &;
-
-    const std::wstring getName() &&;
+    const std::wstring getName() const;
 
     /**
      * Returns the alcohol percentage of the cocktail.
@@ -102,7 +103,7 @@ public:
      * @param cocktail2 Cocktail to add to the current object
      * @return New TCocktail object
      */
-    TCocktail operator+(const TCocktail cocktail1, const TCocktail &cocktail2);
+    TCocktail operator+(const TCocktail &cocktail1, const TCocktail &cocktail2);
 
     /**
      * Multiplies the current cocktail volume by the given multiplier.
@@ -110,7 +111,15 @@ public:
      * @param multiplier Multiplier
      * @return New TCocktail object
      */
-    TCocktail operator*(const TCocktail cocktail, const double &multiplier);
+    TCocktail operator*(const TCocktail cocktail, const double multiplier);
+
+    /**
+     * Multiplies the current cocktail volume by the given multiplier.
+     *
+     * @param multiplier Multiplier
+     * @return New TCocktail object
+     */
+    TCocktail operator*(const double multiplier, const TCocktail cocktail);
 
     /**
      * Inserts the given cocktail object's data into the output stream out.
@@ -129,5 +138,7 @@ public:
      * @return Input stream
      */
     std::wistream &operator>>(std::wistream &in, TCocktail &cocktail);
+
+    bool operator==(const TCocktail &cocktail1, const TCocktail &cocktail2);
 
 #endif //LAB2_COCKTAIL_H
