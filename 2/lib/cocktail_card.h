@@ -84,7 +84,7 @@ public:
      * @param quartile Quartile of cocktails
      * @return Volume of cocktails within the given alcohol percentage quartile
      */
-    const double getVolumeByQuartile(const std::pair<const double, const double> &quartile);
+    double getVolumeByQuartile(const std::pair<const double, const double> &quartile);
 
     /**
      * Renames a cocktail in the collection.
@@ -109,6 +109,11 @@ public:
      */
     const TCocktail& findCocktail(const std::wstring &name);
 
+
+    void dump(std::wostream &out);
+
+    void read(std::wistream &in);
+
     /**
      * Adds a cocktail to the collection.
      *
@@ -126,24 +131,6 @@ public:
     const TCocktail& operator[](const std::wstring &name);
 
     /**
-     * Inserts the collection into an output stream.
-     *
-     * @param out Output stream to insert into
-     * @param card Collection to insert
-     * @return Output stream
-     */
-    friend std::wostream& operator<<(std::wostream& out, const TCocktailCard& card);
-
-    /**
-     * Extracts a collection from an input stream.
-     *
-     * @param in Input stream to extract from
-     * @param card Collection to extract into
-     * @return Input stream
-     */
-    friend std::wistream& operator>>(std::wistream& in, TCocktailCard& card);
-
-    /**
      * Assigns the contents of another collection to this collection.
      *
      * @param other Collection to assign from
@@ -158,11 +145,16 @@ public:
      * @return Reference to this collection
      */
     TCocktailCard& operator=(TCocktailCard &other);
+
+    TCocktailCard& operator=(TCocktailCard &&other);
+
+    TCocktailCard& operator=(const TCocktailCard &&other);
+
 private:
     /**
      * Hash table storing the cocktails in the collection, keyed by name.
      */
-    THashTable<std::wstring, TCocktail> card;
+    THashTable<std::wstring, TCocktail> card_;
 
     /**
      * Adds a cocktail to the collection.
@@ -172,5 +164,23 @@ private:
     void addCocktail(const TCocktail &cocktail);
 
 };
+
+/**
+ * Inserts the collection into an output stream.
+ *
+ * @param out Output stream to insert into
+ * @param card Collection to insert
+ * @return Output stream
+ */
+std::wostream& operator<<(std::wostream& out, TCocktailCard& card);
+
+/**
+ * Extracts a collection from an input stream.
+ *
+ * @param in Input stream to extract from
+ * @param card Collection to extract into
+ * @return Input stream
+ */
+std::wistream& operator>>(std::wistream& in, TCocktailCard& card);
 
 #endif //LAB2_LIB_COCKTAIL_CARD_H
