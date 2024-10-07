@@ -21,4 +21,7 @@ if (ASAN)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address,undefined")
 endif(ASAN)
 
+add_library(cocktail_card lib/cocktail_card.h lib/cocktail_card.cc)
+add_library(cocktail lib/cocktail.h lib/cocktail.cc)
+
 add_subdirectory(test)

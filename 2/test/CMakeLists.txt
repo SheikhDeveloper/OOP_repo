@@ -2,12 +2,15 @@ enable_testing()
 
 include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 
+option(GET_COVERAGE "Run tests with code coverage" ON)
+option(GET_COVERAGE "Run tests without code coverage" OFF)
+
+if(GET_COVERAGE)
+
+
 add_executable(test_hash_table test_hash_table.cc)
 add_executable(test_cocktail_card test_cocktail_card.cc)
 add_executable(test_cocktail test_cocktail.cc)
-
-add_library(cocktail_card ../lib/cocktail_card.h ../lib/cocktail_card.cc)
-add_library(cocktail ../lib/cocktail.h ../lib/cocktail.cc)
 
 target_link_libraries(test_hash_table PRIVATE gtest gtest_main)
 target_link_libraries(test_cocktail_card PRIVATE gtest gtest_main)
