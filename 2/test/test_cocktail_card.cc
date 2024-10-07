@@ -48,24 +48,87 @@ TEST(TCocktailCardTest, RemoveCocktail) {
     EXPECT_TRUE(card.isEmpty());
 }
 
-TEST(TCocktailCardTest, GetCocktail) {
+TEST(TCocktailCardTest, GetCocktailInRange) {
+    // Create a TCocktailCard object
     TCocktailCard card;
-    TCocktail cocktail1(L"Cocktail1", 10.0, 100.0);
-    TCocktail cocktail2(L"Cocktail2", 20.0, 200.0);
+
+    // Add some cocktails to the card
+    TCocktail cocktail1(L"Cocktail 1", 20.0, 100.0);
+    TCocktail cocktail2(L"Cocktail 2", 30.0, 150.0);
     card += cocktail1;
     card += cocktail2;
-    TCocktail result = card.getCocktail(std::make_pair(10.0, 20.0), 150.0);
-    EXPECT_EQ(result.getAlcoholPercentage(), 10.0);
-    EXPECT_EQ(result.getVolume(), 150.0);
+
+    // Define the alcohol percentage range
+    std::pair<const double, const double> alc_percentage_range(20.0, 30.0);
+
+    // Define the volume
+    double volume = 200.0;
+
+    // Get the cocktail
+    TCocktail result = card.getCocktail(alc_percentage_range, volume);
+
+    // Check if the result is correct
+    EXPECT_EQ(result.getAlcoholPercentage(), 20.0);
+    EXPECT_EQ(result.getVolume(), volume);
 }
 
-TEST(TCocktailCardTest, GetCocktailNoMatch) {
+TEST(TCocktailCardTest, GetCocktailOutOfRange) {
+    // Create a TCocktailCard object
     TCocktailCard card;
-    TCocktail cocktail1(L"Cocktail1", 10.0, 100.0);
-    TCocktail cocktail2(L"Cocktail2", 20.0, 200.0);
+
+    // Add some cocktails to the card
+    TCocktail cocktail1(L"Cocktail 1", 20.0, 100.0);
+    TCocktail cocktail2(L"Cocktail 2", 30.0, 150.0);
     card += cocktail1;
     card += cocktail2;
-    EXPECT_THROW(card.getCocktail(std::make_pair(30.0, 40.0), 150.0), std::invalid_argument);
+
+    // Define the alcohol percentage range
+    std::pair<const double, const double> alc_percentage_range(40.0, 50.0);
+
+    // Define the volume
+    double volume = 200.0;
+
+    // Expect an exception to be thrown
+    EXPECT_THROW(card.getCocktail(alc_percentage_range, volume), std::invalid_argument);
+}
+
+TEST(TCocktailCardTest, GetCocktailMixed) {
+    // Create a TCocktailCard object
+    TCocktailCard card;
+
+    // Add some cocktails to the card
+    TCocktail cocktail1(L"Cocktail 1", 10.0, 100.0);
+    TCocktail cocktail2(L"Cocktail 2", 20.0, 150.0);
+    card += cocktail1;
+    card += cocktail2;
+
+    // Define the alcohol percentage range
+    std::pair<const double, const double> alc_percentage_range(15.0, 19.0);
+
+    // Define the volume
+    double volume = 200.0;
+
+    // Get the cocktail
+    TCocktail result = card.getCocktail(alc_percentage_range, volume);
+
+    // Check if the result is correct
+    double expected_alc_percentage = (cocktail1.getAlcoholPercentage() * cocktail1.getVolume() + cocktail2.getAlcoholPercentage() * cocktail2.getVolume()) / (cocktail1.getVolume() + cocktail2.getVolume());
+    EXPECT_NEAR(result.getAlcoholPercentage(), expected_alc_percentage, 0.01);
+    EXPECT_EQ(result.getVolume(), volume);
+}
+
+TEST(TCocktailCardTest, GetCocktailEmptyCard) {
+    // Create a TCocktailCard object
+    TCocktailCard card;
+
+    // Define the alcohol percentage range
+    std::pair<const double, const double> alc_percentage_range(20.0, 30.0);
+
+    // Define the volume
+    double volume = 200.0;
+
+    // Expect an exception to be thrown
+    EXPECT_THROW(card.getCocktail(alc_percentage_range, volume), std::invalid_argument);
 }
 
 TEST(TCocktailCardTest, GetVolumeByQuartile) {

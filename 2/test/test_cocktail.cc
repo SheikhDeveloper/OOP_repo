@@ -27,6 +27,15 @@ TEST(TCocktailTest, VolumeConstructor) {
     EXPECT_EQ(cocktail.getVolume(), vol);
 }
 
+TEST(TCocktailTest, MixWithDouble) {
+    std::wstring name = L"Cocktail";
+    double alc_percentage = 50.;
+    double vol = 100.;
+    TCocktail cocktail(name, alc_percentage, vol);
+    cocktail = cocktail + 200.;
+    EXPECT_EQ(cocktail.getVolume(), 300.);
+}
+
 TEST(TCocktailTest, GetName) {
     std::wstring name = L"Cocktail";
     double alc_percentage = 50.;
