@@ -2,12 +2,6 @@ enable_testing()
 
 include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 
-option(GET_COVERAGE "Run tests with code coverage" ON)
-option(GET_COVERAGE "Run tests without code coverage" OFF)
-
-if(GET_COVERAGE)
-
-
 add_executable(test_hash_table test_hash_table.cc)
 add_executable(test_cocktail_card test_cocktail_card.cc)
 add_executable(test_cocktail test_cocktail.cc)
