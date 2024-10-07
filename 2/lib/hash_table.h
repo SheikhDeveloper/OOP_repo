@@ -56,42 +56,72 @@ public:
          */
         Node(const T1 &key, const T2 &value, bool is_taken, bool is_last, size_t prev, size_t next) : key(key), value(value), is_taken_(is_taken), is_last_(is_last), prev_(prev), next_(next) {}
 
+        /**
+         * Checks if the node is taken.
+         */
         bool isTaken() const {
             return is_taken_;
         }
 
+        /**
+         * Checks if the node is the last node.
+         */
         bool isLast() const {
             return is_last_;
         }
 
+        /**
+         * Returns the previous node with the same hash index.
+         */
         size_t getPrev() const {
             return prev_;
         }
 
+        /**
+         * Returns the next node with the same hash index.
+         */
         size_t getNext() const {
             return next_;
         }
 
+        /**
+         * Sets the node as taken.
+         */
         void setTaken() {
             is_taken_ = true;
         }
 
+        /**
+         * Sets the node as not taken.
+         */
         void setNotTaken() {
             is_taken_ = false;
         }
 
+        /**
+         * Sets the node as the last node.
+         */
         void setLast() {
             is_last_ = true;
         }
 
+        /**
+         * Sets the node as not the last node.
+         */
         void setNotLast() {
             is_last_ = false;
         }
 
+        /**
+         * Sets the next node with the same hash index.
+         */
         void setNext(size_t next) {
             next_ = next;
         }
 
+        /**
+         * Sets the previous node with the same hash index.
+         */
         void setPrev(size_t prev) {
             prev_ = prev;
         }

@@ -110,8 +110,18 @@ public:
     const TCocktail& findCocktail(const std::wstring &name);
 
 
+    /**
+     * Dumps the collection to an output stream.
+     * 
+     * @param out Output stream to dump to
+     */
     void dump(std::wostream &out);
 
+    /**
+     * Reads the collection from an input stream.
+     * 
+     * @param in Input stream to read from
+     */
     void read(std::wistream &in);
 
     /**
@@ -131,9 +141,9 @@ public:
     const TCocktail& operator[](const std::wstring &name);
 
     /**
-     * Assigns the contents of another collection to this collection.
+     * Assigns the contents of another const collection to this collection.
      *
-     * @param other Collection to assign from
+     * @param other const Collection to assign from
      * @return Reference to this collection
      */
     TCocktailCard& operator=(const TCocktailCard &other);
@@ -146,8 +156,20 @@ public:
      */
     TCocktailCard& operator=(TCocktailCard &other);
 
+    /**
+     * Moves the contents of another collection to this collection.
+     *
+     * @param other Collection to move from
+     * @return Reference to this collection
+     */
     TCocktailCard& operator=(TCocktailCard &&other);
 
+    /**
+     * Moves the contents of another const collection to this collection, moving the contents.
+     *
+     * @param other const Collection to move from
+     * @return Reference to this collection
+     */
     TCocktailCard& operator=(const TCocktailCard &&other);
 
 private:
