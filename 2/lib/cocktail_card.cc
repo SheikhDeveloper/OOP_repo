@@ -49,8 +49,12 @@ const TCocktail TCocktailCard::getCocktail(const std::pair<const double, const d
         if (cocktail.getAlcoholPercentage() >= alc_percentage_range.first && cocktail.getAlcoholPercentage() <= alc_percentage_range.second && cocktail.getAlcoholPercentage() < new_cocktail.getAlcoholPercentage()) {
             new_cocktail = cocktail;
         }
-        else if (new_cocktail.getAlcoholPercentage() < alc_percentage_range.first) {
+        else if (new_cocktail.getAlcoholPercentage() < alc_percentage_range.first || new_cocktail.getAlcoholPercentage() > alc_percentage_range.second) {
+            bool is_unnamed = false;
+            if (new_cocktail.getName() == L"") is_unnamed = true;
             new_cocktail = new_cocktail + cocktail;
+            if (is_unnamed)
+                new_cocktail.setName(cocktail.getName());
         }
     }
     if (new_cocktail.getAlcoholPercentage() < alc_percentage_range.first) {

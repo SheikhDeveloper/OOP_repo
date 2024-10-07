@@ -87,8 +87,18 @@ public:
      */
     void operator>>(TCocktail &cocktail2);
 
+    /**
+     * Dumps the cocktail's data to the output stream out.
+     *
+     * @param out Output stream
+     */
     void dump(std::wostream &out) const;
 
+    /**
+     * Reads the cocktail's data from the input stream in.
+     *
+     * @param in Input stream
+     */
     void read(std::wistream &in);
     
     private:
@@ -139,6 +149,13 @@ public:
      */
     std::wistream &operator>>(std::wistream &in, TCocktail &cocktail);
 
+    /**
+     * Checks if the given cocktail objects are equal.
+     * 
+     * @param cocktail1 First cocktail
+     * @param cocktail2 Second cocktail
+     * @return True if the objects are equal, false otherwise
+     */
     bool operator==(const TCocktail &cocktail1, const TCocktail &cocktail2);
 
 #endif //LAB2_COCKTAIL_H
