@@ -46,7 +46,7 @@ const TCocktail TCocktailCard::getCocktail(const std::pair<const double, const d
     new_cocktail = TCocktail();
     for (const auto& node : card_) {
         auto cocktail = node.value;
-        if (cocktail.getAlcoholPercentage() >= alc_percentage_range.first && cocktail.getAlcoholPercentage() <= alc_percentage_range.second && cocktail.getAlcoholPercentage() < new_cocktail.getAlcoholPercentage()) {
+        if (cocktail.getAlcoholPercentage() >= alc_percentage_range.first && cocktail.getAlcoholPercentage() < new_cocktail.getAlcoholPercentage()) {
             new_cocktail = cocktail;
         }
         else if (new_cocktail.getAlcoholPercentage() < alc_percentage_range.first || new_cocktail.getAlcoholPercentage() > alc_percentage_range.second) {
@@ -57,7 +57,7 @@ const TCocktail TCocktailCard::getCocktail(const std::pair<const double, const d
                 new_cocktail.setName(cocktail.getName());
         }
     }
-    if (new_cocktail.getAlcoholPercentage() < alc_percentage_range.first) {
+    if (new_cocktail.getAlcoholPercentage() < alc_percentage_range.first || new_cocktail.getAlcoholPercentage() > alc_percentage_range.second) {
         throw std::invalid_argument("No cocktail can be mixed with the given alcohol percentage range");
     }
     new_cocktail.setVolume(volume);
