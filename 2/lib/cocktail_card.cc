@@ -11,11 +11,11 @@ TCocktailCard::TCocktailCard(const TCocktail *cocktails, size_t cocktails_count)
     }
 }
 
-const TCocktail& TCocktailCard::findCocktail(const std::wstring &name) {
-    if (!card_.contains(name)) {
+TCocktail& TCocktailCard::findCocktail(const std::wstring &name) {
+    try { return card_[name]; } 
+    catch (std::out_of_range &e) {
         throw std::invalid_argument("Cocktail not found");
     }
-    return card_[name];
 }
 
 void TCocktailCard::addCocktail(const TCocktail &cocktail) {
@@ -42,8 +42,7 @@ void TCocktailCard::removeCocktail(const std::wstring &name) {
 }
 
 const TCocktail TCocktailCard::getCocktail(const std::pair<const double, const double> alc_percentage_range, const double &volume) {
-    TCocktail new_cocktail;
-    new_cocktail = TCocktail();
+    TCocktail new_cocktail{};
     for (const auto& node : card_) {
         auto cocktail = node.value;
         if (cocktail.getAlcoholPercentage() >= alc_percentage_range.first && cocktail.getAlcoholPercentage() < new_cocktail.getAlcoholPercentage()) {
@@ -64,23 +63,44 @@ const TCocktail TCocktailCard::getCocktail(const std::pair<const double, const d
     return new_cocktail;
 }
 
-double TCocktailCard::getVolumeByQuartile(const std::pair<const double, const double> &quartile) {
+double TCocktailCard::getVolumeByPercentageRange(const std::pair<const double, const double> &range) {
+    if (range.first > range.second || range.first < 0. || range.second > 100. || range.second < 0.) {
+        throw std::invalid_argument("Invalid range");
+    }
     double volume = 0.;
     for (const auto& node : card_) {
         auto cocktail = node.value;
-        if (cocktail.getAlcoholPercentage() >= quartile.first && cocktail.getAlcoholPercentage() <= quartile.second) {
+        if (cocktail.getAlcoholPercentage() >= range.first && cocktail.getAlcoholPercentage() <= range.second) {
             volume += cocktail.getVolume();
         }
     }
     return volume;
 }
 
+double TCocktailCard::getVolumeByQuartile(TQuartile quartile){ 
+    if (quartile == TQuartile::Q1) {
+        return getVolumeByPercentageRange({0., 25.});
+    }
+    else if (quartile == TQuartile::Q2) {
+        return getVolumeByPercentageRange({25., 50.});
+    }
+    else if (quartile == TQuartile::Q3) {
+        return getVolumeByPercentageRange({50., 75.});
+    }
+    else if (quartile == TQuartile::Q4) {
+        return getVolumeByPercentageRange({75., 100.});
+    }
+    else {
+        throw std::invalid_argument("Invalid quartile");
+    }
+}
+
 void TCocktailCard::renameCocktail(const std::wstring &old_name, const std::wstring &new_name) {
     if (card_.contains(old_name)) {
         TCocktail new_cocktail = card_[old_name];
         new_cocktail.setName(new_name);
-        card_.insert(new_name, new_cocktail);
         card_.remove(old_name);
+        card_.insert(new_name, new_cocktail);
     }
 }
 
@@ -102,33 +122,13 @@ void TCocktailCard::read(std::wistream &in) {
     delete[] cocktails;
 }
 
-void TCocktailCard::operator+=(const TCocktail &cocktail) {
+TCocktailCard& TCocktailCard::operator+=(const TCocktail &cocktail) {
     addCocktail(cocktail);
+    return *this;
 }
 
-const TCocktail& TCocktailCard::operator[](const std::wstring &name) {
+TCocktail& TCocktailCard::operator[](const std::wstring &name) {
     return findCocktail(name);
-}
-
-
-TCocktailCard& TCocktailCard::operator=(TCocktailCard &other) {
-    card_ = other.card_;
-    return *this;
-}
-
-TCocktailCard& TCocktailCard::operator=(const TCocktailCard &other) {
-    card_ = other.card_;
-    return *this;
-}
-
-TCocktailCard& TCocktailCard::operator=(TCocktailCard &&other) {
-    card_ = std::move(other.card_);
-    return *this;
-}
-
-TCocktailCard& TCocktailCard::operator=(const TCocktailCard &&other) {
-    card_ = std::move(other.card_);
-    return *this;
 }
 
 std::wostream& operator<<(std::wostream& out, TCocktailCard& card) {

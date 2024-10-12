@@ -13,28 +13,6 @@ TEST(THashTableTest, ParameterizedConstructor) {
     EXPECT_EQ(table.capacity(), 10);
 }
 
-TEST(THashTableTest, CopyConstructor) {
-    THashTable<int, int> table(10);
-    table.insert(1, 1);
-    table.insert(2, 2);
-    THashTable<int, int> copy(table);
-    EXPECT_EQ(copy.size(), 2);
-    EXPECT_EQ(copy.capacity(), 10);
-    EXPECT_EQ((*(copy.find(1))).value, 1);
-    EXPECT_EQ((*(copy.find(2))).value, 2);
-}
-
-TEST(THashTableTest, MoveConstructor) {
-    THashTable<int, int> table(10);
-    table.insert(1, 1);
-    table.insert(2, 2);
-    THashTable<int, int> moved(std::move(table));
-    EXPECT_EQ(moved.size(), 2);
-    EXPECT_EQ(moved.capacity(), 10);
-    EXPECT_EQ((*(moved.find(1))).value, 1);
-    EXPECT_EQ((*(moved.find(2))).value, 2);
-}
-
 TEST(THashTableTest, Insert) {
     THashTable<int, int> table(10);
     table.insert(1, 1);
@@ -45,7 +23,7 @@ TEST(THashTableTest, Insert) {
     EXPECT_EQ((*(table.find(2))).value, 2);
 }
 
-TEST(HashTableTest, RemoveExistingKey_FirstElement) {
+TEST(THashTableTest, RemoveExistingKey_FirstElement) {
     THashTable<int, int> hashTable(10);
     hashTable.insert(1, 1);
     hashTable.insert(2, 2);
@@ -57,7 +35,7 @@ TEST(HashTableTest, RemoveExistingKey_FirstElement) {
     EXPECT_THROW(hashTable[1], std::out_of_range);
 }
 
-TEST(HashTableTest, RemoveExistingKey_NotFirstElement) {
+TEST(THashTableTest, RemoveExistingKey_NotFirstElement) {
     THashTable<int, int> hashTable(10);
     hashTable.insert(1, 1);
     hashTable.insert(2, 2);
@@ -69,7 +47,7 @@ TEST(HashTableTest, RemoveExistingKey_NotFirstElement) {
     EXPECT_THROW(hashTable[2], std::out_of_range);
 }
 
-TEST(HashTableTest, RemoveNonExistingKey) {
+TEST(THashTableTest, RemoveNonExistingKey) {
     THashTable<int, int> hashTable(10);
     hashTable.insert(1, 1);
     hashTable.insert(2, 2);
@@ -154,6 +132,102 @@ TEST(THashTableTest, OperatorBracket) {
     table.insert(2, 2);
     EXPECT_EQ(table[1], 1);
     EXPECT_EQ(table[2], 2);
+}
+
+TEST(THashTableTest, CopyAssignment) {
+    // Create a hash table
+    THashTable<int, int> hashTable{};
+
+    // Insert some elements
+    hashTable.insert(-1, 1);
+    hashTable.insert(-2, 2);
+
+    // Create another hash table
+    THashTable<int, int> anotherHashTable{};
+
+    // Assign the first hash table to the second
+    anotherHashTable = hashTable;
+
+    // Check if the assignment was successful
+    EXPECT_EQ(anotherHashTable.size(), 2);
+    EXPECT_EQ(anotherHashTable[-1], 1);
+    EXPECT_EQ(anotherHashTable[-2], 2);
+
+    // Modify the first hash table
+    hashTable.insert(-3, 3);
+
+    // Check if the second hash table remains unchanged
+    EXPECT_EQ(anotherHashTable.size(), 2);
+    EXPECT_EQ(anotherHashTable[-1], 1);
+    EXPECT_EQ(anotherHashTable[-2], 2);
+}
+
+TEST(THashTableTest, MoveAssignment) {
+    // Create a hash table
+    THashTable<int, int> hashTable{};
+
+    // Insert some elements
+    hashTable.insert(-1, 1);
+    hashTable.insert(-2, 2);
+
+    // Create another hash table
+    THashTable<int, int> anotherHashTable{};
+
+    // Move assign the first hash table to the second
+    anotherHashTable = std::move(hashTable);
+
+    // Check if the move assignment was successful
+    EXPECT_EQ(anotherHashTable.size(), 2);
+    EXPECT_EQ(anotherHashTable[-1], 1);
+    EXPECT_EQ(anotherHashTable[-2], 2);
+
+    // Check if the first hash table is in a valid but unspecified state
+    EXPECT_EQ(hashTable.size(), 0);
+}
+
+TEST(THashTableTest, CopyConstructor) {
+    // Create a hash table
+    THashTable<int, int> hashTable{};
+
+    // Insert some elements
+    hashTable.insert(-1, 1);
+    hashTable.insert(-2, 2);
+
+    // Create another hash table by copying the first
+    THashTable anotherHashTable(hashTable);
+
+    // Check if the copy was successful
+    EXPECT_EQ(anotherHashTable.size(), 2);
+    EXPECT_EQ(anotherHashTable[-1], 1);
+    EXPECT_EQ(anotherHashTable[-2], 2);
+
+    // Modify the first hash table
+    hashTable.insert(-3, 3);
+
+    // Check if the second hash table remains unchanged
+    EXPECT_EQ(anotherHashTable.size(), 2);
+    EXPECT_EQ(anotherHashTable[-1], 1);
+    EXPECT_EQ(anotherHashTable[-2], 2);
+}
+
+TEST(THashTableTest, MoveConstructor) {
+    // Create a hash table
+    THashTable<int, int> hashTable{};
+
+    // Insert some elements
+    hashTable.insert(-1, 1);
+    hashTable.insert(-2, 2);
+
+    // Create another hash table by moving the first
+    THashTable anotherHashTable(std::move(hashTable));
+
+    // Check if the move was successful
+    EXPECT_EQ(anotherHashTable.size(), 2);
+    EXPECT_EQ(anotherHashTable[-1], 1);
+    EXPECT_EQ(anotherHashTable[-2], 2);
+
+    // Check if the first hash table is in a valid but unspecified state
+    EXPECT_EQ(hashTable.size(), 0);
 }
 
 int main(int argc, char **argv) {

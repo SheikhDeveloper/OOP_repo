@@ -27,7 +27,7 @@ template<class T1, class T2>
 class THashTable {
 public:
     /**
-     * Node structure for the hash table.
+     * Node class for the hash table.
      */
     class Node {
     public:
@@ -227,33 +227,16 @@ public:
         return (*result).value;
     }
 
+
     /**
      * Assigns the contents of another hash table to this hash table.
      *
      * @param other Hash table to assign from
      */
-    void operator=(THashTable &other) {
-        try { table_ = new Node[other.capacity_]; }
-        catch (...) {
-            other.~THashTable();
-            throw std::bad_alloc();
-        }
-        capacity_ = other.capacity_;
-        size_ = 0;
-        for (auto &i : other) {
-            insert(i.key, i.value);            
-        }        
-    }
-
-    /**
-     * Assigns the contents of another const hash table to this hash table.
-     *
-     * @param other Hash table to assign from
-     */
     void operator=(const THashTable &other) {
+        clear();
         try { table_ = new Node[other.capacity_]; }
-        catch (...) {
-            other.~THashTable();
+        catch (std::exception &e) {
             throw std::bad_alloc();
         }
         capacity_ = other.capacity_;
@@ -262,6 +245,29 @@ public:
         for (auto &i : other_not_const) {
             insert(i.key, i.value);            
         }        
+    }
+
+    /**
+     * Move assignment operator.
+     *
+     * Assigns the contents of another THashTable object to this object, transferring ownership.
+     *
+     * @param other The THashTable object to move from.
+     * @return A reference to this object.
+     *
+     * @note This function leaves the other object in a valid but unspecified state.
+     */
+    THashTable &operator=(THashTable &&other) {
+        if (this != &other) {
+            clear();
+            table_ = other.table_;
+            capacity_ = other.capacity_;
+            size_ = other.size_;
+            other.table_ = nullptr;
+            other.size_ = 0;
+            other.capacity_ = 0;
+        }
+        return *this;
     }
     
     /**
@@ -282,6 +288,7 @@ public:
             table_[i].setPrev(i);
         }
     }
+
     /**
      * Copy constructor.
      *
@@ -289,8 +296,7 @@ public:
      */
     THashTable(THashTable &other) {
         try { table_ = new Node[other.capacity_]; }
-        catch (...) {
-            other.~THashTable();
+        catch (std::exception &e) {
             throw std::bad_alloc();
         }
         capacity_ = other.capacity_;
@@ -299,15 +305,6 @@ public:
         }
         size_ = other.size();
     }
-
-    /**
-     * Constructor with a node array, size, and capacity.
-     *
-     * @param table Node array
-     * @param size Size of the hash table
-     * @param capacity Capacity of the hash table
-     */
-    THashTable(Node *table, size_t size, size_t capacity) : table_(table), capacity_(capacity), size_(size) {}
 
     /**
      * Move constructor.
@@ -321,6 +318,7 @@ public:
         other.size_ = 0;
         other.capacity_ = 0;
     }
+
     /**
      * Destructor.
      * 

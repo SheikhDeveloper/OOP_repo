@@ -4,6 +4,13 @@
 #include "cocktail.h"
 #include "hash_table.h"
 
+enum class TQuartile {
+    Q1 = 1,
+    Q2 = 2,
+    Q3 = 3,
+    Q4 = 4
+};
+
 /**
  * Represents a collection of cocktails.
  */
@@ -27,7 +34,7 @@ public:
      *
      * @param other Collection to copy
      */
-    TCocktailCard(const TCocktailCard &other);
+    TCocktailCard(TCocktailCard &other) = default;
 
     /**
      * Move constructor. Initializes a collection by moving another collection.
@@ -79,12 +86,21 @@ public:
     const TCocktail getCocktail(const std::pair<const double, const double> alc_percentage_range, const double &volume=500.);
 
     /**
+     * Gets the volume of cocktails in a given alcohol percentage range.
+     *
+     * @param range Range of alcohol percentages in cocktails
+     * @return Volume of cocktails within the given alcohol percentage range
+     */
+
+    double getVolumeByPercentageRange(const std::pair<const double, const double> &range);
+
+    /**
      * Gets the volume of cocktails in a given alcohol percentage quartile.
      *
-     * @param quartile Quartile of cocktails
+     * @param quartile Quartile of alchol percentages in cocktails
      * @return Volume of cocktails within the given alcohol percentage quartile
      */
-    double getVolumeByQuartile(const std::pair<const double, const double> &quartile);
+    double getVolumeByQuartile(TQuartile quartile);
 
     /**
      * Renames a cocktail in the collection.
@@ -107,7 +123,7 @@ public:
      * @param name Name of the cocktail to find
      * @return Found cocktail
      */
-    const TCocktail& findCocktail(const std::wstring &name);
+    TCocktail& findCocktail(const std::wstring &name);
 
 
     /**
@@ -130,7 +146,7 @@ public:
      * @param cocktail Cocktail to add
      * @return Reference to the collection
      */
-    void operator+=(const TCocktail &cocktail);
+    TCocktailCard& operator+=(const TCocktail &cocktail);
 
     /**
      * Gets a cocktail from the collection by name.
@@ -138,7 +154,7 @@ public:
      * @param name Name of the cocktail to get
      * @return Found cocktail
      */
-    const TCocktail& operator[](const std::wstring &name);
+    TCocktail& operator[](const std::wstring &name);
 
     /**
      * Assigns the contents of another const collection to this collection.
@@ -146,15 +162,7 @@ public:
      * @param other const Collection to assign from
      * @return Reference to this collection
      */
-    TCocktailCard& operator=(const TCocktailCard &other);
-
-    /**
-     * Assigns the contents of another collection to this collection, moving the contents.
-     *
-     * @param other Collection to assign from
-     * @return Reference to this collection
-     */
-    TCocktailCard& operator=(TCocktailCard &other);
+    TCocktailCard& operator=(const TCocktailCard &other) = default;
 
     /**
      * Moves the contents of another collection to this collection.
@@ -162,15 +170,7 @@ public:
      * @param other Collection to move from
      * @return Reference to this collection
      */
-    TCocktailCard& operator=(TCocktailCard &&other);
-
-    /**
-     * Moves the contents of another const collection to this collection, moving the contents.
-     *
-     * @param other const Collection to move from
-     * @return Reference to this collection
-     */
-    TCocktailCard& operator=(const TCocktailCard &&other);
+    TCocktailCard& operator=(TCocktailCard &&other) = default;
 
 private:
     /**

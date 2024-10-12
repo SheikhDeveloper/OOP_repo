@@ -131,15 +131,6 @@ TEST(TCocktailCardTest, GetCocktailEmptyCard) {
     EXPECT_THROW(card.getCocktail(alc_percentage_range, volume), std::invalid_argument);
 }
 
-TEST(TCocktailCardTest, GetVolumeByQuartile) {
-    TCocktailCard card;
-    TCocktail cocktail1(L"Cocktail1", 10.0, 100.0);
-    TCocktail cocktail2(L"Cocktail2", 20.0, 200.0);
-    card += cocktail1;
-    card += cocktail2;
-    EXPECT_EQ(card.getVolumeByQuartile(std::make_pair(0.0, 25.0)), 300.0);
-}
-
 TEST(TCocktailCardTest, RenameCocktail) {
     TCocktailCard card;
     TCocktail cocktail(L"Cocktail", 10.0, 100.0);
@@ -161,15 +152,6 @@ TEST(TCocktailCardTest, OperatorIndex) {
     TCocktail cocktail(L"Cocktail", 10.0, 100.0);
     card += cocktail;
     EXPECT_EQ(card[L"Cocktail"], cocktail);
-}
-
-TEST(TCocktailCardTest, OperatorAssignment) {
-    TCocktailCard card1;
-    TCocktail cocktail(L"Cocktail", 10.0, 100.0);
-    card1 += cocktail;
-    TCocktailCard card2;
-    card2 = card1;
-    EXPECT_EQ(card2.size(), 1);
 }
 
 TEST(TCocktailCardTest, PrintCard) {
@@ -195,6 +177,203 @@ TEST(TCocktailCardTest, OperatorInput) {
     std::wistringstream iss(L"2\nCocktail1 10.0 100.0\nCocktail2 20.0 200.0");
     iss >> card;
     EXPECT_EQ(card.size(), 2);
+}
+
+TEST(TCocktailCardTest, CopyConstructor) {
+    // Create a TCocktailCard object
+    TCocktailCard card;
+
+    // Add some cocktails to the card
+    TCocktail cocktail1(L"Cocktail 1", 20.0, 100.0);
+    TCocktail cocktail2(L"Cocktail 2", 30.0, 150.0);
+    card += cocktail1;
+    card += cocktail2;
+
+    // Create another TCocktailCard object by copying the first
+    TCocktailCard anotherCard(card);
+
+    // Check if the copy was successful
+    EXPECT_EQ(anotherCard.size(), 2);
+    EXPECT_EQ(anotherCard.findCocktail(L"Cocktail 1").getAlcoholPercentage(), 20.0);
+    EXPECT_EQ(anotherCard.findCocktail(L"Cocktail 2").getAlcoholPercentage(), 30.0);
+
+    // Modify the first card
+    card += TCocktail(L"Cocktail 3", 40.0, 200.0);
+
+    // Check if the second card remains unchanged
+    EXPECT_EQ(anotherCard.size(), 2);
+    EXPECT_EQ(anotherCard.findCocktail(L"Cocktail 1").getAlcoholPercentage(), 20.0);
+    EXPECT_EQ(anotherCard.findCocktail(L"Cocktail 2").getAlcoholPercentage(), 30.0);
+}
+
+TEST(TCocktailCardTest, MoveConstructor) {
+    // Create a TCocktailCard object
+    TCocktailCard card;
+
+    // Add some cocktails to the card
+    TCocktail cocktail1(L"Cocktail 1", 20.0, 100.0);
+    TCocktail cocktail2(L"Cocktail 2", 30.0, 150.0);
+    card += cocktail1;
+    card += cocktail2;
+
+    // Create another TCocktailCard object by moving the first
+    TCocktailCard anotherCard(std::move(card));
+
+    // Check if the move was successful
+    EXPECT_EQ(anotherCard.size(), 2);
+    EXPECT_EQ(anotherCard.findCocktail(L"Cocktail 1").getAlcoholPercentage(), 20.0);
+    EXPECT_EQ(anotherCard.findCocktail(L"Cocktail 2").getAlcoholPercentage(), 30.0);
+
+    // Check if the first card is in a valid but unspecified state
+    EXPECT_EQ(card.size(), 0);
+}
+
+TEST(TCocktailCardTest, CopyAssignment) {
+    // Create a TCocktailCard object
+    TCocktailCard card;
+
+    // Add some cocktails to the card
+    TCocktail cocktail1(L"Cocktail 1", 20.0, 100.0);
+    TCocktail cocktail2(L"Cocktail 2", 30.0, 150.0);
+    card += cocktail1;
+    card += cocktail2;
+
+    // Create another TCocktailCard object
+    TCocktailCard anotherCard;
+
+    // Assign the first card to the second
+    anotherCard = card;
+
+    // Check if the assignment was successful
+    EXPECT_EQ(anotherCard.size(), 2);
+    EXPECT_EQ(anotherCard.findCocktail(L"Cocktail 1").getAlcoholPercentage(), 20.0);
+    EXPECT_EQ(anotherCard.findCocktail(L"Cocktail 2").getAlcoholPercentage(), 30.0);
+
+    // Modify the first card
+    card += TCocktail(L"Cocktail 3", 40.0, 200.0);
+
+    // Check if the second card remains unchanged
+    EXPECT_EQ(anotherCard.size(), 2);
+    EXPECT_EQ(anotherCard.findCocktail(L"Cocktail 1").getAlcoholPercentage(), 20.0);
+    EXPECT_EQ(anotherCard.findCocktail(L"Cocktail 2").getAlcoholPercentage(), 30.0);
+}
+
+TEST(TCocktailCardTest, MoveAssignment) {
+    // Create a TCocktailCard object
+    TCocktailCard card;
+
+    // Add some cocktails to the card
+    TCocktail cocktail1(L"Cocktail 1", 20.0, 100.0);
+    TCocktail cocktail2(L"Cocktail 2", 30.0, 150.0);
+    card += cocktail1;
+    card += cocktail2;
+
+    // Create another TCocktailCard object
+    TCocktailCard anotherCard;
+
+    // Move assign the first card to the second
+    anotherCard = std::move(card);
+
+    // Check if the move assignment was successful
+    EXPECT_EQ(anotherCard.size(), 2);
+    EXPECT_EQ(anotherCard.findCocktail(L"Cocktail 1").getAlcoholPercentage(), 20.0);
+    EXPECT_EQ(anotherCard.findCocktail(L"Cocktail 2").getAlcoholPercentage(), 30.0);
+
+    // Check if the first card is in a valid but unspecified state
+    EXPECT_EQ(card.size(), 0);
+}
+
+TEST(TCocktailCardTest, GetVolumeByPercentageRange_EmptyCard) {
+    TCocktailCard card;
+    EXPECT_EQ(card.getVolumeByPercentageRange({0., 100.}), 0.);
+}
+
+TEST(TCocktailCardTest, GetVolumeByPercentageRange_InvalidRange) {
+    TCocktailCard card;
+    TCocktail cocktail1(L"Cocktail1", 10.0, 100.0);
+    card += cocktail1;
+    EXPECT_THROW(card.getVolumeByPercentageRange({100., 0.}), std::invalid_argument);
+    EXPECT_THROW(card.getVolumeByPercentageRange({-10., 100.}), std::invalid_argument);
+    EXPECT_THROW(card.getVolumeByPercentageRange({0., 110.}), std::invalid_argument);
+}
+
+TEST(TCocktailCardTest, GetVolumeByPercentageRange_SingleCocktail) {
+    TCocktailCard card;
+    TCocktail cocktail1(L"Cocktail1", 10.0, 100.0);
+    card += cocktail1;
+    EXPECT_EQ(card.getVolumeByPercentageRange({0., 100.}), 100.0);
+    EXPECT_EQ(card.getVolumeByPercentageRange({0., 10.}), 100.0);
+    EXPECT_EQ(card.getVolumeByPercentageRange({10., 100.}), 100.0);
+    EXPECT_EQ(card.getVolumeByPercentageRange({20., 30.}), 0.0);
+}
+
+TEST(TCocktailCardTest, GetVolumeByPercentageRange_MultipleCocktails) {
+    TCocktailCard card;
+    TCocktail cocktail1(L"Cocktail1", 10.0, 100.0);
+    TCocktail cocktail2(L"Cocktail2", 20.0, 200.0);
+    TCocktail cocktail3(L"Cocktail3", 30.0, 300.0);
+    card += cocktail1;
+    card += cocktail2;
+    card += cocktail3;
+    EXPECT_EQ(card.getVolumeByPercentageRange({0., 100.}), 600.0);
+    EXPECT_EQ(card.getVolumeByPercentageRange({0., 20.}), 300.0);
+    EXPECT_EQ(card.getVolumeByPercentageRange({20., 30.}), 500.0);
+    EXPECT_EQ(card.getVolumeByPercentageRange({30., 100.}), 300.0);
+}
+
+TEST(TCocktailCardTest, GetVolumeByQuartile_EmptyCard) {
+    TCocktailCard card;
+    EXPECT_EQ(card.getVolumeByQuartile(TQuartile::Q1), 0.);
+    EXPECT_EQ(card.getVolumeByQuartile(TQuartile::Q2), 0.);
+    EXPECT_EQ(card.getVolumeByQuartile(TQuartile::Q3), 0.);
+    EXPECT_EQ(card.getVolumeByQuartile(TQuartile::Q4), 0.);
+}
+
+TEST(TCocktailCardTest, GetVolumeByQuartile_InvalidQuartile) {
+    TCocktailCard card;
+    TCocktail cocktail1(L"Cocktail1", 10.0, 100.0);
+    card += cocktail1;
+    EXPECT_THROW(card.getVolumeByQuartile(static_cast<TQuartile>(5)), std::invalid_argument);
+}
+
+TEST(TCocktailCardTest, GetVolumeByQuartile_SingleCocktail) {
+    TCocktailCard card;
+    TCocktail cocktail1(L"Cocktail1", 10.0, 100.0);
+    card += cocktail1;
+    EXPECT_EQ(card.getVolumeByQuartile(TQuartile::Q1), 100.0);
+    EXPECT_EQ(card.getVolumeByQuartile(TQuartile::Q2), 0.);
+    EXPECT_EQ(card.getVolumeByQuartile(TQuartile::Q3), 0.);
+    EXPECT_EQ(card.getVolumeByQuartile(TQuartile::Q4), 0.);
+}
+
+TEST(TCocktailCardTest, GetVolumeByQuartile_MultipleCocktails) {
+    TCocktailCard card;
+    TCocktail cocktail1(L"Cocktail1", 10.0, 100.0);
+    TCocktail cocktail2(L"Cocktail2", 20.0, 200.0);
+    TCocktail cocktail3(L"Cocktail3", 30.0, 300.0);
+    card += cocktail1;
+    card += cocktail2;
+    card += cocktail3;
+    EXPECT_EQ(card.getVolumeByQuartile(TQuartile::Q1), 300.0);
+    EXPECT_EQ(card.getVolumeByQuartile(TQuartile::Q2), 300.0);
+    EXPECT_EQ(card.getVolumeByQuartile(TQuartile::Q3), 0.);
+    EXPECT_EQ(card.getVolumeByQuartile(TQuartile::Q4), 0.);
+}
+
+TEST(TCocktailCardTest, GetVolumeByQuartile_EqualVolumes) {
+    TCocktailCard card;
+    TCocktail cocktail1(L"Cocktail1", 10.0, 100.0);
+    TCocktail cocktail2(L"Cocktail2", 26.0, 100.0);
+    TCocktail cocktail3(L"Cocktail3", 55.0, 100.0);
+    TCocktail cocktail4(L"Cocktail3", 76.0, 100.0);
+    card += cocktail1;
+    card += cocktail2;
+    card += cocktail3;
+    card += cocktail4;
+    EXPECT_EQ(card.getVolumeByQuartile(TQuartile::Q1), 100.0);
+    EXPECT_EQ(card.getVolumeByQuartile(TQuartile::Q2), 100.0);
+    EXPECT_EQ(card.getVolumeByQuartile(TQuartile::Q3), 100.0);
+    EXPECT_EQ(card.getVolumeByQuartile(TQuartile::Q4), 100.0);
 }
 
 int main(int argc, char **argv) {
