@@ -34,11 +34,11 @@ public:
         /**
          * Key of the node.
          */
-        T1 key;
+        T1 key_;
         /**
          * Value of the node.
          */
-        T2 value;
+        T2 value_;
         /**
          * Default constructor of the node.
          */
@@ -54,7 +54,7 @@ public:
          * @param next Next node with the same hash index
          * @param is_last Whether the node is the last node
          */
-        Node(const T1 &key, const T2 &value, bool is_taken, bool is_last, size_t prev, size_t next) : key(key), value(value), is_taken_(is_taken), is_last_(is_last), prev_(prev), next_(next) {}
+        Node(const T1 &key, const T2 &value, bool is_taken, bool is_last, size_t prev, size_t next) : key_(key), value_(value), is_taken_(is_taken), is_last_(is_last), prev_(prev), next_(next) {}
 
         /**
          * Checks if the node is taken.
@@ -224,7 +224,7 @@ public:
         if (result == end()) {
             throw std::out_of_range("Key not found");
         }
-        return (*result).value;
+        return (*result).value_;
     }
 
 
@@ -232,8 +232,10 @@ public:
      * Assigns the contents of another hash table to this hash table.
      *
      * @param other Hash table to assign from
+     *
+     * @return A reference to this object
      */
-    void operator=(const THashTable &other) {
+    THashTable &operator=(const THashTable &other) {
         clear();
         try { table_ = new Node[other.capacity_]; }
         catch (std::exception &e) {
@@ -243,8 +245,9 @@ public:
         size_ = 0;
         auto other_not_const = const_cast<THashTable &>(other);
         for (auto &i : other_not_const) {
-            insert(i.key, i.value);            
+            insert(i.key_, i.value_);            
         }        
+        return *this;
     }
 
     /**
@@ -301,7 +304,7 @@ public:
         }
         capacity_ = other.capacity_;
         for (auto &i : other) {
-            insert(i.key, i.value);
+            insert(i.key_, i.value_);
         }
         size_ = other.size();
     }
@@ -368,7 +371,7 @@ public:
             return end();
         }
         auto index = hash(key) % capacity_;
-        while (table_[index].key != key || !table_[index].isTaken()) {
+        while (table_[index].key_ != key || !table_[index].isTaken()) {
             index = table_[index].getNext();
             if (index == (hash(key) % capacity_)) {
                 return end();
@@ -416,10 +419,10 @@ public:
         if (element == end()) {
             throw std::out_of_range("Key not found");
         }
-        if ((*element).key == table_[hash_index].key) {
+        if ((*element).key_ == table_[hash_index].key_) {
             auto next = table_[hash_index].getNext();
-            table_[hash_index].key = table_[next].key;
-            table_[hash_index].value = table_[next].value;
+            table_[hash_index].key_ = table_[next].key_;
+            table_[hash_index].value_ = table_[next].value_;
             table_[hash_index].setNext(table_[next].getNext());
             table_[next].setNotTaken();
             auto new_next = table_[hash_index].getNext();
@@ -516,7 +519,7 @@ private:
         table_ = new_table;
         size_ = 0;
         for (size_t i = 0; i < old_capacity; ++i) {
-            insert(old_table[i].key, old_table[i].value);
+            insert(old_table[i].key_, old_table[i].value_);
         }
         for (size_t i = 0; i < capacity_; ++i) {
             if (!table_[i].isTaken()) {

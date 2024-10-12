@@ -44,7 +44,7 @@ void TCocktailCard::removeCocktail(const std::wstring &name) {
 const TCocktail TCocktailCard::getCocktail(const std::pair<const double, const double> alc_percentage_range, const double &volume) {
     TCocktail new_cocktail{};
     for (const auto& node : card_) {
-        auto cocktail = node.value;
+        auto cocktail = node.value_;
         if (cocktail.getAlcoholPercentage() >= alc_percentage_range.first && cocktail.getAlcoholPercentage() < new_cocktail.getAlcoholPercentage()) {
             new_cocktail = cocktail;
         }
@@ -69,7 +69,7 @@ double TCocktailCard::getVolumeByPercentageRange(const std::pair<const double, c
     }
     double volume = 0.;
     for (const auto& node : card_) {
-        auto cocktail = node.value;
+        auto cocktail = node.value_;
         if (cocktail.getAlcoholPercentage() >= range.first && cocktail.getAlcoholPercentage() <= range.second) {
             volume += cocktail.getVolume();
         }
@@ -107,7 +107,7 @@ void TCocktailCard::renameCocktail(const std::wstring &old_name, const std::wstr
 
 void TCocktailCard::dump(std::wostream &out) {
     for (const auto& node : card_) {
-        out << node.value << std::endl;
+        out << node.value_ << std::endl;
     }
 }
 
