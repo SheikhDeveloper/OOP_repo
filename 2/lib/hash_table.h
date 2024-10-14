@@ -57,6 +57,11 @@ public:
         Node(const T1 &key, const T2 &value, bool is_taken, bool is_last, size_t prev, size_t next) : key_(key), value_(value), is_taken_(is_taken), is_last_(is_last), prev_(prev), next_(next) {}
 
         /**
+         * Default destructor of the node.
+         */
+        ~Node() = default;
+
+        /**
          * Checks if the node is taken.
          */
         bool isTaken() const {
@@ -393,6 +398,7 @@ public:
             resize();
         }
         auto index = hash(key) % capacity_;
+        auto hash_index = index;
         auto prev_index = table_[index].getPrev();
         auto next_index = index;
         while (table_[index].isTaken()) {
@@ -403,6 +409,14 @@ public:
         }
         auto is_last_ = (index == capacity() - 1) ? true : false;
         table_[index] = Node(key, value, true, is_last_, prev_index, next_index);
+        if (table_[hash_index].getPrev() != hash_index) {
+            auto pre_hash_index = table_[hash_index].getPrev();
+            table_[pre_hash_index].setNext(index);
+        }
+        table_[hash_index].setPrev(index);
+        if (table_[hash_index].getNext() == hash_index) {
+            table_[hash_index].setNext(index);
+        }
         ++size_;
     }
 
@@ -429,9 +443,9 @@ public:
             table_[new_next].setPrev(hash_index);
         }
         else {
-            auto new_next_ = table_[(*element).getNext()].getNext();
-            table_[new_next_].setPrev((*element).getPrev());
-            table_[hash_index].setNotTaken();
+            auto next = (*element).getNext();
+            table_[next].setPrev((*element).getPrev());
+            (*element).setNotTaken();
         }
         --size_;
     }

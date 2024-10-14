@@ -273,6 +273,32 @@ TEST(THashTableTest, MoveConstructor) {
     EXPECT_EQ(hashTable.size(), 0);
 }
 
+TEST(THashTableTest, AddMultipleElementsWithTheSameHash) {
+    THashTable<int, TestStruct> table(10);
+    table.insert(1, 1);
+    table.insert(11, 2);
+    table.insert(21, 3);
+    table.insert(31, 4);
+    EXPECT_EQ(table.size(), 4);
+    EXPECT_EQ(*(table[1]), 1);
+    EXPECT_EQ(*(table[11]), 2);
+    EXPECT_EQ(*(table[21]), 3);
+    EXPECT_EQ(*(table[31]), 4);
+}
+
+TEST(THashTableTest, RemoveOneOfElementsWithTheSameHash) {
+    THashTable<int, TestStruct> table(10);
+    table.insert(1, 1);
+    table.insert(11, 2);
+    table.insert(21, 3);
+    table.insert(31, 4);
+    table.remove(11);
+    EXPECT_EQ(table.size(), 3);
+    EXPECT_EQ(*(table[1]), 1);
+    EXPECT_EQ(*(table[21]), 3);
+    EXPECT_EQ(*(table[31]), 4);
+}
+
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
