@@ -1,5 +1,5 @@
-#ifndef LAB2_LIB_HASH_TABLE_H
-#define LAB2_LIB_HASH_TABLE_H
+#ifndef LAB3_LIB_HASH_TABLE_H
+#define LAB3_LIB_HASH_TABLE_H
 
 #include <cstddef>
 #include <functional>
@@ -546,4 +546,4 @@ private:
     }
 };
 
-#endif //LAB2_LIB_HASH_TABLE_H
+#endif //LAB3_LIB_HASH_TABLE_H
