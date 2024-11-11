@@ -2,10 +2,12 @@
 #define LAB3_LIB_BATTLESHIP_H
 
 #include "captain_info.h"
+#include "weaponry.h"
 
 class TBattleship {
 public:
-    TBattleship(const std::string &name, const std::string &captainName, const std::string &captainRank, const size_t experience, double survivability, size_t crewMembersAmount);
+
+    TBattleship(TWeaponry weaponry, const std::string &name, const std::string &captainName, const std::string &captainRank, const size_t experience, double survivability, size_t crewMembersAmount);
 
     std::string getName() const;
     TCaptainInfo getCaptain() const;
@@ -30,6 +32,7 @@ private:
     double _speed;
     double _survivability;
     size_t _crewMembersAmount;
+    TWeaponry _weaponry;
 };
 
 #endif //LAB3_LIB_BATTLESHIP_H
