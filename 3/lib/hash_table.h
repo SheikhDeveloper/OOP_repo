@@ -302,7 +302,7 @@ public:
      *
      * @param other Hash table to copy from
      */
-    THashTable(THashTable &other) {
+    THashTable(const THashTable &other) {
         try { table_ = new Node[other.capacity_]; }
         catch (std::exception &e) {
             throw std::bad_alloc();
@@ -352,6 +352,23 @@ public:
         return end();
     }
 
+
+    /**
+     * Returns an const iterator pointing to the beginning of the hash table.
+     * 
+     * The iterator points to the first element in the hash table, or to the end of the hash table if it is empty.
+     * 
+     * @return An iterator pointing to the beginning of the hash table.
+     */
+    virtual const Iterator begin() const {
+        for (size_t i = 0; i < capacity_; ++i) {
+            if (table_[i].isTaken()) {
+                return Iterator(table_ + i);
+            }
+        }
+        return end();
+    }
+
     /**
      * Returns an iterator pointing to the end of the hash table.
      * 
@@ -360,6 +377,18 @@ public:
      * @return An iterator pointing to the end of the hash table.
      */
     virtual Iterator end() {
+        return Iterator(table_ + capacity_);
+    }
+
+    
+    /**
+     * Returns an const iterator pointing to the end of the hash table.
+     * 
+     * The iterator points to a position one past the last element in the hash table.
+     * 
+     * @return An iterator pointing to the end of the hash table.
+     */
+    virtual const Iterator end() const {
         return Iterator(table_ + capacity_);
     }
 

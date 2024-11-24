@@ -45,45 +45,45 @@ TWeaponry::TWeaponry(const std::string& name, const std::string& ammoName, size_
     }
 }
 
-std::string TWeaponry::GetName() const {
+std::string TWeaponry::getName() const {
     return _name;
 }
 
-std::string TWeaponry::GetAmmoName() const {
+std::string TWeaponry::getAmmoName() const {
     return _ammoName;
 }
 
-size_t TWeaponry::GetAmmoAmount() const {
+size_t TWeaponry::getAmmoAmount() const {
     return _ammoAmount;
 }
 
-double TWeaponry::GetDamage() const {
+double TWeaponry::getDamage() const {
     return _damage;
 }
 
-WeaponryType TWeaponry::GetType() const {
+WeaponryType TWeaponry::getType() const {
     return _type;
 }
 
-void TWeaponry::SetName(const std::string& name) {
+void TWeaponry::setName(const std::string& name) {
     _name = name;
 }
 
-void TWeaponry::SetAmmoName(const std::string& ammoName) {
+void TWeaponry::setAmmoName(const std::string& ammoName) {
     _ammoName = ammoName;
 }
 
-void TWeaponry::SetAmmoAmount(size_t ammoAmount) {
+void TWeaponry::setAmmoAmount(size_t ammoAmount) {
     _ammoAmount = ammoAmount;
 }
 
-void TWeaponry::SetDamage(double damage) {
+void TWeaponry::setDamage(double damage) {
     if (damage < 0.)
         throw std::logic_error("Damage can't be negative");
     _damage = damage;
 }
 
-void TWeaponry::SetType(WeaponryType type) {
+void TWeaponry::setType(WeaponryType type) {
     _type = type;
 }
 

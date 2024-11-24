@@ -20,17 +20,17 @@ public:
     TWeaponry(const TWeaponry& other) = default;
     TWeaponry(TWeaponry&& other) = default;
 
-    std::string GetName() const;
-    std::string GetAmmoName() const;
-    size_t GetAmmoAmount() const;
-    double GetDamage() const;
-    WeaponryType GetType() const;
+    std::string getName() const;
+    std::string getAmmoName() const;
+    size_t getAmmoAmount() const;
+    double getDamage() const;
+    WeaponryType getType() const;
 
-    void SetName(const std::string& name);
-    void SetAmmoName(const std::string& ammoName);
-    void SetAmmoAmount(size_t ammoAmount);
-    void SetDamage(double damage);
-    void SetType(WeaponryType type);
+    void setName(const std::string& name);
+    void setAmmoName(const std::string& ammoName);
+    void setAmmoAmount(size_t ammoAmount);
+    void setDamage(double damage);
+    void setType(WeaponryType type);
 
     void dump(std::ostream &out) const;
     void read(std::istream &in);

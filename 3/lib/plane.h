@@ -5,18 +5,21 @@
 
 class TPlane {
 public:
+    TPlane();
     TPlane(TWeaponry &weaponry, double survavability, double fuelUsage);
 
     TPlane(const TPlane &other) = default;
     TPlane(TPlane &&other) = default;
 
-    TWeaponry GetWeaponry() const;
-    double GetSurvavability() const;
-    double GetFuelUsage() const;
+    TWeaponry getWeaponry() const;
+    double getSurvavability() const;
+    double getFuelUsage() const;
+    std::string getName() const;
 
-    void SetWeaponry(TWeaponry &newWeaponry);
-    void SetSurvavability(double newSurvavability);
-    void SetFuelUsage(double newFuelUsage);
+    void setName(const std::string &newName);
+    void setWeaponry(TWeaponry &newWeaponry);
+    void setSurvavability(double newSurvavability);
+    void setFuelUsage(double newFuelUsage);
 
     void dump(std::ostream &out) const;
     void read(std::istream &in);
@@ -27,6 +30,7 @@ public:
     ~TPlane() = default;
 
 private:
+    std::string _name;
     TWeaponry _weaponry;
     double _survavability;
     double _fuelUsage;
