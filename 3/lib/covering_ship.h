@@ -3,7 +3,7 @@
 
 #include "battleship.h"
 
-class CoveringShip : public TBattleship
+class CoveringShip : virtual public TBattleship
 {
 public:
     CoveringShip(TBattleship &shipToCover, TWeaponry weaponry, const std::string &name, const std::string &captainName, 
