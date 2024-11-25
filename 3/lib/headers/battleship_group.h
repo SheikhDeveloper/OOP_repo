@@ -18,6 +18,7 @@ enum class ShipType
 class TBattleshipGroup
 {
 public:
+    TBattleshipGroup();
     TBattleshipGroup(std::string admiralName, std::string admiralRank, size_t admiralExperience, const std::string &startingPoint, const std::string &destination, double distance);
     TBattleshipGroup(std::string admiralName, std::string admiralRank, size_t admiralExperience, const std::string &startingPoint, const std::string &destination, double distance,
                      std::vector<TBattleship> &battleships);
@@ -29,7 +30,7 @@ public:
 
     TPlane &getPlane(const std::string &planeName, const std::string &carrierName) const;
     TBattleship &getBattleship(const std::string &battleshipName) const;
-    size_t getShipAmount(enum class ShipType shipType) const;
+    size_t getShipAmount(ShipType shipType) const;
     void addPlane(TPlane &plane, const std::string &carrierName);
     void addBattleship(TBattleship &battleship);
     void setAdmiral(TCaptainInfo &admiral);
@@ -38,17 +39,18 @@ public:
     void setDistance(double distance);
     void relocatePlane(const std::string planeName, const std::string carrierName1, const std::string carrierName2);
     void simulateAttack(TPlaneGroup &attackingGroup);
-    void dump(std::ostream &out) const;
-    ~TBattleshipGroup();
+    virtual void dump(std::ostream &out) const;
+    virtual void read(std::istream &in);
+    virtual ~TBattleshipGroup() = default;
 
     TBattleshipGroup &operator=(const TBattleshipGroup &battleshipGroup) = default;
     TBattleshipGroup &operator=(TBattleshipGroup &&battleshipGroup) = default;
 private:
-    THashTable<std::string, TBattleship> battleshipGroup;
-    TCaptainInfo admiral;
-    std::string startingPoint;
-    std::string destination;
-    double distance;
+    THashTable<std::string, TBattleship> _battleshipGroup;
+    TCaptainInfo _admiral;
+    std::string _startingPoint;
+    std::string _destination;
+    double _distance;
 
     void relocatePlane(const std::string planeName, TAircraftCarrier &aircraftCarrier1, TAircraftCarrier &aircraftCarrier2);
 };

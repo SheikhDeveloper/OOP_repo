@@ -8,6 +8,7 @@ struct TCaptainInfo {
     std::string _rank;
     size_t _experience;
 
+    TCaptainInfo();
     TCaptainInfo(const std::string &name, const std::string &rank, size_t experience);
     ~TCaptainInfo() = default;
 };
