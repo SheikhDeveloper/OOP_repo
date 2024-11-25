@@ -1,4 +1,4 @@
-#include "weaponry.h"
+#include "../headers/weaponry.h"
 
 #include <iostream>
 

@@ -1,6 +1,9 @@
-#include "battleship.h"
+#include "../headers/battleship.h"
 
 #include <iostream>
+
+
+TBattleship::TBattleship() : _weaponry(), _name(), _captain(), _speed(0.), _survivability(0.), _crewMembersAmount(0) {}
 
 TBattleship::TBattleship(TWeaponry weaponry, const std::string &name, const std::string &captainName, const std::string &captainRank, const size_t experience, double speed, double survivability, size_t crewMembersAmount) :
     _weaponry(weaponry),

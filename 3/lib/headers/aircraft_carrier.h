@@ -7,18 +7,24 @@
 
 class TAircraftCarrier : virtual public TBattleship {
 public:
+    TAircraftCarrier();
     TAircraftCarrier(TWeaponry weaponry, TPlaneGroup planes, const std::string &name, const std::string &captainName, 
             const std::string &captainRank, const size_t experience, double survivability, size_t crewMembersAmount);
+
+    TAircraftCarrier(TPlaneGroup planes);
 
     TAircraftCarrier(const TAircraftCarrier &aircraftCarrier);
     TAircraftCarrier(TAircraftCarrier &&aircraftCarrier);
 
     virtual std::pair<size_t, TPlaneGroup> getPlaneInfo() const;
+
     virtual double calcPlaneDamage() const;
+
+    virtual void setWeaponry(TWeaponry weaponry) override;
     virtual void setPlaneInfo(TPlaneGroup planes);
     void setPlaneType(TPlane &plane);
-    virtual void dump(std::ostream &out) const;
-    virtual void read(std::istream &in);
+    virtual void dump(std::ostream &out) const override;
+    virtual void read(std::istream &in) override;
 
     virtual ~TAircraftCarrier() = default;
 

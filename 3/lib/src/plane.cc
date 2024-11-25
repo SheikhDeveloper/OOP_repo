@@ -1,44 +1,44 @@
-#include "plane.h"
+#include "../headers/plane.h"
 #include <iostream>
 
 TPlane::TPlane(TWeaponry &weaponry, double survavability, double fuelUsage) : _weaponry(weaponry), _survavability(survavability), _fuelUsage(fuelUsage) {
     if (survavability < 0.) {
         survavability = 0.;
-        throw std::logic_error("Survavability can't be negative.Setting it to 0");
+        throw std::logic_error("Survavability can't be negative.setting it to 0");
     }
     if (fuelUsage < 0.) {
         fuelUsage = 0.;
-        throw std::logic_error("Fuel usage can't be negative.Setting it to 0");
+        throw std::logic_error("Fuel usage can't be negative.setting it to 0");
     }
 }
 
-TWeaponry TPlane::GetWeaponry() const {
+TWeaponry TPlane::getWeaponry() const {
     return _weaponry;
 }
 
-double TPlane::GetSurvavability() const {
+double TPlane::getSurvavability() const {
     return _survavability;
 }
 
-double TPlane::GetFuelUsage() const {
+double TPlane::getFuelUsage() const {
     return _fuelUsage;
 }
 
-void TPlane::SetWeaponry(TWeaponry &newWeaponry) {
-    if (newWeaponry.GetType() != WeaponryType::light) {
+void TPlane::setWeaponry(TWeaponry &newWeaponry) {
+    if (newWeaponry.getType() != WeaponryType::light) {
         throw std::logic_error("Can't set heavy weaponry on a plane");
     }
     _weaponry = newWeaponry;
 }
 
-void TPlane::SetSurvavability(double newSurvavability) {
+void TPlane::setSurvavability(double newSurvavability) {
     if (newSurvavability < 0.) {
         throw std::logic_error("Survavability can't be negative");
     }
     _survavability = newSurvavability;
 }
 
-void TPlane::SetFuelUsage(double newFuelUsage) {
+void TPlane::setFuelUsage(double newFuelUsage) {
     if (newFuelUsage < 0.) {
         throw std::logic_error("Fuel usage can't be negative");
     }

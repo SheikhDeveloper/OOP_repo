@@ -1,10 +1,14 @@
-#include "aircraft_carrier.h"
+#include "../headers/aircraft_carrier.h"
 
+TAircraftCarrier::TAircraftCarrier() : TBattleship(), _planes() {}
 
 TAircraftCarrier::TAircraftCarrier(TWeaponry weaponry, TPlaneGroup planes, const std::string &name, const std::string &captainName, 
         const std::string &captainRank, const size_t experience, double survivability, size_t crewMembersAmount) :
     TBattleship(weaponry, name, captainName, captainRank, experience, 0., survivability, crewMembersAmount),
     _planes(planes) {}
+
+TAircraftCarrier::TAircraftCarrier(TPlaneGroup planes) :
+    TBattleship(), _planes(planes) {}
 
 TAircraftCarrier::TAircraftCarrier(const TAircraftCarrier &aircraftCarrier) :
     TBattleship(aircraftCarrier.getWeaponry(), aircraftCarrier.getName(), aircraftCarrier.getCaptain()._name, aircraftCarrier.getCaptain()._rank,
@@ -23,6 +27,13 @@ std::pair<size_t, TPlaneGroup> TAircraftCarrier::getPlaneInfo() const {
 
 double TAircraftCarrier::calcPlaneDamage() const {
     return _planes.getTotalDamage();
+}
+
+void TAircraftCarrier::setWeaponry(TWeaponry weaponry) {
+    if (weaponry.getType() != WeaponryType::light) {
+        throw std::logic_error("Can't set heavy weaponry on an aircraft carrier");
+    }
+    TBattleship::setWeaponry(weaponry);
 }
 
 void TAircraftCarrier::setPlaneInfo(TPlaneGroup planes) {

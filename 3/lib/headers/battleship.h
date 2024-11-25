@@ -6,7 +6,7 @@
 
 class TBattleship {
 public:
-
+    TBattleship();
     TBattleship(TWeaponry weaponry, const std::string &name, const std::string &captainName, const std::string &captainRank, const size_t experience, double speed, double survivability, size_t crewMembersAmount);
 
     TBattleship(const TBattleship &battleship);
@@ -26,8 +26,8 @@ public:
     void setCaptain(const std::string &captainName, const std::string &captainRank, const size_t experience);
     void setName(const std::string &name);
 
-    void dump(std::ostream &out) const;
-    void read(std::istream &in);
+    virtual void dump(std::ostream &out) const;
+    virtual void read(std::istream &in);
 
     virtual ~TBattleship() = default;
 
