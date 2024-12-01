@@ -27,6 +27,8 @@ std::istream &operator>>(std::istream &in, WeaponryType &type) {
     return in;
 }
 
+TWeaponry::TWeaponry() : _name(""), _ammoName(""), _ammoAmount(0), _damage(0.), _type(WeaponryType::light) {}
+
 TWeaponry::TWeaponry(const std::string& name, const std::string& ammoName, size_t ammoAmount, double damage, WeaponryType type) :
     _name(name),
     _ammoName(ammoName),

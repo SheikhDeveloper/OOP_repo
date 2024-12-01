@@ -3,12 +3,12 @@
 
 #include "battleship.h"
 
-class TCoveringShip : virtual public TBattleship
+class TCoveringShip : public TBattleship
 {
 public:
-    TCoveringShip() = default;
+    TCoveringShip();
     TCoveringShip(TBattleship &shipToCover, TWeaponry weaponry, const std::string &name, const std::string &captainName, 
-            const std::string &captainRank, const size_t experience, double survivability, double speed, size_t crewMembersAmount);
+            const std::string &captainRank, const size_t experience, double survivability, double speed, size_t crewMembersAmount, double fuelUsage);
     TCoveringShip(TBattleship &shipToCover);
 
     TCoveringShip(const TCoveringShip &coveringShip);
@@ -22,6 +22,7 @@ public:
     virtual void setShipToCover(TBattleship &shipToCover);
     virtual void dump(std::ostream &out) const override;
     virtual void read(std::istream &in) override;
+    virtual void readShipToCover(std::istream &in);
 
     virtual ~TCoveringShip() = default;
 

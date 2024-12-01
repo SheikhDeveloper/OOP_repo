@@ -4,6 +4,7 @@
 #include "plane.h"
 #include "hash_table.h"
 
+
 class TPlaneGroup {
 public:
     TPlaneGroup() = default;
@@ -11,9 +12,9 @@ public:
 
     TPlaneGroup(TPlaneGroup&&);
 
-    void addPlane(const TPlane&);
+    void addPlane(TPlane& plane);
     void deletePlane(const std::string& name);
-    TPlane &getPlane(std::string &name);
+    TPlane &getPlane(std::string &name, TPlaneType planeType);
     double getTotalDamage() const;
     size_t size() const;
 

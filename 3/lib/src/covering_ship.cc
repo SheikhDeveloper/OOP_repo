@@ -2,9 +2,11 @@
 
 #include <iostream>
 
-TCoveringShip::TCoveringShip(TBattleship &shipToCover, TWeaponry weaponry, const std::string &name, const std::string &captainName, 
-            const std::string &captainRank, const size_t experience, double survivability, double speed, size_t crewMembersAmount) :
-    TBattleship(weaponry, name, captainName, captainRank, experience, survivability, speed, crewMembersAmount),
+TCoveringShip::TCoveringShip(TBattleship &shipToCover, TWeaponry weaponry, 
+                             const std::string &name, const std::string &captainName, 
+                             const std::string &captainRank, const size_t experience, 
+                             double survivability, double speed, size_t crewMembersAmount, double fuelUsage) :
+    TBattleship(weaponry, name, captainName, captainRank, experience, survivability, speed, crewMembersAmount, fuelUsage),
     _shipToCover(shipToCover) {
 
         if (getWeaponryDamage() < 0.) {
@@ -62,6 +64,10 @@ void TCoveringShip::read(std::istream &in) {
     std::string shipToCoverName;
     in >> shipToCoverName;
     _shipToCover.setName(shipToCoverName);
+}
+
+void TCoveringShip::readShipToCover(std::istream &in) {
+    _shipToCover.read(in);
 }
 
 TCoveringShip &TCoveringShip::operator=(const TCoveringShip &coveringShip) {

@@ -1,42 +1,38 @@
 #include "../headers/aircraft_carrier.h"
 
-TAircraftCarrier::TAircraftCarrier() : TBattleship(), _planes() {}
-
 TAircraftCarrier::TAircraftCarrier(TWeaponry weaponry, TPlaneGroup planes, const std::string &name, const std::string &captainName, 
-        const std::string &captainRank, const size_t experience, double survivability, size_t crewMembersAmount) :
-    TBattleship(weaponry, name, captainName, captainRank, experience, 0., survivability, crewMembersAmount),
+        const std::string &captainRank, const size_t experience, double survivability, double speed, size_t crewMembersAmount, double fuelUsage) :
+    TBattleship(weaponry, name, captainName, captainRank, experience, speed, survivability, crewMembersAmount, fuelUsage),
     _planes(planes) {}
-
-TAircraftCarrier::TAircraftCarrier(TPlaneGroup planes) :
-    TBattleship(), _planes(planes) {}
 
 TAircraftCarrier::TAircraftCarrier(const TAircraftCarrier &aircraftCarrier) :
     TBattleship(aircraftCarrier.getWeaponry(), aircraftCarrier.getName(), aircraftCarrier.getCaptain()._name, aircraftCarrier.getCaptain()._rank,
-            aircraftCarrier.getCaptain()._experience, 0., aircraftCarrier.getSurvivability(), aircraftCarrier.getCrewMembersAmount()),
+            aircraftCarrier.getCaptain()._experience, aircraftCarrier.getSpeed(), aircraftCarrier.getSurvivability(), 
+            aircraftCarrier.getCrewMembersAmount(), aircraftCarrier.getFuelUsage()),
     _planes(aircraftCarrier._planes) {}
 
 TAircraftCarrier::TAircraftCarrier(TAircraftCarrier &&aircraftCarrier) :
     TBattleship(std::move(aircraftCarrier.getWeaponry()), std::move(aircraftCarrier.getName()), std::move(aircraftCarrier.getCaptain()._name), 
-            std::move(aircraftCarrier.getCaptain()._rank), std::move(aircraftCarrier.getCaptain()._experience), 0., 
-            std::move(aircraftCarrier.getSurvivability()), std::move(aircraftCarrier.getCrewMembersAmount())),
+            std::move(aircraftCarrier.getCaptain()._rank), std::move(aircraftCarrier.getCaptain()._experience), std::move(aircraftCarrier.getSpeed()), 
+            std::move(aircraftCarrier.getSurvivability()), std::move(aircraftCarrier.getCrewMembersAmount()), std::move(aircraftCarrier.getFuelUsage())),
     _planes(std::move(aircraftCarrier._planes)) {}
 
-std::pair<size_t, TPlaneGroup> TAircraftCarrier::getPlaneInfo() const {
-    return {_planes.size(), _planes};
+TPlaneGroup & TAircraftCarrier::getPlaneInfo() {
+    return _planes;
 }
 
 double TAircraftCarrier::calcPlaneDamage() const {
     return _planes.getTotalDamage();
 }
 
-void TAircraftCarrier::setWeaponry(TWeaponry weaponry) {
+void TAircraftCarrier::setWeaponry(TWeaponry &weaponry) {
     if (weaponry.getType() != WeaponryType::light) {
         throw std::logic_error("Can't set heavy weaponry on an aircraft carrier");
     }
     TBattleship::setWeaponry(weaponry);
 }
 
-void TAircraftCarrier::setPlaneInfo(TPlaneGroup planes) {
+void TAircraftCarrier::setPlaneInfo(TPlaneGroup &planes) {
     _planes = planes;
 }
 

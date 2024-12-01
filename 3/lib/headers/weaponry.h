@@ -15,6 +15,7 @@ std::istream &operator>>(std::istream &in, WeaponryType &type);
 class TWeaponry
 {
 public:
+    TWeaponry();
     TWeaponry(const std::string& name, const std::string& ammoName, size_t ammoAmount, double damage, WeaponryType type);
 
     TWeaponry(const TWeaponry& other) = default;

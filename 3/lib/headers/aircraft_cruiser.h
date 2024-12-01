@@ -4,12 +4,12 @@
 #include "aircraft_carrier.h"
 #include "covering_ship.h"
 
-class TAircraftCarryingCruiser : public TAircraftCarrier, public TCoveringShip {
+class TAircraftCarryingCruiser : virtual public TAircraftCarrier, virtual public TCoveringShip {
 public:
     TAircraftCarryingCruiser();
     TAircraftCarryingCruiser(TWeaponry weaponry, TPlaneGroup planes, TBattleship &shipToCover, const std::string &name, 
             const std::string &captainName, const std::string &captainRank, const size_t experience, double survivability, 
-            double speed, size_t crewMembersAmount);
+            double speed, size_t crewMembersAmount, double fuelUsage);
     TAircraftCarryingCruiser(const TAircraftCarryingCruiser &aircraftCarryingCruiser);
     TAircraftCarryingCruiser(TAircraftCarryingCruiser &&aircraftCarryingCruiser);
 

@@ -2,11 +2,11 @@
 
 #include <iostream>
 
-TAircraftCarryingCruiser::TAircraftCarryingCruiser() {}
-
 TAircraftCarryingCruiser::TAircraftCarryingCruiser(TWeaponry weaponry, TPlaneGroup planes, TBattleship &shipToCover, const std::string &name, 
     const std::string &captainName, const std::string &captainRank, const size_t experience, double survivability, double speed, 
-    size_t crewMembersAmount) : TBattleship(weaponry, name, captainName, captainRank, experience, survivability, speed, crewMembersAmount), TAircraftCarrier(planes), TCoveringShip(shipToCover){}
+    size_t crewMembersAmount, double fuelUsage) : 
+    TAircraftCarrier(weaponry, planes, name, captainName, captainRank, experience, survivability, speed, crewMembersAmount, fuelUsage), 
+    TCoveringShip(shipToCover, weaponry, name, captainName, captainRank, experience, survivability, speed, crewMembersAmount, fuelUsage) {}
 
 TAircraftCarryingCruiser::TAircraftCarryingCruiser(const TAircraftCarryingCruiser &aircraftCarryingCruiser) : 
     TAircraftCarrier(aircraftCarryingCruiser), TCoveringShip(aircraftCarryingCruiser) {}
@@ -21,9 +21,7 @@ void TAircraftCarryingCruiser::dump(std::ostream &out) const {
 
 void TAircraftCarryingCruiser::read(std::istream &in) {
     TAircraftCarrier::read(in);
-    TBattleship shipToCover;
-    shipToCover.read(in);
-    setShipToCover(shipToCover);
+    TCoveringShip::readShipToCover(in);
 }
 
 TAircraftCarryingCruiser &TAircraftCarryingCruiser::operator=(const TAircraftCarryingCruiser &aircraftCarryingCruiser) {

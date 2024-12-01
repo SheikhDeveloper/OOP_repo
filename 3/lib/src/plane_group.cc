@@ -12,9 +12,11 @@ TPlaneGroup::TPlaneGroup(TPlaneGroup &&planeGroup) :
     _planes(std::move(planeGroup._planes)),
     _totalDamage(planeGroup._totalDamage) {}
 
-void TPlaneGroup::addPlane(const TPlane &plane) {
+void TPlaneGroup::addPlane(TPlane &plane) {
+    std::string key = plane.getName() + std::to_string(static_cast<int>(plane.getPlaneType()));
     _planes.insert(plane.getName(), plane);
-    _totalDamage += plane.getWeaponry().getDamage();
+    auto &plane_weaponry = plane.getWeaponry();
+    _totalDamage += plane_weaponry.getDamage();
 }
 
 void TPlaneGroup::deletePlane(const std::string &name) {
@@ -22,7 +24,8 @@ void TPlaneGroup::deletePlane(const std::string &name) {
     _planes.remove(name);
 }
 
-TPlane &TPlaneGroup::getPlane(std::string &name) {
+TPlane &TPlaneGroup::getPlane(std::string &name, TPlaneType planeType) {
+    std::string key = name + std::to_string(static_cast<int>(planeType));
     return _planes[name];
 }
 
@@ -36,7 +39,8 @@ size_t TPlaneGroup::size() const {
 
 void TPlaneGroup::dump(std::ostream &os) const {
     for (auto &i : _planes) {
-        i.value_.dump(os);
+        TPlane plane = i.value_;
+        plane.dump(os);
     }
 }
 
