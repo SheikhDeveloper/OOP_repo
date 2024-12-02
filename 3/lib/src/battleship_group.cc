@@ -197,7 +197,18 @@ void TBattleshipGroup::relocatePlane(std::string planeName, TPlaneType planeType
 
 void TBattleshipGroup::simulateAttack(TPlaneGroup &attackingGroup, size_t numWorkers) {
     std::vector<std::thread> threads(numWorkers);
-    for (size_t i = 0; i < numWorkers; ++i) {
+    for (auto i = _battleshipGroup.begin(); i != _battleshipGroup.end(); ++i) {
+        for (size_t j = 0; j < numWorkers; ++j) {
+            if (threads[j].joinable())
+                threads[j].join();
+            threads[j] = std::thread(&TPlaneGroup::attack, &attackingGroup, &((*i).value_));
+        }
+        if ((*i).value_.getSurvivability() == 0.)
+            _battleshipGroup.remove((*i).key_);
+    }
+    for (auto &thread : threads) {
+        if (thread.joinable())
+            thread.join();
     }
 }
 

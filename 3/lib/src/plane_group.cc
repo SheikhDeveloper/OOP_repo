@@ -20,15 +20,28 @@ TPlaneGroup::TPlaneGroup(TPlaneGroup &&planeGroup) :
     _fightersAmount(planeGroup._fightersAmount) {}
 
 void TPlaneGroup::addPlane(TPlane &plane) {
-    TPlaneType planeType = plane.getPlaneType();
+    TPlaneType planeType = plane.getType();
     std::string key = plane.getName() + std::to_string(static_cast<int>(planeType));
     _planes.insert(plane.getName(), plane);
     auto &plane_weaponry = plane.getWeaponry();
-    _totalDamage += plane_weaponry.getDamage();
+    if (planeType == TPlaneType::bomber) {
+        _bomberAmount++;
+        _shipDamage += plane.getWeaponry().getDamage();
+    }
+    else if (planeType == TPlaneType::fighter)
+        _fightersAmount++;
+    _planeDamage += plane.getWeaponry().getDamage();
 }
 
 void TPlaneGroup::deletePlane(const std::string &name) {
-    _totalDamage -= _planes[name].getWeaponry().getDamage();
+    TPlane plane = _planes[name];
+    if (plane.getType() == TPlaneType::bomber) {
+        _bomberAmount--;
+        _shipDamage -= plane.getWeaponry().getDamage();
+    }
+    else if (plane.getType() == TPlaneType::fighter)
+        _fightersAmount--;
+    _planeDamage -= plane.getWeaponry().getDamage();
     _planes.remove(name);
 }
 
@@ -38,7 +51,7 @@ TPlane &TPlaneGroup::getPlane(std::string &name, TPlaneType planeType) {
 }
 
 double TPlaneGroup::getTotalDamage() const {
-    return _totalDamage;
+    return _planeDamage + _shipDamage;
 }
 
 size_t TPlaneGroup::size() const {
@@ -75,7 +88,10 @@ TPlane &TPlaneGroup::operator[](const std::string &name) {
 TPlaneGroup &TPlaneGroup::operator=(const TPlaneGroup &planeGroup) {
     if (this != &planeGroup) {
         _planes = planeGroup._planes;
-        _totalDamage = planeGroup._totalDamage;
+        _planeDamage = planeGroup._planeDamage;
+        _shipDamage = planeGroup._shipDamage;
+        _bomberAmount = planeGroup._bomberAmount;
+        _fightersAmount = planeGroup._fightersAmount;
     }
     return *this;
 }
@@ -84,7 +100,10 @@ TPlaneGroup &TPlaneGroup::operator=(const TPlaneGroup &planeGroup) {
 TPlaneGroup &TPlaneGroup::operator=(TPlaneGroup &&planeGroup) {
     if (this != &planeGroup) {
         _planes = std::move(planeGroup._planes);
-        _totalDamage = planeGroup._totalDamage;
+        _planeDamage = planeGroup._planeDamage;
+        _shipDamage = planeGroup._shipDamage;
+        _bomberAmount = planeGroup._bomberAmount;
+        _fightersAmount = planeGroup._fightersAmount;
     }
     return *this;
 }
