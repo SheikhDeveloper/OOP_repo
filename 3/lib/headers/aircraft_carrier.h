@@ -20,7 +20,7 @@ public:
 
     virtual void setWeaponry(TWeaponry &weaponry) override;
     virtual void setPlaneInfo(TPlaneGroup &planes);
-    void setPlaneType(TPlane &plane);
+    void addPlane(TPlane &plane);
     virtual void dump(std::ostream &out) const override;
     virtual void read(std::istream &in) override;
 

@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+TCoveringShip::TCoveringShip(): TBattleship(), _shipToCover(TBattleship()) {}
+
 TCoveringShip::TCoveringShip(TBattleship &shipToCover, TWeaponry weaponry, 
                              const std::string &name, const std::string &captainName, 
                              const std::string &captainRank, const size_t experience, 

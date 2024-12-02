@@ -26,12 +26,12 @@ std::istream &operator>>(std::istream &in, TPlaneType &type) {
     return in;
 }
 
-TPlane::TPlane(const std::string name, TWeaponry &weaponry, double survavability, double fuelUsage, TPlaneType type) : 
+TPlane::TPlane(const std::string name, TWeaponry &weaponry, double survivability, double fuelUsage, TPlaneType type) : 
     _name(name), _weaponry(weaponry), _type(type),
-    _survavability(survavability), _fuelUsage(fuelUsage) {
-    if (survavability < 0.) {
-        survavability = 0.;
-        throw std::logic_error("Survavability can't be negative.setting it to 0");
+    _survivability(survivability), _fuelUsage(fuelUsage) {
+    if (survivability < 0.) {
+        survivability = 0.;
+        throw std::logic_error("Survivability can't be negative.setting it to 0");
     }
     if (fuelUsage < 0.) {
         fuelUsage = 0.;
@@ -42,12 +42,12 @@ TPlane::TPlane(const std::string name, TWeaponry &weaponry, double survavability
     }
 }
 
-TPlane::TPlane(std::string &&name, TWeaponry &&weaponry, double survavability, double fuelUsage, TPlaneType type) : 
+TPlane::TPlane(std::string &&name, TWeaponry &&weaponry, double survivability, double fuelUsage, TPlaneType type) : 
     _name(std::move(name)), _weaponry(std::move(weaponry)), 
-    _survavability(survavability), _fuelUsage(fuelUsage), _type(type) {
-    if (survavability < 0.) {
-        survavability = 0.;
-        throw std::logic_error("Survavability can't be negative.setting it to 0");
+    _survivability(survivability), _fuelUsage(fuelUsage), _type(type) {
+    if (survivability < 0.) {
+        survivability = 0.;
+        throw std::logic_error("Survivability can't be negative.setting it to 0");
     }
     if (fuelUsage < 0.) {
         fuelUsage = 0.;
@@ -62,8 +62,8 @@ TWeaponry &TPlane::getWeaponry() {
     return _weaponry;
 }
 
-double TPlane::getSurvavability() const {
-    return _survavability;
+double TPlane::getSurvivability() const {
+    return _survivability;
 }
 
 double TPlane::getFuelUsage() const {
@@ -93,11 +93,11 @@ void TPlane::setWeaponry(TWeaponry &newWeaponry) {
     _weaponry = newWeaponry;
 }
 
-void TPlane::setSurvavability(double newSurvavability) {
-    if (newSurvavability < 0.) {
-        throw std::logic_error("Survavability can't be negative");
+void TPlane::setSurvivability(double newSurvivability) {
+    if (newSurvivability < 0.) {
+        throw std::logic_error("Survivability can't be negative");
     }
-    _survavability = newSurvavability;
+    _survivability = newSurvivability;
 }
 
 void TPlane::setFuelUsage(double newFuelUsage) {
@@ -116,12 +116,12 @@ void TPlane::setWeaponryType(WeaponryType weaponryType) {
 
 void TPlane::dump(std::ostream &out) const {
     _weaponry.dump(out);
-    out << _survavability << " " << _fuelUsage << _name << " " << _type;
+    out << _survivability << " " << _fuelUsage << _name << " " << _type;
 }
 
 void TPlane::read(std::istream &in) {
     _weaponry.read(in);
-    in >> _survavability >> _fuelUsage >> _name >> _type;
+    in >> _survivability >> _fuelUsage >> _name >> _type;
 }
 
 std::ostream &operator<<(std::ostream &out, const TPlane &plane) {

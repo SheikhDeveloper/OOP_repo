@@ -1,5 +1,7 @@
 #include "../headers/aircraft_carrier.h"
 
+TAircraftCarrier::TAircraftCarrier() : TBattleship(), _planes() {}
+
 TAircraftCarrier::TAircraftCarrier(TWeaponry weaponry, TPlaneGroup planes, const std::string &name, const std::string &captainName, 
         const std::string &captainRank, const size_t experience, double survivability, double speed, size_t crewMembersAmount, double fuelUsage) :
     TBattleship(weaponry, name, captainName, captainRank, experience, speed, survivability, crewMembersAmount, fuelUsage),
@@ -36,7 +38,7 @@ void TAircraftCarrier::setPlaneInfo(TPlaneGroup &planes) {
     _planes = planes;
 }
 
-void TAircraftCarrier::setPlaneType(TPlane &plane) {
+void TAircraftCarrier::addPlane(TPlane &plane) {
     _planes.addPlane(plane);
 }
 

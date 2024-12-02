@@ -132,9 +132,6 @@ void TBattleship::setSurvivability(double survivability) {
 }
 
 void TBattleship::setCrewMembersAmount(size_t crewMembersAmount) {
-    if (crewMembersAmount < 0) {
-        throw std::logic_error("Crew members amount can't be negative");
-    }
     _crewMembersAmount = crewMembersAmount;
 }
 

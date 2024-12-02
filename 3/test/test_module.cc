@@ -4,11 +4,11 @@
 TEST(TestBattleship, TestDefaultConstructor) {
     TBattleship b;
 
-    EXPECT_EQ(b.getSurvivability(), 0);
+    EXPECT_DOUBLE_EQ(b.getSurvivability(), 0);
     EXPECT_EQ(b.getWeaponry().getDamage(), 0);
     EXPECT_EQ(b.getCrewMembersAmount(), 0);
-    EXPECT_EQ(b.getSpeed(), 0);
-    EXPECT_EQ(b.getFuelUsage(), 0);
+    EXPECT_DOUBLE_EQ(b.getSpeed(), 0);
+    EXPECT_DOUBLE_EQ(b.getFuelUsage(), 0);
     EXPECT_EQ(b.getName(), "");
     EXPECT_EQ(b.getCaptain()._experience, 0);
     EXPECT_EQ(b.getCaptain()._rank[0], 0);
@@ -18,21 +18,21 @@ TEST(TestBattleship, TestDefaultConstructor) {
 TEST(TestBattleship, TestConstructor) {
     std::string name = "Battleship";
     TWeaponry w;
-    double survavability = 0.5;
+    double survivability = 0.5;
     double fuelUsage = 0.5;
     TCaptainInfo c;
     size_t crewMembersAmount = 0;
     double speed = 0;
-    TBattleship b(w, c, name, speed, survavability, crewMembersAmount, fuelUsage);
+    TBattleship b(w, c, name, speed, survivability, crewMembersAmount, fuelUsage);
 
-    EXPECT_EQ(b.getSurvivability(), survavability);
+    EXPECT_DOUBLE_EQ(b.getSurvivability(), survivability);
     EXPECT_EQ(b.getWeaponry().getDamage(), w.getDamage());
     EXPECT_EQ(b.getWeaponry().getName(), w.getName());
     EXPECT_EQ(b.getWeaponry().getAmmoName(), w.getAmmoName());
     EXPECT_EQ(b.getWeaponry().getAmmoAmount(), w.getAmmoAmount());
     EXPECT_EQ(b.getCrewMembersAmount(), crewMembersAmount);
-    EXPECT_EQ(b.getSpeed(), 0);
-    EXPECT_EQ(b.getFuelUsage(), fuelUsage);
+    EXPECT_DOUBLE_EQ(b.getSpeed(), 0);
+    EXPECT_DOUBLE_EQ(b.getFuelUsage(), fuelUsage);
     EXPECT_EQ(b.getName(), name);
     EXPECT_EQ(b.getCaptain()._experience, c._experience);
     EXPECT_EQ(b.getCaptain()._rank[0], c._rank[0]);
@@ -46,20 +46,20 @@ TEST(TestBattleship, TestConstructorWithoutCaptainInfo) {
     size_t experience = 0;
     std::string captainName = "Captain";
     TWeaponry w;
-    double survavability = 0.5;
+    double survivability = 0.5;
     double fuelUsage = 0.5;
     size_t crewMembersAmount = 0;
     double speed = 0;
-    TBattleship b(w, name, captainName, rank, experience, speed, survavability, crewMembersAmount, fuelUsage);
+    TBattleship b(w, name, captainName, rank, experience, speed, survivability, crewMembersAmount, fuelUsage);
 
-    EXPECT_EQ(b.getSurvivability(), survavability);
+    EXPECT_DOUBLE_EQ(b.getSurvivability(), survivability);
     EXPECT_EQ(b.getWeaponry().getDamage(), w.getDamage());
     EXPECT_EQ(b.getWeaponry().getName(), w.getName());
     EXPECT_EQ(b.getWeaponry().getAmmoName(), w.getAmmoName());
     EXPECT_EQ(b.getWeaponry().getAmmoAmount(), w.getAmmoAmount());
     EXPECT_EQ(b.getCrewMembersAmount(), crewMembersAmount);
-    EXPECT_EQ(b.getSpeed(), 0);
-    EXPECT_EQ(b.getFuelUsage(), fuelUsage);
+    EXPECT_DOUBLE_EQ(b.getSpeed(), 0);
+    EXPECT_DOUBLE_EQ(b.getFuelUsage(), fuelUsage);
     EXPECT_EQ(b.getName(), name);
     EXPECT_EQ(b.getCaptain()._experience, c._experience);
     EXPECT_EQ(b.getCaptain()._rank[0], c._rank[0]);
@@ -69,22 +69,22 @@ TEST(TestBattleship, TestConstructorWithoutCaptainInfo) {
 TEST(TestBattleship, TestCopyConstructor) {
     std::string name = "Battleship";
     TWeaponry w;
-    double survavability = 0.5;
+    double survivability = 0.5;
     double fuelUsage = 0.5;
     TCaptainInfo c;
     size_t crewMembersAmount = 0;
     double speed = 0;
-    TBattleship b(w, c, name, speed, survavability, crewMembersAmount, fuelUsage);
+    TBattleship b(w, c, name, speed, survivability, crewMembersAmount, fuelUsage);
     TBattleship b2(b);
 
-    EXPECT_EQ(b.getSurvivability(), b2.getSurvivability());
+    EXPECT_DOUBLE_EQ(b.getSurvivability(), b2.getSurvivability());
     EXPECT_EQ(b.getWeaponry().getDamage(), b2.getWeaponry().getDamage());
     EXPECT_EQ(b.getWeaponry().getName(), b2.getWeaponry().getName());
     EXPECT_EQ(b.getWeaponry().getAmmoName(), b2.getWeaponry().getAmmoName());
     EXPECT_EQ(b.getWeaponry().getAmmoAmount(), b2.getWeaponry().getAmmoAmount());
     EXPECT_EQ(b.getCrewMembersAmount(), b2.getCrewMembersAmount());
-    EXPECT_EQ(b.getSpeed(), 0);
-    EXPECT_EQ(b.getFuelUsage(), fuelUsage);
+    EXPECT_DOUBLE_EQ(b.getSpeed(), 0);
+    EXPECT_DOUBLE_EQ(b.getFuelUsage(), fuelUsage);
     EXPECT_EQ(b.getName(), name);
     EXPECT_EQ(b.getCaptain()._experience, c._experience);
     EXPECT_EQ(b.getCaptain()._rank[0], c._rank[0]);
@@ -94,22 +94,22 @@ TEST(TestBattleship, TestCopyConstructor) {
 TEST(TestBattleship, TestMoveConstructor) {
     std::string name = "Battleship";
     TWeaponry w;
-    double survavability = 0.5;
+    double survivability = 0.5;
     double fuelUsage = 0.5;
     TCaptainInfo c;
     size_t crewMembersAmount = 0;
     double speed = 0;
-    TBattleship b(w, c, name, speed, survavability, crewMembersAmount, fuelUsage);
+    TBattleship b(w, c, name, speed, survivability, crewMembersAmount, fuelUsage);
     TBattleship b2(std::move(b));
 
-    EXPECT_EQ(b.getSurvivability(), b2.getSurvivability());
+    EXPECT_DOUBLE_EQ(b.getSurvivability(), b2.getSurvivability());
     EXPECT_EQ(b.getWeaponry().getDamage(), b2.getWeaponry().getDamage());
     EXPECT_EQ(b.getWeaponry().getName(), b2.getWeaponry().getName());
     EXPECT_EQ(b.getWeaponry().getAmmoName(), b2.getWeaponry().getAmmoName());
     EXPECT_EQ(b.getWeaponry().getAmmoAmount(), b2.getWeaponry().getAmmoAmount());
     EXPECT_EQ(b.getCrewMembersAmount(), b2.getCrewMembersAmount());
-    EXPECT_EQ(b.getSpeed(), 0);
-    EXPECT_EQ(b.getFuelUsage(), fuelUsage);
+    EXPECT_DOUBLE_EQ(b.getSpeed(), 0);
+    EXPECT_DOUBLE_EQ(b.getFuelUsage(), fuelUsage);
     EXPECT_EQ(b.getName(), name);
     EXPECT_EQ(b.getCaptain()._experience, c._experience);
     EXPECT_EQ(b.getCaptain()._rank[0], c._rank[0]);
@@ -119,21 +119,21 @@ TEST(TestBattleship, TestMoveConstructor) {
 TEST(TestBattleship, TestGetters) {
     std::string name = "Battleship";
     TWeaponry w;
-    double survavability = 0.5;
+    double survivability = 0.5;
     double fuelUsage = 0.5;
     TCaptainInfo c;
     size_t crewMembersAmount = 0;
     double speed = 0;
-    TBattleship b(w, c, name, speed, survavability, crewMembersAmount, fuelUsage);
+    TBattleship b(w, c, name, speed, survivability, crewMembersAmount, fuelUsage);
 
-    EXPECT_EQ(b.getSurvivability(), survavability);
+    EXPECT_DOUBLE_EQ(b.getSurvivability(), survivability);
     EXPECT_EQ(b.getWeaponry().getDamage(), w.getDamage());
     EXPECT_EQ(b.getWeaponry().getName(), w.getName());
     EXPECT_EQ(b.getWeaponry().getAmmoName(), w.getAmmoName());
     EXPECT_EQ(b.getWeaponry().getAmmoAmount(), w.getAmmoAmount());
     EXPECT_EQ(b.getCrewMembersAmount(), crewMembersAmount);
-    EXPECT_EQ(b.getSpeed(), 0);
-    EXPECT_EQ(b.getFuelUsage(), fuelUsage);
+    EXPECT_DOUBLE_EQ(b.getSpeed(), 0);
+    EXPECT_DOUBLE_EQ(b.getFuelUsage(), fuelUsage);
     EXPECT_EQ(b.getName(), name);
     EXPECT_EQ(b.getCaptain()._experience, c._experience);
     EXPECT_EQ(b.getCaptain()._rank[0], c._rank[0]);
@@ -143,12 +143,12 @@ TEST(TestBattleship, TestGetters) {
 TEST(TestBattleship, TestSetters) {
     std::string name = "Battleship";
     TWeaponry w;
-    double survavability = 0.5;
+    double survivability = 0.5;
     double fuelUsage = 0.5;
     TCaptainInfo c;
     size_t crewMembersAmount = 0;
     double speed = 0;
-    TBattleship b(w, c, name, speed, survavability, crewMembersAmount, fuelUsage);
+    TBattleship b(w, c, name, speed, survivability, crewMembersAmount, fuelUsage);
 
     double newSurvivability = 0.3;
     double newFuelUsage = 0.3;
@@ -176,21 +176,21 @@ TEST(TestBattleship, TestSetters) {
         EXPECT_EQ(b.getName()[i], new_name[i]);
     }
 
-    EXPECT_EQ(b.getSurvivability(), newSurvivability);
-    EXPECT_EQ(b.getFuelUsage(), newFuelUsage);
+    EXPECT_DOUBLE_EQ(b.getSurvivability(), newSurvivability);
+    EXPECT_DOUBLE_EQ(b.getFuelUsage(), newFuelUsage);
     EXPECT_EQ(b.getCrewMembersAmount(), newCrewMembersAmount);
-    EXPECT_EQ(b.getSpeed(), newSpeed);
+    EXPECT_DOUBLE_EQ(b.getSpeed(), newSpeed);
 }
 
 TEST(TestBattleship, TestMaxDistanceCalculation) {
     std::string name = "Battleship";
     TWeaponry w;
-    double survavability = 0.5;
+    double survivability = 0.5;
     double fuelUsage = 0.5;
     TCaptainInfo c;
     size_t crewMembersAmount = 0;
     double speed = 0;
-    TBattleship b(w, c, name, speed, survavability, crewMembersAmount, fuelUsage);
+    TBattleship b(w, c, name, speed, survivability, crewMembersAmount, fuelUsage);
     EXPECT_DOUBLE_EQ(b.calcMaxDistance(100), 200);
 
     double newSurvivability = 0.3;
@@ -209,12 +209,12 @@ TEST(TestBattleship, TestMaxDistanceCalculation) {
 TEST(TestBattleship, TestDump) {
     std::string name = "Battleship";
     TWeaponry w;
-    double survavability = 0.5;
+    double survivability = 0.5;
     double fuelUsage = 0.5;
     TCaptainInfo c;
     size_t crewMembersAmount = 0;
     double speed = 0;
-    TBattleship b(w, c, name, speed, survavability, crewMembersAmount, fuelUsage);
+    TBattleship b(w, c, name, speed, survivability, crewMembersAmount, fuelUsage);
     std::stringstream ss;
 
     b.dump(ss);
@@ -234,38 +234,38 @@ TEST(TestBattleship, TestDump) {
 TEST(TestBattleship, TestRead) {
     std::string name = "Battleship";
     TWeaponry w;
-    double survavability = 0.5;
+    double survivability = 0.5;
     double fuelUsage = 0.5;
     TCaptainInfo c;
     size_t crewMembersAmount = 0;
     double speed = 0;
-    TBattleship b(w, c, name, speed, survavability, crewMembersAmount, fuelUsage);
+    TBattleship b(w, c, name, speed, survivability, crewMembersAmount, fuelUsage);
     std::stringstream ss;
-    ss << "Name: Battleship\n"
-       << "Speed: 0.0\n"
-       << "Survivability: 0.5\n"
-       << "Crew members amount: 0\n"
-       << "Weaponry: \n"
-       << "Fuel usage: 0.5\n"
-       << "Captain: \n";
+    ss << "Battleship\n"
+       << "0.0\n"
+       << "0.5\n"
+       << "0\n"
+       << "\n"
+       << "0.5\n"
+       << "\n";
     b.read(ss);
     EXPECT_EQ(b.getName(), name);
-    EXPECT_EQ(b.getSurvivability(), survavability);
-    EXPECT_EQ(b.getFuelUsage(), fuelUsage);
+    EXPECT_DOUBLE_EQ(b.getSurvivability(), survivability);
+    EXPECT_DOUBLE_EQ(b.getFuelUsage(), fuelUsage);
 }
 
 TEST(TestBattleship, TestCoppyAssignment) {
     std::string name = "Battleship";
     TWeaponry w;
-    double survavability = 0.5;
+    double survivability = 0.5;
     double fuelUsage = 0.5;
     TCaptainInfo c;
     size_t crewMembersAmount = 0;
     double speed = 0;
-    TBattleship b(w, c, name, speed, survavability, crewMembersAmount, fuelUsage);
+    TBattleship b(w, c, name, speed, survivability, crewMembersAmount, fuelUsage);
     TBattleship b2 = b;
     EXPECT_EQ(b2.getName(), name);
-    EXPECT_EQ(b2.getSurvivability(), survavability);
+    EXPECT_EQ(b2.getSurvivability(), survivability);
     EXPECT_EQ(b2.getFuelUsage(), fuelUsage);
     EXPECT_EQ(b2.getCrewMembersAmount(), crewMembersAmount);
     EXPECT_EQ(b2.getSpeed(), speed);
@@ -278,29 +278,394 @@ TEST(TestBattleship, TestCoppyAssignment) {
 TEST(TestBattleship, TestMoveAssignment) {
     std::string name = "Battleship";
     TWeaponry w;
-    double survavability = 0.5;
+    double survivability = 0.5;
     double fuelUsage = 0.5;
     TCaptainInfo c;
     size_t crewMembersAmount = 0;
     double speed = 0;
-    TBattleship b(w, c, name, speed, survavability, crewMembersAmount, fuelUsage);
+    TBattleship b(w, c, name, speed, survivability, crewMembersAmount, fuelUsage);
     TBattleship b2 = std::move(b);
     EXPECT_EQ(b2.getName(), name);
-    EXPECT_EQ(b2.getSurvivability(), survavability);
-    EXPECT_EQ(b2.getFuelUsage(), fuelUsage);
+    EXPECT_DOUBLE_EQ(b2.getSurvivability(), survivability);
+    EXPECT_DOUBLE_EQ(b2.getFuelUsage(), fuelUsage);
     EXPECT_EQ(b2.getCrewMembersAmount(), crewMembersAmount);
-    EXPECT_EQ(b2.getSpeed(), speed);
-    EXPECT_EQ(b2.getWeaponry().getDamage(), w.getDamage());
+    EXPECT_DOUBLE_EQ(b2.getSpeed(), speed);
+    EXPECT_DOUBLE_EQ(b2.getWeaponry().getDamage(), w.getDamage());
     EXPECT_EQ(b2.getCaptain()._name[0], c._name[0]);
     EXPECT_EQ(b2.getCaptain()._rank[0], c._rank[0]);
     EXPECT_EQ(b2.getCaptain()._experience, c._experience);
 }
 
+TEST(TestBattleship, TestExceptions) {
+    TWeaponry w;
+    double survivability = 0.5;
+    double fuelUsage = 0.5;
+    TCaptainInfo c;
+    size_t crewMembersAmount = 0;
+    double speed = 0;
+    EXPECT_THROW(TBattleship(w, c, "Name", -1, survivability, crewMembersAmount, fuelUsage), std::logic_error);
+    EXPECT_THROW(TBattleship(w, c, "Name", speed, -1, crewMembersAmount, fuelUsage), std::logic_error);
+    EXPECT_THROW(TBattleship(w, c, "Name", speed, survivability, crewMembersAmount, -1), std::logic_error);
+    TBattleship b(w, c, "Name", speed, survivability, crewMembersAmount, fuelUsage);
+    EXPECT_THROW(b.setSpeed(-1), std::logic_error);
+    EXPECT_THROW(b.setSurvivability(-1), std::logic_error);
+    EXPECT_THROW(b.setFuelUsage(-1), std::logic_error);
+}
+
+TEST(TestCoveringShip, TestDefaultConstructor) {
+    TCoveringShip c;
+    EXPECT_EQ(c.getShipToCover().getSurvivability(), 0);
+    EXPECT_EQ(c.getShipToCover().getWeaponry().getDamage(), 0);
+    EXPECT_EQ(c.getShipToCover().getCrewMembersAmount(), 0);
+    EXPECT_EQ(c.getShipToCover().getSpeed(), 0);
+    EXPECT_EQ(c.getShipToCover().getFuelUsage(), 0);
+    EXPECT_EQ(c.getShipToCover().getName()[0], ""[0]);
+    EXPECT_EQ(c.getShipToCover().getCaptain()._experience, 0);
+    EXPECT_EQ(c.getShipToCover().getCaptain()._rank[0], 0);
+    EXPECT_EQ(c.getShipToCover().getCaptain()._name[0], 0);
+}
+
+TEST(TestCoveringShip, TestConstructor) {
+    TBattleship b;
+    TWeaponry w;
+    std::string captainName = "Captain";
+    std::string captainRank = "Captain rank";
+    size_t experience = 0;
+    double survivability = 0.5;
+    double speed = 0;
+    double fuelUsage = 0.5; 
+    size_t crewMembersAmount = 0;
+    TCoveringShip c(b, w, "Name", captainName, captainRank, experience, survivability, speed, crewMembersAmount, fuelUsage);
+    EXPECT_DOUBLE_EQ(c.getShipToCover().getSurvivability(), b.getSurvivability());
+    EXPECT_DOUBLE_EQ(c.getShipToCover().getWeaponry().getDamage(), b.getWeaponry().getDamage());
+    EXPECT_EQ(c.getShipToCover().getCrewMembersAmount(), b.getCrewMembersAmount());
+    EXPECT_DOUBLE_EQ(c.getShipToCover().getSpeed(), b.getSpeed());
+    EXPECT_DOUBLE_EQ(c.getShipToCover().getFuelUsage(), b.getFuelUsage());
+    EXPECT_EQ(c.getShipToCover().getName(), b.getName());
+    EXPECT_EQ(c.getShipToCover().getCaptain()._experience, b.getCaptain()._experience);
+    EXPECT_EQ(c.getShipToCover().getCaptain()._rank[0], b.getCaptain()._rank[0]);
+    EXPECT_EQ(c.getShipToCover().getCaptain()._name[0], b.getCaptain()._name[0]);
+    EXPECT_DOUBLE_EQ(c.getSurvivability(), survivability);
+    EXPECT_DOUBLE_EQ(c.getWeaponry().getDamage(), w.getDamage());
+    EXPECT_EQ(c.getCrewMembersAmount(), crewMembersAmount);
+    EXPECT_DOUBLE_EQ(c.getSpeed(), speed);
+    EXPECT_DOUBLE_EQ(c.getFuelUsage(), fuelUsage);
+    EXPECT_EQ(c.getCaptain()._name[0], captainName[0]);
+    EXPECT_EQ(c.getCaptain()._rank[0], captainRank[0]);
+    EXPECT_EQ(c.getCaptain()._experience, experience);
+}
+
+TEST(TestCoveringShip, TestCopyConstructor) {
+    TBattleship b;
+    TWeaponry w;
+    std::string captainName = "Captain";
+    std::string captainRank = "Captain rank";
+    size_t experience = 0;
+    double survivability = 0.5;
+    double speed = 0;
+    double fuelUsage = 0.5; 
+    size_t crewMembersAmount = 0;
+    TCoveringShip c(b, w, "Name", captainName, captainRank, experience, survivability, speed, crewMembersAmount, fuelUsage);
+    TCoveringShip c2(c);
+    EXPECT_DOUBLE_EQ(c2.getShipToCover().getSurvivability(), b.getSurvivability());
+    EXPECT_DOUBLE_EQ(c2.getShipToCover().getWeaponry().getDamage(), b.getWeaponry().getDamage());
+    EXPECT_EQ(c2.getShipToCover().getCrewMembersAmount(), b.getCrewMembersAmount());
+    EXPECT_DOUBLE_EQ(c2.getShipToCover().getSpeed(), b.getSpeed());
+    EXPECT_DOUBLE_EQ(c2.getShipToCover().getFuelUsage(), b.getFuelUsage());
+    EXPECT_EQ(c2.getShipToCover().getName(), b.getName());
+    EXPECT_EQ(c2.getShipToCover().getCaptain()._experience, b.getCaptain()._experience);
+    EXPECT_EQ(c2.getShipToCover().getCaptain()._rank[0], b.getCaptain()._rank[0]);
+    EXPECT_EQ(c2.getShipToCover().getCaptain()._name[0], b.getCaptain()._name[0]);
+    EXPECT_DOUBLE_EQ(c2.getSurvivability(), survivability);
+    EXPECT_DOUBLE_EQ(c2.getWeaponry().getDamage(), w.getDamage());
+    EXPECT_EQ(c2.getCrewMembersAmount(), crewMembersAmount);
+    EXPECT_DOUBLE_EQ(c2.getSpeed(), speed);
+    EXPECT_DOUBLE_EQ(c2.getFuelUsage(), fuelUsage);
+    EXPECT_EQ(c2.getCaptain()._name[0], captainName[0]);
+    EXPECT_EQ(c2.getCaptain()._rank[0], captainRank[0]);
+
+}
+
+TEST(TestCoveringShip, TestMoveConstructor) {
+    TBattleship b;
+    TWeaponry w;
+    std::string captainName = "Captain";
+    std::string captainRank = "Captain rank";
+    size_t experience = 0;
+    double survivability = 0.5;
+    double speed = 0;
+    double fuelUsage = 0.5; 
+    size_t crewMembersAmount = 0;
+    TCoveringShip c(b, w, "Name", captainName, captainRank, experience, survivability, speed, crewMembersAmount, fuelUsage);
+    TCoveringShip c2(std::move(c));
+    EXPECT_DOUBLE_EQ(c.getShipToCover().getSurvivability(), b.getSurvivability());
+    EXPECT_DOUBLE_EQ(c.getShipToCover().getWeaponry().getDamage(), b.getWeaponry().getDamage());
+    EXPECT_EQ(c.getShipToCover().getCrewMembersAmount(), b.getCrewMembersAmount());
+    EXPECT_DOUBLE_EQ(c.getShipToCover().getSpeed(), b.getSpeed());
+    EXPECT_DOUBLE_EQ(c.getShipToCover().getFuelUsage(), b.getFuelUsage());
+    EXPECT_EQ(c.getShipToCover().getName(), b.getName());
+    EXPECT_EQ(c.getShipToCover().getCaptain()._experience, b.getCaptain()._experience);
+    EXPECT_EQ(c.getShipToCover().getCaptain()._rank[0], b.getCaptain()._rank[0]);
+    EXPECT_EQ(c.getShipToCover().getCaptain()._name[0], b.getCaptain()._name[0]);
+    EXPECT_DOUBLE_EQ(c.getSurvivability(), survivability);
+    EXPECT_DOUBLE_EQ(c.getWeaponry().getDamage(), w.getDamage());
+    EXPECT_EQ(c.getCrewMembersAmount(), crewMembersAmount);
+    EXPECT_DOUBLE_EQ(c.getSpeed(), speed);
+    EXPECT_DOUBLE_EQ(c.getFuelUsage(), fuelUsage);
+    EXPECT_EQ(c.getCaptain()._name[0], captainName[0]);
+    EXPECT_EQ(c.getCaptain()._rank[0], captainRank[0]);
+}
+
+TEST(TestCoveringShip, TestGetters) {
+    TBattleship b;
+    TWeaponry w;
+    std::string captainName = "Captain";
+    std::string captainRank = "Captain rank";
+    size_t experience = 0;
+    double survivability = 0.5;
+    double speed = 0;
+    double fuelUsage = 0.5; 
+    size_t crewMembersAmount = 0;
+    TCoveringShip c(b, w, "Name", captainName, captainRank, experience, survivability, speed, crewMembersAmount, fuelUsage);
+    EXPECT_DOUBLE_EQ(c.getWeaponryDamage(), w.getDamage());
+    TBattleship b2 = c.getShipToCover();
+    EXPECT_DOUBLE_EQ(c.getShipToCover().getSurvivability(), b2.getSurvivability());
+    EXPECT_DOUBLE_EQ(c.getShipToCover().getWeaponry().getDamage(), b2.getWeaponry().getDamage());
+    EXPECT_EQ(c.getShipToCover().getCrewMembersAmount(), b2.getCrewMembersAmount());
+    EXPECT_DOUBLE_EQ(c.getShipToCover().getSpeed(), b2.getSpeed());
+    EXPECT_DOUBLE_EQ(c.getShipToCover().getFuelUsage(), b2.getFuelUsage());
+    std::string cCoverName = c.getShipToCover().getName();
+    std::string b2Name = b2.getName();
+    EXPECT_EQ(cCoverName.size(), b2Name.size());
+    for (size_t i = 0; i < cCoverName.size(); ++i) {
+        EXPECT_EQ(cCoverName[i], b2Name[i]);
+    }
+    EXPECT_EQ(c.getShipToCover().getCaptain()._experience, b2.getCaptain()._experience);
+    EXPECT_EQ(c.getShipToCover().getCaptain()._rank[0], b2.getCaptain()._rank[0]);
+    EXPECT_EQ(c.getShipToCover().getCaptain()._name[0], b2.getCaptain()._name[0]);
+
+}
+
+TEST(TestCoveringShip, TestSetters) {
+    TBattleship b;
+    TWeaponry w;
+    std::string captainName = "Captain";
+    std::string captainRank = "Captain rank";
+    size_t experience = 0;
+    double survivability = 0.5;
+    double speed = 0;
+    size_t crewMembersAmount = 0;
+    TCoveringShip c(b, w, "Name", captainName, captainRank, experience, survivability, speed, crewMembersAmount, 0.5);
+    std::string b2Name = "Name2";
+    TBattleship b2(w, TCaptainInfo(" ", " ", 0), b2Name, 0.5, 0.5, 0, 0);
+    c.setShipToCover(b2);
+    c.setWeaponryDamage(3.2);
+    EXPECT_DOUBLE_EQ(c.getShipToCover().getSurvivability(), b2.getSurvivability());
+    EXPECT_DOUBLE_EQ(c.getShipToCover().getWeaponry().getDamage(), b2.getWeaponry().getDamage());
+    EXPECT_EQ(c.getShipToCover().getCrewMembersAmount(), b2.getCrewMembersAmount());
+    EXPECT_DOUBLE_EQ(c.getShipToCover().getSpeed(), b2.getSpeed());
+    EXPECT_DOUBLE_EQ(c.getShipToCover().getFuelUsage(), b2.getFuelUsage());
+    std::string cCoverName = c.getShipToCover().getName();
+    std::string b2Name2 = b2.getName();
+    EXPECT_EQ(cCoverName.size(), b2Name2.size());
+    for (size_t i = 0; i < cCoverName.size(); ++i) {
+        EXPECT_EQ(cCoverName[i], b2Name2[i]);
+    }
+    EXPECT_EQ(c.getShipToCover().getCaptain()._experience, b2.getCaptain()._experience);
+    EXPECT_EQ(c.getShipToCover().getCaptain()._rank[0], b2.getCaptain()._rank[0]);
+    EXPECT_EQ(c.getShipToCover().getCaptain()._name[0], b2.getCaptain()._name[0]);
+    EXPECT_DOUBLE_EQ(c.getWeaponryDamage(), 3.2);
+    
+}
+
+TEST(TestCoveringShip, TestDump) {
+    TBattleship b;
+    TWeaponry w;
+    std::string captainName = "Captain";
+    std::string captainRank = "Captain rank";
+    size_t experience = 0;
+    double survivability = 0.5;
+    double speed = 0;
+    size_t crewMembersAmount = 0;
+    TCoveringShip c(b, w, "Name", captainName, captainRank, experience, survivability, speed, crewMembersAmount, 0.5);
+    std::stringstream out;
+    c.dump(out);
+    std::string expected = "Name: Battleship\n"
+                           "Speed: 0.0\n"
+                           "Survivability: 0.5\n"
+                           "Crew members amount: 0\n"
+                           "Weaponry: \n"
+                           "Fuel usage: 0.5\n"
+                           "Captain: \n"
+                           "Ship to cover: \n";
+    std::string actual = out.str();
+    EXPECT_EQ(expected.size(), actual.size());
+    for (size_t i = 0; i < expected.size(); ++i) {
+        EXPECT_EQ(expected[i], actual[i]);
+    }
+
+}
+
+TEST(TestCoveringShip, CopyAssignment) {
+    TBattleship b;
+    TWeaponry w;
+    std::string captainName = "Captain";
+    std::string captainRank = "Captain rank";
+    size_t experience = 0;
+    double survivability = 0.5;
+    double speed = 0;
+    size_t crewMembersAmount = 0;
+    TCoveringShip c(b, w, "Name", captainName, captainRank, experience, survivability, speed, crewMembersAmount, 0.5);
+    TCoveringShip c2 = c;
+    EXPECT_DOUBLE_EQ(c2.getShipToCover().getSurvivability(), b.getSurvivability());
+    EXPECT_DOUBLE_EQ(c2.getShipToCover().getWeaponry().getDamage(), b.getWeaponry().getDamage());
+    EXPECT_EQ(c2.getShipToCover().getCrewMembersAmount(), b.getCrewMembersAmount());
+    EXPECT_DOUBLE_EQ(c2.getShipToCover().getSpeed(), b.getSpeed());
+    EXPECT_DOUBLE_EQ(c2.getShipToCover().getFuelUsage(), b.getFuelUsage());
+    EXPECT_EQ(c2.getShipToCover().getName(), b.getName());
+    EXPECT_EQ(c2.getShipToCover().getCaptain()._experience, b.getCaptain()._experience);
+    EXPECT_EQ(c2.getShipToCover().getCaptain()._rank[0], b.getCaptain()._rank[0]);
+    EXPECT_EQ(c2.getShipToCover().getCaptain()._name[0], b.getCaptain()._name[0]);
+    EXPECT_DOUBLE_EQ(c2.getSurvivability(), survivability);
+    EXPECT_DOUBLE_EQ(c2.getWeaponry().getDamage(), w.getDamage());
+    EXPECT_EQ(c2.getCrewMembersAmount(), crewMembersAmount);
+    EXPECT_DOUBLE_EQ(c2.getSpeed(), speed);
+    EXPECT_DOUBLE_EQ(c2.getFuelUsage(), 0.5);
+    EXPECT_EQ(c2.getCaptain()._name[0], captainName[0]);
+    EXPECT_EQ(c2.getCaptain()._rank[0], captainRank[0]);
+
+}
+
+TEST(TestCoveringShip, MoveAssignment) {
+    TBattleship b;
+    TWeaponry w;
+    std::string captainName = "Captain";
+    std::string captainRank = "Captain rank";
+    size_t experience = 0;
+    double survivability = 0.5;
+    double speed = 0;
+    size_t crewMembersAmount = 0;
+    TCoveringShip c(b, w, "Name", captainName, captainRank, experience, survivability, speed, crewMembersAmount, 0.5);
+    TCoveringShip c2 = std::move(c);
+    EXPECT_DOUBLE_EQ(c2.getShipToCover().getSurvivability(), b.getSurvivability());
+    EXPECT_DOUBLE_EQ(c2.getShipToCover().getWeaponry().getDamage(), b.getWeaponry().getDamage());
+    EXPECT_EQ(c2.getShipToCover().getCrewMembersAmount(), b.getCrewMembersAmount());
+    EXPECT_DOUBLE_EQ(c2.getShipToCover().getSpeed(), b.getSpeed());
+    EXPECT_DOUBLE_EQ(c2.getShipToCover().getFuelUsage(), b.getFuelUsage());
+    EXPECT_EQ(c2.getShipToCover().getName(), b.getName());
+    EXPECT_EQ(c2.getShipToCover().getCaptain()._experience, b.getCaptain()._experience);
+    EXPECT_EQ(c2.getShipToCover().getCaptain()._rank[0], b.getCaptain()._rank[0]);
+    EXPECT_EQ(c2.getShipToCover().getCaptain()._name[0], b.getCaptain()._name[0]);
+    EXPECT_DOUBLE_EQ(c2.getSurvivability(), survivability);
+    EXPECT_DOUBLE_EQ(c2.getWeaponry().getDamage(), w.getDamage());
+    EXPECT_EQ(c2.getCrewMembersAmount(), crewMembersAmount);
+    EXPECT_DOUBLE_EQ(c2.getSpeed(), speed);
+    EXPECT_DOUBLE_EQ(c2.getFuelUsage(), 0.5);
+    EXPECT_EQ(c2.getCaptain()._name[0], captainName[0]);
+    EXPECT_EQ(c2.getCaptain()._rank[0], captainRank[0]);
+
+}
+
+TEST(TestAircraftCarrier, TestDefaultConstructor) {
+    TAircraftCarrier a;
+    EXPECT_EQ(a.getWeaponry().getDamage(), 0);
+    EXPECT_EQ(a.getSurvivability(), 0);
+    EXPECT_EQ(a.getFuelUsage(), 0);
+    EXPECT_EQ(a.getName()[0], ""[0]);
+    EXPECT_EQ(a.getCrewMembersAmount(), 0);
+    EXPECT_EQ(a.getSpeed(), 0);
+    EXPECT_EQ(a.getPlaneInfo().size(), 0);
+}
+
+TEST(TestAircraftCarrier, TestConstructor) {
+    TPlaneGroup planes;
+    TWeaponry w;
+    TAircraftCarrier a(w, planes, "Name", "Captain", "Captain rank", 10, 0.5, 0, 10, 0.5);
+    EXPECT_DOUBLE_EQ(a.getWeaponry().getDamage(), w.getDamage());
+    EXPECT_DOUBLE_EQ(a.getSurvivability(), 0);
+    EXPECT_DOUBLE_EQ(a.getFuelUsage(), 0);
+    EXPECT_EQ(a.getName()[0], ""[0]);
+    EXPECT_EQ(a.getCrewMembersAmount(), 10);
+    EXPECT_DOUBLE_EQ(a.getSpeed(), 0);
+    EXPECT_EQ(a.getPlaneInfo().size(), 0);
+}
+
+TEST(TestAircraftCarrier, TestCopyConstructor) {
+    TPlaneGroup planes;
+    TWeaponry w;
+    TAircraftCarrier a(w, planes, "Name", "Captain", "Captain rank", 10, 0.5, 0, 10, 0.5);
+    TAircraftCarrier a2(a);
+    EXPECT_DOUBLE_EQ(a2.getWeaponry().getDamage(), w.getDamage());
+    EXPECT_DOUBLE_EQ(a2.getSurvivability(), 0);
+    EXPECT_DOUBLE_EQ(a2.getFuelUsage(), 0);
+    EXPECT_EQ(a2.getName()[0], ""[0]);
+    EXPECT_EQ(a2.getCrewMembersAmount(), 10);
+    EXPECT_DOUBLE_EQ(a2.getSpeed(), 0);
+    EXPECT_EQ(a2.getPlaneInfo().size(), 0);
+}
+
+TEST(TestAircraftCarrier, TestMoveConstructor) {
+    TPlaneGroup planes;
+    TWeaponry w;
+    TAircraftCarrier a(w, planes, "Name", "Captain", "Captain rank", 10, 0.5, 0, 10, 0.5);
+    TAircraftCarrier a2(std::move(a));
+    EXPECT_DOUBLE_EQ(a2.getWeaponry().getDamage(), w.getDamage());
+    EXPECT_DOUBLE_EQ(a2.getSurvivability(), 0);
+    EXPECT_DOUBLE_EQ(a2.getFuelUsage(), 0);
+    EXPECT_EQ(a2.getName()[0], ""[0]);
+    EXPECT_EQ(a2.getCrewMembersAmount(), 10);
+    EXPECT_DOUBLE_EQ(a2.getSpeed(), 0);
+    EXPECT_EQ(a2.getPlaneInfo().size(), 0);
+}
+
+TEST(TestAircraftCarrier, TestGetters) {
+    TPlaneGroup planes;
+    TWeaponry w;
+    TAircraftCarrier a(w, planes, "Name", "Captain", "Captain rank", 10, 0.5, 0, 10, 0.5);
+    EXPECT_DOUBLE_EQ(a.getWeaponry().getDamage(), w.getDamage());
+    EXPECT_DOUBLE_EQ(a.getSurvivability(), 0);
+    EXPECT_DOUBLE_EQ(a.getFuelUsage(), 0);
+    EXPECT_EQ(a.getName()[0], ""[0]);
+    EXPECT_EQ(a.getCrewMembersAmount(), 10);
+    EXPECT_DOUBLE_EQ(a.getSpeed(), 0);
+    EXPECT_EQ(a.getPlaneInfo().size(), 0);
+}
+
+TEST(TestAircraftCarrier, TestSetters) {
+    TPlaneGroup planes;
+    TWeaponry w1(" ", " ", 10, 1.3, WeaponryType::light);
+    TAircraftCarrier a(w1, planes, "Name", "Captain", "Captain rank", 10, 0.5, 0, 10, 0.5);
+    TWeaponry w2("w2", "22.5mm", 5, 1.5, WeaponryType::heavy);
+    a.setWeaponry(w2);
+    TPlaneGroup planes2;
+    TPlane p("Plane", w2, 0.5, 0.5, TPlaneType::bomber);
+    planes2.addPlane(p);
+    a.setPlaneInfo(planes2);
+    EXPECT_DOUBLE_EQ(a.getWeaponry().getDamage(), w2.getDamage());
+    EXPECT_DOUBLE_EQ(a.getSurvivability(), 0.5);
+    EXPECT_DOUBLE_EQ(a.getFuelUsage(), 0.5);
+    EXPECT_EQ(a.getName()[0], ""[0]);
+    EXPECT_EQ(a.getCrewMembersAmount(), 10);
+    EXPECT_DOUBLE_EQ(a.getSpeed(), 0);
+    EXPECT_EQ(a.getPlaneInfo().size(), 1);
+}
+
+TEST(TestAircraftCarrier, TestAddPlane) {
+    TPlaneGroup planes;
+    TWeaponry w;
+    TAircraftCarrier a(w, planes, "Name", "Captain", "Captain rank", 10, 0.5, 0, 10, 0.5);
+    TPlane p("Plane", w, 0.5, 0.5, TPlaneType::bomber);
+    a.addPlane(p);
+    EXPECT_EQ(a.getPlaneInfo().size(), 1);
+}
+
+
+
 TEST(TestPlane, TestDefaultConstructor) {
     TPlane p;
 
     EXPECT_EQ(p.getWeaponry().getDamage(), 0);
-    EXPECT_EQ(p.getSurvavability(), 0);
+    EXPECT_EQ(p.getSurvivability(), 0);
     EXPECT_EQ(p.getFuelUsage(), 0);
     EXPECT_EQ(p.getName(), "");
 }
@@ -308,12 +673,12 @@ TEST(TestPlane, TestDefaultConstructor) {
 TEST(TestPlane, TestConstructor) {
     std::string name = "Plane";
     TWeaponry w;
-    double survavability = 0.5;
+    double survivability = 0.5;
     double fuelUsage = 0.5;
-    TPlane p(name, w, survavability, fuelUsage, TPlaneType::bomber);
+    TPlane p(name, w, survivability, fuelUsage, TPlaneType::bomber);
 
     EXPECT_EQ(p.getWeaponry().getDamage(), w.getDamage());
-    EXPECT_EQ(p.getSurvavability(), survavability);
+    EXPECT_EQ(p.getSurvivability(), survivability);
     EXPECT_EQ(p.getFuelUsage(), fuelUsage);
     EXPECT_EQ(p.getName(), name);
     EXPECT_EQ(p.getType(), TPlaneType::bomber);
@@ -322,13 +687,13 @@ TEST(TestPlane, TestConstructor) {
 TEST(TestPlane, TestCopyConstructor) {
     std::string name = "Plane";
     TWeaponry w;
-    double survavability = 0.5;
+    double survivability = 0.5;
     double fuelUsage = 0.5;
-    TPlane p(name, w, survavability, fuelUsage, TPlaneType::bomber);
+    TPlane p(name, w, survivability, fuelUsage, TPlaneType::bomber);
     TPlane q(p);
 
     EXPECT_EQ(q.getWeaponry().getDamage(), w.getDamage());
-    EXPECT_EQ(q.getSurvavability(), survavability);
+    EXPECT_EQ(q.getSurvivability(), survivability);
     EXPECT_EQ(q.getFuelUsage(), fuelUsage);
     EXPECT_EQ(q.getName(), name);
     EXPECT_EQ(q.getType(), TPlaneType::bomber);
@@ -337,13 +702,13 @@ TEST(TestPlane, TestCopyConstructor) {
 TEST(TestPlane, TestMoveConstructor) {
     std::string name = "Plane";
     TWeaponry w;
-    double survavability = 0.5;
+    double survivability = 0.5;
     double fuelUsage = 0.5;
-    TPlane p(name, w, survavability, fuelUsage, TPlaneType::bomber);
+    TPlane p(name, w, survivability, fuelUsage, TPlaneType::bomber);
     TPlane q(std::move(p));
 
     EXPECT_EQ(q.getWeaponry().getDamage(), w.getDamage());
-    EXPECT_EQ(q.getSurvavability(), survavability);
+    EXPECT_EQ(q.getSurvivability(), survivability);
     EXPECT_EQ(q.getFuelUsage(), fuelUsage);
     EXPECT_EQ(q.getName(), name);
     EXPECT_EQ(q.getType(), TPlaneType::bomber);
@@ -352,13 +717,13 @@ TEST(TestPlane, TestMoveConstructor) {
 TEST(TestPlane, TestGetters) {
     std::string name = "Plane";
     TWeaponry w;
-    double survavability = 0.5;
+    double survivability = 0.5;
     double fuelUsage = 0.5;
     TPlaneType planeType = TPlaneType::bomber;
-    TPlane p(name, w, survavability, fuelUsage, planeType);
+    TPlane p(name, w, survivability, fuelUsage, planeType);
 
     EXPECT_EQ(p.getWeaponry().getDamage(), w.getDamage());
-    EXPECT_EQ(p.getSurvavability(), survavability);
+    EXPECT_EQ(p.getSurvivability(), survivability);
     EXPECT_EQ(p.getFuelUsage(), fuelUsage);
     EXPECT_EQ(p.getName(), name);
     EXPECT_EQ(p.getType(), planeType);
@@ -367,21 +732,21 @@ TEST(TestPlane, TestGetters) {
 TEST(TestPlane, TestSetters) {
     std::string name = "Plane";
     TWeaponry w;
-    double survavability = 0.5;
+    double survivability = 0.5;
     double fuelUsage = 0.5;
-    TPlane p(name, w, survavability, fuelUsage, TPlaneType::bomber);
+    TPlane p(name, w, survivability, fuelUsage, TPlaneType::bomber);
     TWeaponry w2;
-    double survavability2 = 0.5;
+    double survivability2 = 0.5;
     double fuelUsage2 = 0.5;
     p.setWeaponry(w2);
     p.setWeaponryType(WeaponryType::heavy);
-    p.setSurvavability(survavability2);
+    p.setSurvivability(survivability2);
     p.setFuelUsage(fuelUsage2);
     p.setName(name);
     p.setType(TPlaneType::fighter);
     EXPECT_EQ(p.getWeaponry().getDamage(), w2.getDamage());
     EXPECT_EQ(p.getWeaponry().getType(), WeaponryType::heavy);
-    EXPECT_EQ(p.getSurvavability(), survavability2);
+    EXPECT_EQ(p.getSurvivability(), survivability2);
     EXPECT_EQ(p.getFuelUsage(), fuelUsage2);
     EXPECT_EQ(p.getName(), name);
     EXPECT_EQ(p.getType(), TPlaneType::fighter);
@@ -390,13 +755,13 @@ TEST(TestPlane, TestSetters) {
 TEST(TestPlane, TestExceptions) {
     std::string name = "Plane";
     TWeaponry w;
-    double survavability = 0.5;
+    double survivability = 0.5;
     double fuelUsage = 0.5;
-    EXPECT_THROW(TPlane p(name, w, survavability, fuelUsage, TPlaneType::bomber), std::logic_error);
+    EXPECT_THROW(TPlane p(name, w, survivability, fuelUsage, TPlaneType::bomber), std::logic_error);
     w.setType(WeaponryType::heavy);
-    TPlane p(name, w, survavability, fuelUsage, TPlaneType::bomber);
+    TPlane p(name, w, survivability, fuelUsage, TPlaneType::bomber);
     EXPECT_THROW(p.setWeaponryType(WeaponryType::light), std::logic_error);
-    EXPECT_THROW(p.setSurvavability(-1), std::logic_error);
+    EXPECT_THROW(p.setSurvivability(-1), std::logic_error);
     EXPECT_THROW(p.setFuelUsage(-1), std::logic_error);
     TWeaponry w2;
     EXPECT_THROW(p.setWeaponry(w2), std::logic_error);
@@ -405,12 +770,12 @@ TEST(TestPlane, TestExceptions) {
 TEST(TestPlane, TestDump) {
     std::string name = "Plane";
     TWeaponry w;
-    double survavability = 0.5;
+    double survivability = 0.5;
     double fuelUsage = 0.5;
-    TPlane p(name, w, survavability, fuelUsage, TPlaneType::bomber);
+    TPlane p(name, w, survivability, fuelUsage, TPlaneType::bomber);
     std::stringstream s;
     p.dump(s);
-    std::string expected = name + " " + std::to_string(survavability) + " " + std::to_string(fuelUsage) + "\n";
+    std::string expected = name + " " + std::to_string(survivability) + " " + std::to_string(fuelUsage) + "\n";
     std::string actual = s.str();
     for (size_t i = 0; i < expected.size(); ++i) {
         EXPECT_EQ(expected[i], actual[i]);
@@ -420,16 +785,16 @@ TEST(TestPlane, TestDump) {
 TEST(TestPlane, TestRead) {
     std::string name = "Plane";
     TWeaponry w;
-    double survavability = 0.5;
+    double survivability = 0.5;
     double fuelUsage = 0.5;
-    TPlane p(name, w, survavability, fuelUsage, TPlaneType::bomber);
+    TPlane p(name, w, survivability, fuelUsage, TPlaneType::bomber);
     std::stringstream s;
     p.dump(s);
     TPlane q;
     std::stringstream t(s.str());
     q.read(t);
     EXPECT_EQ(q.getWeaponry().getDamage(), w.getDamage());
-    EXPECT_EQ(q.getSurvavability(), survavability);
+    EXPECT_EQ(q.getSurvivability(), survivability);
     EXPECT_EQ(q.getFuelUsage(), fuelUsage);
     EXPECT_EQ(q.getName(), name);
 }
@@ -437,12 +802,12 @@ TEST(TestPlane, TestRead) {
 TEST(TestPlane, CopyAssignment) {
     std::string name = "Plane";
     TWeaponry w;
-    double survavability = 0.5;
+    double survivability = 0.5;
     double fuelUsage = 0.5;
-    TPlane p(name, w, survavability, fuelUsage, TPlaneType::bomber);
+    TPlane p(name, w, survivability, fuelUsage, TPlaneType::bomber);
     TPlane q = p;
     EXPECT_EQ(q.getWeaponry().getDamage(), w.getDamage());
-    EXPECT_EQ(q.getSurvavability(), survavability);
+    EXPECT_EQ(q.getSurvivability(), survivability);
     EXPECT_EQ(q.getFuelUsage(), fuelUsage);
     EXPECT_EQ(q.getName(), name);
     EXPECT_EQ(q.getType(), TPlaneType::bomber);
@@ -451,12 +816,12 @@ TEST(TestPlane, CopyAssignment) {
 TEST(TestPlane, MoveAssignment) {
     std::string name = "Plane";
     TWeaponry w;
-    double survavability = 0.5;
+    double survivability = 0.5;
     double fuelUsage = 0.5;
-    TPlane p(name, w, survavability, fuelUsage, TPlaneType::bomber);
+    TPlane p(name, w, survivability, fuelUsage, TPlaneType::bomber);
     TPlane q = std::move(p);
     EXPECT_EQ(q.getWeaponry().getDamage(), w.getDamage());
-    EXPECT_EQ(q.getSurvavability(), survavability);
+    EXPECT_EQ(q.getSurvivability(), survivability);
     EXPECT_EQ(q.getFuelUsage(), fuelUsage);
     EXPECT_EQ(q.getName(), name);
     EXPECT_EQ(q.getType(), TPlaneType::bomber);
@@ -707,4 +1072,9 @@ TEST(TestBattleshipGroup, TestMoveAssignment) {
     EXPECT_EQ(b.getStartingPoint(), b2.getStartingPoint());
     EXPECT_EQ(b.getDestination(), b2.getDestination());
     EXPECT_EQ(b.getDistance(), b2.getDistance());
+}
+
+int main(int argc, char **argv) {
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
 }

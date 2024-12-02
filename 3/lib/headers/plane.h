@@ -15,13 +15,13 @@ std::istream &operator>>(std::istream &in, TPlaneType &type);
 class TPlane {
 public:
     TPlane();
-    TPlane(const std::string name, TWeaponry &weaponry, double survavability, double fuelUsage, TPlaneType type);
-    TPlane(std::string &&name, TWeaponry &&weaponry, double survavability, double fuelUsage, TPlaneType type);
+    TPlane(const std::string name, TWeaponry &weaponry, double survivability, double fuelUsage, TPlaneType type);
+    TPlane(std::string &&name, TWeaponry &&weaponry, double survivability, double fuelUsage, TPlaneType type);
     TPlane(const TPlane &other) = default;
     TPlane(TPlane &&other) = default;
 
     TWeaponry &getWeaponry();
-    double getSurvavability() const;
+    double getSurvivability() const;
     double getFuelUsage() const;
     std::string getName() const;
     TPlaneType getType() const;
@@ -29,7 +29,7 @@ public:
     void setType(TPlaneType newType);
     void setName(const std::string &newName);
     virtual void setWeaponry(TWeaponry &newWeaponry);
-    void setSurvavability(double newSurvavability);
+    void setSurvivability(double newSurvivability);
     void setFuelUsage(double newFuelUsage);
     virtual void setWeaponryType(WeaponryType weaponryType);
 
@@ -44,7 +44,7 @@ public:
 private:
     std::string _name;
     TWeaponry _weaponry;
-    double _survavability;
+    double _survivability;
     double _fuelUsage;
     TPlaneType _type;
 };
