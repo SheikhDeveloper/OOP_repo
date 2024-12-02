@@ -26,7 +26,9 @@ std::istream &operator>>(std::istream &in, TPlaneType &type) {
     return in;
 }
 
-TPlane::TPlane(const std::string name, TWeaponry &weaponry, double survavability, double fuelUsage) : _name(name), _weaponry(weaponry), _survavability(survavability), _fuelUsage(fuelUsage) {
+TPlane::TPlane(const std::string name, TWeaponry &weaponry, double survavability, double fuelUsage, TPlaneType type) : 
+    _name(name), _weaponry(weaponry), _type(type),
+    _survavability(survavability), _fuelUsage(fuelUsage) {
     if (survavability < 0.) {
         survavability = 0.;
         throw std::logic_error("Survavability can't be negative.setting it to 0");
@@ -34,10 +36,15 @@ TPlane::TPlane(const std::string name, TWeaponry &weaponry, double survavability
     if (fuelUsage < 0.) {
         fuelUsage = 0.;
         throw std::logic_error("Fuel usage can't be negative.setting it to 0");
+    }
+    if (type == TPlaneType::bomber && weaponry.getType() != WeaponryType::heavy) {
+        throw std::logic_error("Can't set light weaponry on a bomber");
     }
 }
 
-TPlane::TPlane(std::string &&name, TWeaponry &&weaponry, double survavability, double fuelUsage) : _name(std::move(name)), _weaponry(std::move(weaponry)), _survavability(survavability), _fuelUsage(fuelUsage) {
+TPlane::TPlane(std::string &&name, TWeaponry &&weaponry, double survavability, double fuelUsage, TPlaneType type) : 
+    _name(std::move(name)), _weaponry(std::move(weaponry)), 
+    _survavability(survavability), _fuelUsage(fuelUsage), _type(type) {
     if (survavability < 0.) {
         survavability = 0.;
         throw std::logic_error("Survavability can't be negative.setting it to 0");
@@ -45,6 +52,9 @@ TPlane::TPlane(std::string &&name, TWeaponry &&weaponry, double survavability, d
     if (fuelUsage < 0.) {
         fuelUsage = 0.;
         throw std::logic_error("Fuel usage can't be negative.setting it to 0");
+    }
+    if (type == TPlaneType::bomber && weaponry.getType() != WeaponryType::heavy) {
+        throw std::logic_error("Can't set light weaponry on a bomber");
     }
 }
 
@@ -60,9 +70,25 @@ double TPlane::getFuelUsage() const {
     return _fuelUsage;
 }
 
+std::string TPlane::getName() const {
+    return _name;
+}
+
+TPlaneType TPlane::getType() const {
+    return _type;
+}
+
+void TPlane::setType(TPlaneType newType) {
+    _type = newType;
+}
+
+void TPlane::setName(const std::string &newName) {
+    _name = newName;
+}
+
 void TPlane::setWeaponry(TWeaponry &newWeaponry) {
-    if (newWeaponry.getType() != WeaponryType::light) {
-        throw std::logic_error("Can't set heavy weaponry on a plane");
+    if (newWeaponry.getType() != WeaponryType::heavy && _type == TPlaneType::bomber) {
+        throw std::logic_error("Can't set light weaponry on a bomber");
     }
     _weaponry = newWeaponry;
 }
@@ -82,20 +108,20 @@ void TPlane::setFuelUsage(double newFuelUsage) {
 }
 
 void TPlane::setWeaponryType(WeaponryType weaponryType) {
-    if (weaponryType != WeaponryType::light) {
-        throw std::logic_error("Can't set heavy weaponry on a plane");
+    if (weaponryType != WeaponryType::heavy && _type == TPlaneType::bomber) {
+        throw std::logic_error("Can't set light weaponry on a bomber");
     }
     _weaponry.setType(weaponryType);
 }
 
 void TPlane::dump(std::ostream &out) const {
     _weaponry.dump(out);
-    out << _survavability << " " << _fuelUsage;
+    out << _survavability << " " << _fuelUsage << _name << " " << _type;
 }
 
 void TPlane::read(std::istream &in) {
     _weaponry.read(in);
-    in >> _survavability >> _fuelUsage;
+    in >> _survavability >> _fuelUsage >> _name >> _type;
 }
 
 std::ostream &operator<<(std::ostream &out, const TPlane &plane) {

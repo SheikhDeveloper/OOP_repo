@@ -41,6 +41,32 @@ TBattleship::TBattleship(TWeaponry weaponry, const std::string &name,
         }
 }
 
+TBattleship::TBattleship(TWeaponry weaponry, TCaptainInfo captainInfo, const std::string &name, double speed, 
+                         double survivability, size_t crewMembersAmount, double fuelUsage) :
+    _name(name),
+    _weaponry(weaponry),
+    _captain(captainInfo),
+    _speed(speed),
+    _survivability(survivability),
+    _crewMembersAmount(crewMembersAmount),
+    _fuelUsage(fuelUsage) {
+
+        if (_survivability < 0.) {
+            _survivability = 0;
+            throw std::logic_error("Survivability can't be negative.Setting it to 0");
+        }
+
+        if (_crewMembersAmount < 0) {
+            _crewMembersAmount = 0;
+            throw std::logic_error("Crew members amount can't be negative.Setting it to 0");
+        }
+
+        if (_speed < 0.) {
+            _speed = 0.;
+            throw std::logic_error("Speed can't be negative.Setting it to 0");
+        }
+    }
+
 TBattleship::TBattleship(const TBattleship &battleship) :
     _weaponry(battleship._weaponry),
     _name(battleship._name),
@@ -114,6 +140,10 @@ void TBattleship::setCrewMembersAmount(size_t crewMembersAmount) {
 
 void TBattleship::setCaptain(const std::string &captainName, const std::string &captainRank, const size_t experience) {
     _captain = TCaptainInfo(captainName, captainRank, experience);
+}
+
+void TBattleship::setCaptain(const TCaptainInfo &captainInfo) {
+    _captain = captainInfo;
 }
 
 void TBattleship::setName(const std::string &name) {

@@ -1,6 +1,7 @@
 #include "../headers/battleship_group.h"
 
 #include <iostream>
+#include <thread>
 
 std::istream &operator>>(std::istream &in, ShipType &shipType) {
     std::string type;
@@ -94,15 +95,72 @@ TBattleshipGroup::TBattleshipGroup(TBattleshipGroup &&battleshipGroup) {
 }
 
 TPlane &TBattleshipGroup::getPlane(std::string &name, TPlaneType planeType, const std::string &carrierName) {
-    TAircraftCarrier *carrier = (TAircraftCarrier *) &getBattleship(carrierName);
-    switch (planeType) {
-        case TPlaneType::fighter:
-            TFighterPlane *plane = (TFighterPlane *) &(carrier->getPlaneInfo().getPlane(name, planeType));
-            return *plane;
-        case TPlaneType::bomber:
-            TBomberPlane *plane = (TBomberPlane *) &(carrier->getPlaneInfo().getPlane(name, planeType));
-            return *plane;
+    try {
+        TAircraftCarrier &carrier = dynamic_cast<TAircraftCarrier &>(getBattleship(carrierName));
+        return carrier.getPlaneInfo().getPlane(name, planeType);
     }
+    catch (std::bad_cast &e) {
+        throw std::invalid_argument("Wrong carrier name");
+    }
+    catch (std::exception &e) {
+        throw e;
+    }
+}
+
+TBattleship &TBattleshipGroup::getBattleship(const std::string &name) {
+    return _battleshipGroup[name];
+}
+
+size_t TBattleshipGroup::getShipAmount(ShipType shipType) const {
+    size_t amount = 0;
+    for (auto &battleship : _battleshipGroup) {
+        switch (shipType) {
+            case ShipType::AIRCRAFT_CARRIER:
+                try {
+                    TAircraftCarrier &carrier = dynamic_cast<TAircraftCarrier &>(battleship.value_);
+                    amount++;
+                }
+                catch (std::exception &e) {
+                    break;
+                }
+                break;
+            case ShipType::COVERING_SHIP:
+                try {
+                    TCoveringShip &ship = dynamic_cast<TCoveringShip &>(battleship.value_);
+                    amount++;
+                }
+                catch (std::exception &e) {
+                    break;
+                }
+                break;
+            case ShipType::AIRCRAFT_CARRYING_CRUISER:
+                try {
+                    TAircraftCarryingCruiser &cruiser = dynamic_cast<TAircraftCarryingCruiser &>(battleship.value_);
+                    amount++;
+                }
+                catch (std::exception &e) {
+                    break;
+                }
+                break;
+        }
+    }
+    return amount;
+}
+
+TCaptainInfo &TBattleshipGroup::getAdmiralInfo() {
+    return _admiral;
+}
+
+std::string TBattleshipGroup::getStartingPoint() const {
+    return _startingPoint;
+}
+
+std::string TBattleshipGroup::getDestination() const {
+    return _destination;
+}
+
+double TBattleshipGroup::getDistance() const {
+    return _distance;
 }
 
 void TBattleshipGroup::setAdmiral(TCaptainInfo &admiral) {
@@ -121,20 +179,26 @@ void TBattleshipGroup::setDistance(double distance) {
     setDistance(distance);
 }
 
-void TBattleshipGroup::relocatePlane(const std::string planeName, const std::string carrierName1, const std::string carrierName2) {
+void TBattleshipGroup::relocatePlane(const std::string planeName, TPlaneType planeType, const std::string carrierName1, const std::string carrierName2) {
     TBattleship &carrier1 = getBattleship(carrierName1);
     TBattleship &carrier2 = getBattleship(carrierName2);
-    relocatePlane(planeName, carrierName1, carrierName2);
+    relocatePlane(planeName, planeType, carrierName1, carrierName2);
 }
 
-void TBattleshipGroup::relocatePlane(const std::string planeName, TAircraftCarrier &carrier1, TAircraftCarrier &carrier2) {
-    TPlane plane = getPlane(planeName, carrier1.getName());
+void TBattleshipGroup::relocatePlane(std::string planeName, TPlaneType planeType, TAircraftCarrier &carrier1, TAircraftCarrier &carrier2) {
+    TPlane plane = getPlane(planeName, planeType, carrier1.getName());
     TPlaneGroup carrier2_planes = carrier2.getPlaneInfo();
     carrier2_planes.addPlane(plane);
     carrier2.setPlaneInfo(carrier2_planes);
     TPlaneGroup carrier1_planes = carrier1.getPlaneInfo();
     carrier1_planes.deletePlane(plane.getName());
     carrier1.setPlaneInfo(carrier1_planes);
+}
+
+void TBattleshipGroup::simulateAttack(TPlaneGroup &attackingGroup, size_t numWorkers) {
+    std::vector<std::thread> threads(numWorkers);
+    for (size_t i = 0; i < numWorkers; ++i) {
+    }
 }
 
 void TBattleshipGroup::dump(std::ostream &out) const {
@@ -179,4 +243,14 @@ void TBattleshipGroup::read(std::istream &in) {
         }
         _battleshipGroup.insert(battleship.getName(), battleship);
     }
+}
+
+std::ostream &operator<<(std::ostream &out, TBattleshipGroup &battleshipGroup) {
+    battleshipGroup.dump(out);
+    return out;
+}
+
+std::istream &operator>>(std::istream &in, TBattleshipGroup &battleshipGroup) {
+    battleshipGroup.read(in);
+    return in;
 }

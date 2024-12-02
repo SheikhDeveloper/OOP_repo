@@ -11,9 +11,15 @@ TBomberPlane::TBomberPlane(const TBomberPlane &plane) : TPlane(plane) {}
 
 TBomberPlane::TBomberPlane(TBomberPlane &&plane) : TPlane(std::move(plane)) {}
 
-TPlaneType TBomberPlane::getPlaneType() const {
-    return TPlaneType::bomber;
+void TBomberPlane::attack(TBattleship &target) {
+    auto damage = getWeaponry().getDamage();
+    auto targetSurvivability = target.getSurvivability();
+    targetSurvivability -= damage;
+    if (targetSurvivability < 0.)
+        targetSurvivability = 0.;
+    target.setSurvivability(targetSurvivability);
 }
+
 
 void TBomberPlane::dump(std::ostream &os) const {
     TPlane::dump(os);

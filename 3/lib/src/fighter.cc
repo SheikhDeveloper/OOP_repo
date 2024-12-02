@@ -12,10 +12,6 @@ TFighterPlane::TFighterPlane(const TFighterPlane& other): TPlane(other) {}
 
 TFighterPlane::TFighterPlane(TFighterPlane&& other) noexcept: TPlane(std::move(other)) {}
 
-TPlaneType TFighterPlane::getPlaneType() const {
-    return TPlaneType::fighter;
-}
-
 void TFighterPlane::dump(std::ostream &os) const {
     TPlane::dump(os);
     os << TPlaneType::fighter;

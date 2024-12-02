@@ -1,19 +1,27 @@
 #include "../headers/plane_group.h"
 
+
 #include <iostream>
 
 
 TPlaneGroup::TPlaneGroup(const TPlaneGroup &planeGroup) :
     _planes(planeGroup._planes),
-    _totalDamage(planeGroup._totalDamage) {}
+    _planeDamage(planeGroup._planeDamage),
+    _shipDamage(planeGroup._shipDamage),
+    _bomberAmount(planeGroup._bomberAmount), 
+    _fightersAmount(planeGroup._fightersAmount) {}
 
 
 TPlaneGroup::TPlaneGroup(TPlaneGroup &&planeGroup) :
     _planes(std::move(planeGroup._planes)),
-    _totalDamage(planeGroup._totalDamage) {}
+    _planeDamage(planeGroup._planeDamage), 
+    _shipDamage(planeGroup._shipDamage), 
+    _bomberAmount(planeGroup._bomberAmount), 
+    _fightersAmount(planeGroup._fightersAmount) {}
 
 void TPlaneGroup::addPlane(TPlane &plane) {
-    std::string key = plane.getName() + std::to_string(static_cast<int>(plane.getPlaneType()));
+    TPlaneType planeType = plane.getPlaneType();
+    std::string key = plane.getName() + std::to_string(static_cast<int>(planeType));
     _planes.insert(plane.getName(), plane);
     auto &plane_weaponry = plane.getWeaponry();
     _totalDamage += plane_weaponry.getDamage();
@@ -37,6 +45,15 @@ size_t TPlaneGroup::size() const {
     return _planes.size();
 }
 
+void TPlaneGroup::attack(TBattleship &target) {
+    auto shipSurvivability = target.getSurvivability();
+    auto totalDamage = getTotalDamage();
+    shipSurvivability -= totalDamage;
+    if (shipSurvivability < 0.)
+        shipSurvivability = 0.;
+    target.setSurvivability(shipSurvivability);
+}
+
 void TPlaneGroup::dump(std::ostream &os) const {
     for (auto &i : _planes) {
         TPlane plane = i.value_;
@@ -49,6 +66,10 @@ void TPlaneGroup::read(std::istream &is) {
     while (is >> plane) {
         addPlane(plane);
     }
+}
+
+TPlane &TPlaneGroup::operator[](const std::string &name) {
+    return _planes[name];
 }
 
 TPlaneGroup &TPlaneGroup::operator=(const TPlaneGroup &planeGroup) {

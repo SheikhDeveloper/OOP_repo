@@ -10,6 +10,8 @@ public:
     TBattleship(TWeaponry weaponry, const std::string &name, const std::string &captainName, const std::string &captainRank,
                 const size_t experience, const double speed, const double survivability, const size_t crewMembersAmount,
                 const double fuelUsage);
+    TBattleship(TWeaponry weaponry, TCaptainInfo captainInfo, const std::string &name, const double speed, 
+                const double survivability, const size_t crewMembersAmount, const double fuelUsage);
     TBattleship(const TBattleship &battleship);
     TBattleship(TBattleship &&battleship);
 
@@ -26,6 +28,7 @@ public:
     void setSurvivability(double survivability);
     void setCrewMembersAmount(size_t crewMembersAmount);
     void setCaptain(const std::string &captainName, const std::string &captainRank, const size_t experience);
+    void setCaptain(const TCaptainInfo &captainInfo);
     void setName(const std::string &name);
     void setFuelUsage(double fuelUsage);
 

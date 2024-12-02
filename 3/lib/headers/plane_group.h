@@ -3,6 +3,7 @@
 
 #include "plane.h"
 #include "hash_table.h"
+#include "battleship.h"
 
 
 class TPlaneGroup {
@@ -17,19 +18,23 @@ public:
     TPlane &getPlane(std::string &name, TPlaneType planeType);
     double getTotalDamage() const;
     size_t size() const;
+    void attack(TBattleship &target);
 
     void dump(std::ostream &out) const;
     void read(std::istream &in);
 
     ~TPlaneGroup() = default;
 
+    TPlane &operator[](const std::string &name);
     TPlaneGroup &operator=(const TPlaneGroup& planeGroup);
-
     TPlaneGroup &operator=(TPlaneGroup&& planeGroup);
 
 private:
     THashTable<std::string, TPlane> _planes;
-    double _totalDamage;
+    double _planeDamage;
+    double _shipDamage;
+    double _bomberAmount;
+    double _fightersAmount;
 };
 
 std::ostream &operator<<(std::ostream &out, const TPlaneGroup &planeGroup);

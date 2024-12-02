@@ -39,6 +39,10 @@ public:
     TPlane &getPlane(std::string &planeName, TPlaneType planeType, const std::string &carrierName);
     TBattleship &getBattleship(const std::string &battleshipName);
     size_t getShipAmount(ShipType shipType) const;
+    TCaptainInfo &getAdmiralInfo();
+    std::string getStartingPoint() const;
+    std::string getDestination() const;
+    double getDistance() const;
 
     void addPlane(TPlane &plane, const std::string &carrierName);
     void addBattleship(TBattleship &battleship);
@@ -49,8 +53,8 @@ public:
     void setStartingPoint(const std::string &startingPoint);
     void setDestination(const std::string &destination);
     void setDistance(double distance);
-    void relocatePlane(const std::string planeName, const std::string carrierName1, const std::string carrierName2);
-    void simulateAttack(TPlaneGroup &attackingGroup);
+    void relocatePlane(std::string planeName, TPlaneType planeType, const std::string carrierName1, const std::string carrierName2);
+    void simulateAttack(TPlaneGroup &attackingGroup, size_t numWorkers = 3);
     virtual void dump(std::ostream &out) const;
     virtual void read(std::istream &in);
     virtual ~TBattleshipGroup() = default;
@@ -64,8 +68,11 @@ private:
     std::string _destination;
     double _distance;
 
-    void relocatePlane(const std::string planeName, TAircraftCarrier &aircraftCarrier1, TAircraftCarrier &aircraftCarrier2);
+    void relocatePlane(std::string planeName, TPlaneType planeType, TAircraftCarrier &aircraftCarrier1, TAircraftCarrier &aircraftCarrier2);
 };
+
+std::ostream &operator<<(std::ostream &out, const TBattleshipGroup &battleshipGroup);
+std::istream &operator>>(std::istream &in, TBattleshipGroup &battleshipGroup);
 
 
 
