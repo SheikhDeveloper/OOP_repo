@@ -248,3 +248,8 @@ TEST(TestBattleshipGroup, TestMoveAssignment) {
     EXPECT_EQ(b.getDestination(), b2.getDestination());
     EXPECT_EQ(b.getDistance(), b2.getDistance());
 }
+
+int main(int argc, char **argv) {
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
+}
