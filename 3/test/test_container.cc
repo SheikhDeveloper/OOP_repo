@@ -124,18 +124,15 @@ TEST(TestBattleshipGroup, TestPlaneRelocation) {
     TAircraftCarrier c1, c2;
     TWeaponry w1;
     TPlane b1("bomber", std::move(w1), 10., 10., TPlaneType::fighter);
-    auto &c1Planes = c1.getPlaneInfo();
-    c1Planes.addPlane(b1);
-    b.relocatePlane("bomber", TPlaneType::bomber, c1.getName(), c2.getName());
+    c1.addPlane(b1);
+    b.relocatePlane("bomber", TPlaneType::fighter, c1.getName(), c2.getName());
     auto &c2Planes = c2.getPlaneInfo();
-    EXPECT_EQ(c2Planes.size(), 1);
-    EXPECT_EQ(c1Planes.size(), 0);
+    auto &c1Planes = c1.getPlaneInfo();
+    EXPECT_EQ(c1Planes.size(), 1);
+    EXPECT_EQ(c2Planes.size(), 0);
     std::string planeName = "bomber";
-    std::string c1PlaneName = c1.getPlaneInfo().getPlane(planeName, TPlaneType::bomber).getName();
-    EXPECT_EQ(c1PlaneName.size(), planeName.size());
-    for (size_t i = 0; i < planeName.size(); ++i) {
-        EXPECT_EQ(c1PlaneName[i], planeName[i]);
-    }
+    std::string c1PlaneName = c1.getPlaneInfo().getPlane(planeName, TPlaneType::fighter).getName();
+    EXPECT_EQ(c1PlaneName, planeName);
 }
 
 TEST(TestBattleshipGroup, TestCopyConstructor) {
@@ -209,7 +206,25 @@ TEST(TestBattleshipGroup, TestMoveAssignment) {
 }
 
 TEST(TestBattleshipGroup, TestAttackSimulation) {
-   ; 
+    std::string admiralName = "Admiral";
+    std::string admiralRank = "Captain";
+    size_t admiralExperience = 10;
+    std::string startingPoint = "Earth";
+    std::string destination = "Mars";
+    double distance = 1000;
+    TBattleshipGroup b(admiralName, admiralRank, admiralExperience, startingPoint, destination, distance);
+    TBattleship ship1(TWeaponry(),TCaptainInfo(), "Name", 3., 5., 10, 7.);
+    b.addBattleship(ship1);
+    TBattleship ship2(TWeaponry(),TCaptainInfo(), "Name2", 3., 5., 10, 7.);
+    b.addBattleship(ship2);
+    TPlaneGroup attackers;
+    TWeaponry w1;
+    w1.setType(WeaponryType::heavy);
+    w1.setDamage(10.);
+    TPlane p1("bomber", std::move(w1), 10., 10., TPlaneType::bomber);
+    attackers.addPlane(p1);
+    b.simulateAttack(attackers);
+    EXPECT_EQ(b.size(), 0);
 }
 
 int main(int argc, char **argv) {

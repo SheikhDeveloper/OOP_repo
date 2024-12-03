@@ -36,15 +36,25 @@ void TPlaneGroup::addPlane(TPlane &plane) {
 
 void TPlaneGroup::deletePlane(const std::string &name) {
     std::string key = name + std::to_string(static_cast<int>(TPlaneType::bomber));
-    TPlane plane = _planes[key];
-    if (plane.getType() == TPlaneType::bomber) {
+    try {
+        TPlane plane = _planes[key];
         _bomberAmount--;
         _shipDamage -= plane.getWeaponry().getDamage();
+        _planes.remove(key);
+        _planeDamage -= plane.getWeaponry().getDamage();
     }
-    else if (plane.getType() == TPlaneType::fighter)
-        _fightersAmount--;
-    _planeDamage -= plane.getWeaponry().getDamage();
-    _planes.remove(name);
+    catch (std::exception &e) {
+        std::string new_key = name + std::to_string(static_cast<int>(TPlaneType::fighter));
+        try {
+            TPlane plane = _planes[new_key];
+            _fightersAmount--;
+            _planes.remove(new_key);
+            _planeDamage -= plane.getWeaponry().getDamage();
+        }
+        catch (std::exception &e) {
+            throw std::invalid_argument("Wrong plane name");
+        }
+    }
 }
 
 TPlane &TPlaneGroup::getPlane(std::string &name, TPlaneType planeType) {
@@ -85,7 +95,6 @@ void TPlaneGroup::attack(TBattleship &target) {
         ;
     }
     shipSurvivability -= _shipDamage;
-    target.setSurvivability(shipSurvivability);
     if (shipSurvivability < 0.)
         shipSurvivability = 0.;
     target.setSurvivability(shipSurvivability);

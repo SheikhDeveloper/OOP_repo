@@ -49,6 +49,8 @@ public:
     void removePlane(const std::string &planeName, const std::string &carrierName);
     void removeBattleship(const std::string &battleshipName);
 
+    size_t size() const;
+
     void setAdmiral(TCaptainInfo &admiral);
     void setStartingPoint(const std::string &startingPoint);
     void setDestination(const std::string &destination);

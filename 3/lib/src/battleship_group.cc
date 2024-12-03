@@ -167,6 +167,45 @@ double TBattleshipGroup::getDistance() const {
     return _distance;
 }
 
+void TBattleshipGroup::addPlane(TPlane &plane, const std::string &carrierName) {
+    try {
+        TAircraftCarrier &carrier = dynamic_cast<TAircraftCarrier &>(getBattleship(carrierName));
+        carrier.addPlane(plane);
+    }
+    catch (std::bad_cast &e) {
+        throw std::invalid_argument("Wrong carrier name");
+    }
+    catch (std::exception &e) {
+        throw e;
+    }
+}
+
+void TBattleshipGroup::addBattleship(TBattleship &battleship) {
+    _battleshipGroup.insert(battleship.getName(), battleship);
+}
+
+void TBattleshipGroup::removePlane(const std::string &planeName, const std::string &carrierName) {
+    try {
+        TAircraftCarrier &carrier = dynamic_cast<TAircraftCarrier &>(getBattleship(carrierName));
+        TPlaneGroup &planeGroup = carrier.getPlaneInfo();
+        planeGroup.deletePlane(planeName);
+    }
+    catch (std::bad_cast &e) {
+        throw std::invalid_argument("Wrong carrier name");
+    }
+    catch (std::exception &e) {
+        throw e;
+    }
+}
+
+void TBattleshipGroup::removeBattleship(const std::string &name) {
+    _battleshipGroup.remove(name);
+}
+
+size_t TBattleshipGroup::size() const {
+    return _battleshipGroup.size();
+}
+
 void TBattleshipGroup::setAdmiral(TCaptainInfo &admiral) {
     _admiral = admiral;
 }
@@ -192,39 +231,37 @@ void TBattleshipGroup::relocatePlane(const std::string planeName, TPlaneType pla
     catch (std::bad_cast &e) {
         throw std::invalid_argument("Wrong carrier name");
     }
-    catch (std::exception &e) {
-        throw e;
-    }
 }
 
 void TBattleshipGroup::relocatePlane(std::string planeName, TPlaneType planeType, TAircraftCarrier &carrier1, TAircraftCarrier &carrier2) {
     TPlane plane = getPlane(planeName, planeType, carrier1.getName());
-    TPlaneGroup carrier2_planes = carrier2.getPlaneInfo();
+    TPlaneGroup &carrier2_planes = carrier2.getPlaneInfo();
     carrier2_planes.addPlane(plane);
-    carrier2.setPlaneInfo(carrier2_planes);
-    TPlaneGroup carrier1_planes = carrier1.getPlaneInfo();
+    TPlaneGroup &carrier1_planes = carrier1.getPlaneInfo();
     carrier1_planes.deletePlane(plane.getName());
-    carrier1.setPlaneInfo(carrier1_planes);
 }
 
 void TBattleshipGroup::simulateAttack(TPlaneGroup &attackingGroup, size_t numWorkers) {
     std::vector<std::thread> threads(numWorkers);
-    std::vector<std::string> to_remove;
     for (auto i = _battleshipGroup.begin(); i != _battleshipGroup.end(); ++i) {
         for (size_t j = 0; j < numWorkers; ++j) {
             if (threads[j].joinable())
                 threads[j].join();
-            threads[j] = std::thread(&TPlaneGroup::attack, &attackingGroup, std::ref((*i).value_));
+            if (i != _battleshipGroup.end()) {
+                threads[j] = std::thread(&TPlaneGroup::attack, std::ref(attackingGroup), std::ref((*i).value_));
+                ++i;
+            }
         }
-        if ((*i).value_.getSurvivability() == 0.)
-            to_remove.push_back((*i).key_);
+        if (i == _battleshipGroup.end())
+            break;
     }
     for (auto &thread : threads) {
         if (thread.joinable())
             thread.join();
     }
-    for (auto &i : to_remove) {
-        _battleshipGroup.remove(i);
+    for (auto &i : _battleshipGroup) {
+        if (i.value_.getSurvivability() == 0.)
+            _battleshipGroup.remove(i.key_);
     }
 }
 
