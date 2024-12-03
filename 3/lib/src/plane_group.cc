@@ -4,6 +4,7 @@
 
 #include <iostream>
 
+TPlaneGroup::TPlaneGroup() : _planes(), _planeDamage(0.), _shipDamage(0.), _bomberAmount(0), _fightersAmount(0) {}
 
 TPlaneGroup::TPlaneGroup(const TPlaneGroup &planeGroup) :
     _planes(planeGroup._planes),
@@ -24,7 +25,6 @@ void TPlaneGroup::addPlane(TPlane &plane) {
     TPlaneType planeType = plane.getType();
     std::string key = plane.getName() + std::to_string(static_cast<int>(planeType));
     _planes.insert(plane.getName(), plane);
-    auto &plane_weaponry = plane.getWeaponry();
     if (planeType == TPlaneType::bomber) {
         _bomberAmount++;
         _shipDamage += plane.getWeaponry().getDamage();

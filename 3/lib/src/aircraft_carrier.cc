@@ -14,7 +14,7 @@ TAircraftCarrier::TAircraftCarrier(const TAircraftCarrier &aircraftCarrier) :
     _planes(aircraftCarrier._planes) {}
 
 TAircraftCarrier::TAircraftCarrier(TAircraftCarrier &&aircraftCarrier) :
-    TBattleship(std::move(aircraftCarrier.getWeaponry()), std::move(aircraftCarrier.getName()), std::move(aircraftCarrier.getCaptain()._name), 
+    TBattleship(aircraftCarrier.getWeaponry(), std::move(aircraftCarrier.getName()), std::move(aircraftCarrier.getCaptain()._name), 
             std::move(aircraftCarrier.getCaptain()._rank), std::move(aircraftCarrier.getCaptain()._experience), std::move(aircraftCarrier.getSpeed()), 
             std::move(aircraftCarrier.getSurvivability()), std::move(aircraftCarrier.getCrewMembersAmount()), std::move(aircraftCarrier.getFuelUsage())),
     _planes(std::move(aircraftCarrier._planes)) {}
@@ -45,6 +45,11 @@ void TAircraftCarrier::addPlane(TPlane &plane) {
 void TAircraftCarrier::dump(std::ostream &out) const {
     TBattleship::dump(out);
     _planes.dump(out);
+}
+
+void TAircraftCarrier::read(std::istream &in) {
+    TBattleship::read(in);
+    _planes.read(in);
 }
 
 TAircraftCarrier &TAircraftCarrier::operator=(const TAircraftCarrier &aircraftCarrier) {

@@ -26,9 +26,11 @@ std::istream &operator>>(std::istream &in, TPlaneType &type) {
     return in;
 }
 
+TPlane::TPlane() : _survivability(0.), _fuelUsage(0.), _type(TPlaneType::bomber) {}
+
 TPlane::TPlane(const std::string name, TWeaponry &weaponry, double survivability, double fuelUsage, TPlaneType type) : 
-    _name(name), _weaponry(weaponry), _type(type),
-    _survivability(survivability), _fuelUsage(fuelUsage) {
+    _name(name), _weaponry(weaponry),
+    _survivability(survivability), _fuelUsage(fuelUsage), _type(type) {
     if (survivability < 0.) {
         survivability = 0.;
         throw std::logic_error("Survivability can't be negative.setting it to 0");

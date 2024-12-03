@@ -8,7 +8,7 @@
 
 class TPlaneGroup {
 public:
-    TPlaneGroup() = default;
+    TPlaneGroup();
     TPlaneGroup(const TPlaneGroup&);
 
     TPlaneGroup(TPlaneGroup&&);

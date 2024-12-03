@@ -39,7 +39,7 @@ public:
     TPlane &operator=(const TPlane &other) = default;
     TPlane &operator=(TPlane &&other) = default;
 
-    ~TPlane() = default;
+    virtual ~TPlane() = default;
 
 private:
     std::string _name;

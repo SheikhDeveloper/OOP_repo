@@ -17,12 +17,12 @@ TBattleship::TBattleship(TWeaponry weaponry, const std::string &name,
                          const std::string &captainName, const std::string &captainRank, 
                          const size_t experience, double speed, double survivability, 
                          size_t crewMembersAmount, double fuelUsage) :
-    _weaponry(weaponry),
     _name(name),
     _captain(captainName, captainRank, experience),
     _speed(speed),
     _survivability(survivability),
     _crewMembersAmount(crewMembersAmount),
+    _weaponry(weaponry),
     _fuelUsage(fuelUsage) {
 
         if (_survivability < 0.) {
@@ -38,17 +38,22 @@ TBattleship::TBattleship(TWeaponry weaponry, const std::string &name,
         if (_speed < 0.) {
             _speed = 0.;
             throw std::logic_error("Speed can't be negative.Setting it to 0");
+        }
+        
+        if (fuelUsage < 0.) {
+            _fuelUsage = 0.;
+            throw std::logic_error("Fuel usage can't be negative.Setting it to 0");
         }
 }
 
 TBattleship::TBattleship(TWeaponry weaponry, TCaptainInfo captainInfo, const std::string &name, double speed, 
                          double survivability, size_t crewMembersAmount, double fuelUsage) :
     _name(name),
-    _weaponry(weaponry),
     _captain(captainInfo),
     _speed(speed),
     _survivability(survivability),
     _crewMembersAmount(crewMembersAmount),
+    _weaponry(weaponry),
     _fuelUsage(fuelUsage) {
 
         if (_survivability < 0.) {
@@ -65,24 +70,29 @@ TBattleship::TBattleship(TWeaponry weaponry, TCaptainInfo captainInfo, const std
             _speed = 0.;
             throw std::logic_error("Speed can't be negative.Setting it to 0");
         }
+        
+        if (fuelUsage < 0.) {
+            _fuelUsage = 0.;
+            throw std::logic_error("Fuel usage can't be negative.Setting it to 0");
+        }
     }
 
 TBattleship::TBattleship(const TBattleship &battleship) :
-    _weaponry(battleship._weaponry),
     _name(battleship._name),
     _captain(battleship._captain),
     _speed(battleship._speed),
     _survivability(battleship._survivability),
     _crewMembersAmount(battleship._crewMembersAmount),
+    _weaponry(battleship._weaponry),
     _fuelUsage(battleship._fuelUsage) {}
 
 TBattleship::TBattleship(TBattleship &&battleship) :
-    _weaponry(std::move(battleship._weaponry)),
     _name(std::move(battleship._name)),
     _captain(std::move(battleship._captain)),
     _speed(std::move(battleship._speed)),
     _survivability(std::move(battleship._survivability)),
     _crewMembersAmount(std::move(battleship._crewMembersAmount)),
+    _weaponry(std::move(battleship._weaponry)),
     _fuelUsage(std::move(battleship._fuelUsage)) {}
 
 std::string TBattleship::getName() const {

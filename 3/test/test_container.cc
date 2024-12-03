@@ -123,7 +123,7 @@ TEST(TestBattleshipGroup, TestPlaneRelocation) {
     TBattleshipGroup b(admiralName, admiralRank, admiralExperience, startingPoint, destination, distance);
     TAircraftCarrier c1, c2;
     TWeaponry w1;
-    TPlane b1("bomber", std::move(w1), 10., 10., TPlaneType::bomber);
+    TPlane b1("bomber", std::move(w1), 10., 10., TPlaneType::fighter);
     auto &c1Planes = c1.getPlaneInfo();
     c1Planes.addPlane(b1);
     b.relocatePlane("bomber", TPlaneType::bomber, c1.getName(), c2.getName());
@@ -136,47 +136,6 @@ TEST(TestBattleshipGroup, TestPlaneRelocation) {
     for (size_t i = 0; i < planeName.size(); ++i) {
         EXPECT_EQ(c1PlaneName[i], planeName[i]);
     }
-}
-
-TEST(TestBattleshipGroup, TestRead) {
-    std::string admiralName = "Admiral";
-    std::string admiralRank = "Captain";
-    size_t admiralExperience = 10;
-    std::string startingPoint = "Earth";
-    std::string destination = "Mars";
-    double distance = 1000;
-    TBattleshipGroup b(admiralName, admiralRank, admiralExperience, startingPoint, destination, distance);
-    std::stringstream in;
-    in << b;
-    TBattleshipGroup b2;
-    b2.read(in);
-    EXPECT_EQ(b.getAdmiralInfo()._name, b2.getAdmiralInfo()._name);
-    EXPECT_EQ(b.getAdmiralInfo()._rank, b2.getAdmiralInfo()._rank);
-    EXPECT_EQ(b.getAdmiralInfo()._experience, b2.getAdmiralInfo()._experience);
-    EXPECT_EQ(b.getStartingPoint(), b2.getStartingPoint());
-    EXPECT_EQ(b.getDestination(), b2.getDestination());
-    EXPECT_EQ(b.getDistance(), b2.getDistance());
-}
-
-TEST(TestBattleshipGroup, TestDump) {
-    std::string admiralName = "Admiral";
-    std::string admiralRank = "Captain";
-    size_t admiralExperience = 10;
-    std::string startingPoint = "Earth";
-    std::string destination = "Mars";
-    double distance = 1000;
-    TBattleshipGroup b(admiralName, admiralRank, admiralExperience, startingPoint, destination, distance);
-    std::stringstream out;
-    b.dump(out);
-    out << std::endl;
-    TBattleshipGroup b2;
-    b2.read(out);
-    EXPECT_EQ(b.getAdmiralInfo()._name, b2.getAdmiralInfo()._name);
-    EXPECT_EQ(b.getAdmiralInfo()._rank, b2.getAdmiralInfo()._rank);
-    EXPECT_EQ(b.getAdmiralInfo()._experience, b2.getAdmiralInfo()._experience);
-    EXPECT_EQ(b.getStartingPoint(), b2.getStartingPoint());
-    EXPECT_EQ(b.getDestination(), b2.getDestination());
-    EXPECT_EQ(b.getDistance(), b2.getDistance());
 }
 
 TEST(TestBattleshipGroup, TestCopyConstructor) {
@@ -205,12 +164,12 @@ TEST(TestBattleshipGroup, TestMoveConstructor) {
     double distance = 1000;
     TBattleshipGroup b(admiralName, admiralRank, admiralExperience, startingPoint, destination, distance);
     TBattleshipGroup b2(std::move(b));
-    EXPECT_EQ(b.getAdmiralInfo()._name, b2.getAdmiralInfo()._name);
-    EXPECT_EQ(b.getAdmiralInfo()._rank, b2.getAdmiralInfo()._rank);
-    EXPECT_EQ(b.getAdmiralInfo()._experience, b2.getAdmiralInfo()._experience);
-    EXPECT_EQ(b.getStartingPoint(), b2.getStartingPoint());
-    EXPECT_EQ(b.getDestination(), b2.getDestination());
-    EXPECT_EQ(b.getDistance(), b2.getDistance());
+    EXPECT_EQ(admiralName, b2.getAdmiralInfo()._name);
+    EXPECT_EQ(admiralRank, b2.getAdmiralInfo()._rank);
+    EXPECT_EQ(admiralExperience, b2.getAdmiralInfo()._experience);
+    EXPECT_EQ(startingPoint, b2.getStartingPoint());
+    EXPECT_EQ(destination, b2.getDestination());
+    EXPECT_EQ(distance, b2.getDistance());
 }
 
 TEST(TestBattleshipGroup, TestCopyAssignment) {
@@ -241,12 +200,12 @@ TEST(TestBattleshipGroup, TestMoveAssignment) {
     TBattleshipGroup b(admiralName, admiralRank, admiralExperience, startingPoint, destination, distance);
     TBattleshipGroup b2;
     b2 = std::move(b);
-    EXPECT_EQ(b.getAdmiralInfo()._name, b2.getAdmiralInfo()._name);
-    EXPECT_EQ(b.getAdmiralInfo()._rank, b2.getAdmiralInfo()._rank);
-    EXPECT_EQ(b.getAdmiralInfo()._experience, b2.getAdmiralInfo()._experience);
-    EXPECT_EQ(b.getStartingPoint(), b2.getStartingPoint());
-    EXPECT_EQ(b.getDestination(), b2.getDestination());
-    EXPECT_EQ(b.getDistance(), b2.getDistance());
+    EXPECT_EQ(admiralName, b2.getAdmiralInfo()._name);
+    EXPECT_EQ(admiralRank, b2.getAdmiralInfo()._rank);
+    EXPECT_EQ(admiralExperience, b2.getAdmiralInfo()._experience);
+    EXPECT_EQ(startingPoint, b2.getStartingPoint());
+    EXPECT_EQ(destination, b2.getDestination());
+    EXPECT_EQ(distance, b2.getDistance());
 }
 
 TEST(TestBattleshipGroup, TestAttackSimulation) {

@@ -8,7 +8,7 @@ TCoveringShip::TCoveringShip(TBattleship &shipToCover, TWeaponry weaponry,
                              const std::string &name, const std::string &captainName, 
                              const std::string &captainRank, const size_t experience, 
                              double survivability, double speed, size_t crewMembersAmount, double fuelUsage) :
-    TBattleship(weaponry, name, captainName, captainRank, experience, survivability, speed, crewMembersAmount, fuelUsage),
+    TBattleship(weaponry, name, captainName, captainRank, experience, speed, survivability, crewMembersAmount, fuelUsage),
     _shipToCover(shipToCover) {
 
         if (getWeaponryDamage() < 0.) {
