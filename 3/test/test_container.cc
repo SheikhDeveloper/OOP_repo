@@ -249,6 +249,10 @@ TEST(TestBattleshipGroup, TestMoveAssignment) {
     EXPECT_EQ(b.getDistance(), b2.getDistance());
 }
 
+TEST(TestBattleshipGroup, TestAttackSimulation) {
+   ; 
+}
+
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();

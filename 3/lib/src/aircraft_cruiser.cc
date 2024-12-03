@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+TAircraftCarryingCruiser::TAircraftCarryingCruiser(): TAircraftCarrier(), TCoveringShip() {}
+
 TAircraftCarryingCruiser::TAircraftCarryingCruiser(TWeaponry weaponry, TPlaneGroup planes, TBattleship &shipToCover, const std::string &name, 
     const std::string &captainName, const std::string &captainRank, const size_t experience, double survivability, double speed, 
     size_t crewMembersAmount, double fuelUsage) : 

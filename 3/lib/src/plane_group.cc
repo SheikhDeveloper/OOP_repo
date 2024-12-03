@@ -1,4 +1,5 @@
 #include "../headers/plane_group.h"
+#include "../headers/aircraft_carrier.h"
 
 
 #include <iostream>
@@ -34,7 +35,8 @@ void TPlaneGroup::addPlane(TPlane &plane) {
 }
 
 void TPlaneGroup::deletePlane(const std::string &name) {
-    TPlane plane = _planes[name];
+    std::string key = name + std::to_string(static_cast<int>(TPlaneType::bomber));
+    TPlane plane = _planes[key];
     if (plane.getType() == TPlaneType::bomber) {
         _bomberAmount--;
         _shipDamage -= plane.getWeaponry().getDamage();
@@ -59,9 +61,31 @@ size_t TPlaneGroup::size() const {
 }
 
 void TPlaneGroup::attack(TBattleship &target) {
-    auto shipSurvivability = target.getSurvivability();
-    auto totalDamage = getTotalDamage();
-    shipSurvivability -= totalDamage;
+    double shipSurvivability = target.getSurvivability();
+    std::vector<std::string> to_remove;
+    try {
+        TAircraftCarrier &carrier = dynamic_cast<TAircraftCarrier &>(target);
+        auto &aircraftPlanes = carrier.getPlaneInfo();
+        auto planeDamage = _planeDamage;
+        for (auto &i : aircraftPlanes._planes) {
+            TPlane plane = i.value_;
+            double newSurvivability = plane.getSurvivability() - planeDamage;
+            if (newSurvivability < 0.) {
+                newSurvivability = 0.;
+                to_remove.push_back(plane.getName());
+            }
+            plane.setSurvivability(newSurvivability);
+        }
+        
+        for (auto &i : to_remove) {
+            aircraftPlanes.deletePlane(i);
+        }
+    }
+    catch (std::bad_cast &e) {
+        ;
+    }
+    shipSurvivability -= _shipDamage;
+    target.setSurvivability(shipSurvivability);
     if (shipSurvivability < 0.)
         shipSurvivability = 0.;
     target.setSurvivability(shipSurvivability);
