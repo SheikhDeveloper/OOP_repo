@@ -7,6 +7,98 @@
 #include "../lib/headers/covering_ship.h"
 #include "../lib/headers/plane.h"
 
+TEST(TestCaptainInfo, TestDefaultConstructor) {
+    TCaptainInfo c;
+    EXPECT_EQ(c._name, "");
+    EXPECT_EQ(c._rank, "");
+    EXPECT_EQ(c._experience, 0);
+}
+
+TEST(TestCaptainInfo, TestConstructor) {
+    TCaptainInfo c("Admiral", "Captain", 10);
+    EXPECT_EQ(c._name, "Admiral");
+    EXPECT_EQ(c._rank, "Captain");
+    EXPECT_EQ(c._experience, 10);
+}
+
+TEST(TestWeaponry, TestDefaultConstructor) {
+    TWeaponry w;
+    EXPECT_EQ(w.getName(), "");
+    EXPECT_EQ(w.getAmmoName(), "");
+    EXPECT_EQ(w.getAmmoAmount(), 0);
+    EXPECT_DOUBLE_EQ(w.getDamage(), 0);
+    EXPECT_EQ(w.getType(), WeaponryType::light);
+}
+
+TEST(TestWeaponry, TestConstructor) {
+    TWeaponry w("Weaponry", "Ammo", 10, 10.0, WeaponryType::heavy);
+    EXPECT_EQ(w.getName(), "Weaponry");
+    EXPECT_EQ(w.getAmmoName(), "Ammo");
+    EXPECT_EQ(w.getAmmoAmount(), 10);
+    EXPECT_DOUBLE_EQ(w.getDamage(), 10.0);
+    EXPECT_EQ(w.getType(), WeaponryType::heavy);
+}
+
+TEST(TestWeaponry, TestCopyConstructor) {
+    TWeaponry w("Weaponry", "Ammo", 10, 10.0, WeaponryType::heavy);
+    TWeaponry w2(w);
+    EXPECT_EQ(w.getName(), w2.getName());
+    EXPECT_EQ(w.getAmmoName(), w2.getAmmoName());
+    EXPECT_EQ(w.getAmmoAmount(), w2.getAmmoAmount());
+    EXPECT_DOUBLE_EQ(w.getDamage(), w2.getDamage());
+    EXPECT_EQ(w.getType(), w2.getType());
+}
+
+TEST(TestWeaponry, TestMoveConstructor) {
+    TWeaponry w("Weaponry", "Ammo", 10, 10.0, WeaponryType::heavy);
+    TWeaponry w2(std::move(w));
+    EXPECT_EQ(w.getName(), "");
+    EXPECT_EQ(w.getAmmoName(), "");
+    EXPECT_EQ(w2.getName(), "Weaponry");
+    EXPECT_EQ(w2.getAmmoName(), "Ammo");
+    EXPECT_EQ(w2.getAmmoAmount(), 10);
+    EXPECT_DOUBLE_EQ(w2.getDamage(), 10.0);
+    EXPECT_EQ(w2.getType(), WeaponryType::heavy);
+}
+
+TEST(TestWeaponry, TestGettersAndSetters) {
+    TWeaponry w;
+    w.setName("Weaponry");
+    w.setAmmoName("Ammo");
+    w.setAmmoAmount(10);
+    w.setDamage(10.0);
+    w.setType(WeaponryType::heavy);
+    EXPECT_EQ(w.getName(), "Weaponry");
+    EXPECT_EQ(w.getAmmoName(), "Ammo");
+    EXPECT_EQ(w.getAmmoAmount(), 10);
+    EXPECT_DOUBLE_EQ(w.getDamage(), 10.0);
+    EXPECT_EQ(w.getType(), WeaponryType::heavy);
+}
+
+TEST(TestWeaponry, TestCopyAssignment) {
+    TWeaponry w("Weaponry", "Ammo", 10, 10.0, WeaponryType::heavy);
+    TWeaponry w2;
+    w2 = w;
+    EXPECT_EQ(w.getName(), w2.getName());
+    EXPECT_EQ(w.getAmmoName(), w2.getAmmoName());
+    EXPECT_EQ(w.getAmmoAmount(), w2.getAmmoAmount());
+    EXPECT_DOUBLE_EQ(w.getDamage(), w2.getDamage());
+    EXPECT_EQ(w.getType(), w2.getType());
+}
+
+TEST(TestWeaponry, TestMoveAssignment) {
+    TWeaponry w("Weaponry", "Ammo", 10, 10.0, WeaponryType::heavy);
+    TWeaponry w2;
+    w2 = std::move(w);
+    EXPECT_EQ(w.getName(), "");
+    EXPECT_EQ(w.getAmmoName(), "");
+    EXPECT_EQ(w2.getName(), "Weaponry");
+    EXPECT_EQ(w2.getAmmoName(), "Ammo");
+    EXPECT_EQ(w2.getAmmoAmount(), 10);
+    EXPECT_DOUBLE_EQ(w2.getDamage(), 10.0);
+    EXPECT_EQ(w2.getType(), WeaponryType::heavy);
+}
+
 TEST(TestBattleship, TestDefaultConstructor) {
     TBattleship b;
 
