@@ -19,6 +19,7 @@ enum class ShipType
 std::istream &operator>>(std::istream &in, ShipType &shipType);
 std::ostream &operator<<(std::ostream &out, const ShipType &shipType);
 
+
 class TBattleshipGroup
 {
 public:
@@ -64,13 +65,25 @@ public:
     TBattleshipGroup &operator=(const TBattleshipGroup &battleshipGroup) = default;
     TBattleshipGroup &operator=(TBattleshipGroup &&battleshipGroup) = default;
 private:
-    THashTable<std::string, TBattleship> _battleshipGroup;
+    class BattleshipVessel {
+        public:
+        TBattleship *battleshipPtr_ = nullptr;
+        BattleshipVessel() = default;
+        BattleshipVessel(TBattleship &battleship);
+        BattleshipVessel(TBattleship *battleship_ptr);
+
+        TBattleship &operator*();
+        ~BattleshipVessel() = default;
+    };
+
+    THashTable<std::string, BattleshipVessel> _battleshipGroup;
     TCaptainInfo _admiral;
     std::string _startingPoint;
     std::string _destination;
     double _distance;
 
-    void relocatePlane(std::string planeName, TPlaneType planeType, TAircraftCarrier &aircraftCarrier1, TAircraftCarrier &aircraftCarrier2);
+    BattleshipVessel &getBattleshipVessel(const std::string &battleshipName);
+    void relocatePlane(std::string planeName, TPlaneType planeType, BattleshipVessel &aircraftCarrier1, BattleshipVessel &aircraftCarrier2);
 };
 
 std::ostream &operator<<(std::ostream &out, const TBattleshipGroup &battleshipGroup);

@@ -4,6 +4,10 @@
 
 TCoveringShip::TCoveringShip(): TBattleship(), _shipToCover(TBattleship()) {}
 
+TCoveringShip::TCoveringShip(const TBattleship &shipToCover): TBattleship(), _shipToCover(shipToCover) {}
+
+TCoveringShip::TCoveringShip(TBattleship &&shipToCover): TBattleship(), _shipToCover(std::move(shipToCover)) {}
+
 TCoveringShip::TCoveringShip(TBattleship &shipToCover, TWeaponry weaponry, 
                              const std::string &name, const std::string &captainName, 
                              const std::string &captainRank, const size_t experience, 

@@ -281,7 +281,7 @@ public:
     /**
      * Default constructor.
      */
-    THashTable() = default;
+    THashTable(): table_(nullptr), capacity_(0), size_(0) {};
 
     /**
      * Constructor with a capacity.

@@ -31,10 +31,10 @@ public:
 
 private:
     THashTable<std::string, TPlane> _planes;
-    double _planeDamage;
-    double _shipDamage;
-    double _bomberAmount;
-    double _fightersAmount;
+    double _planeDamage = 0.;
+    double _shipDamage = 0.;
+    size_t _bomberAmount = 0;
+    size_t _fightersAmount = 0;
 };
 
 std::ostream &operator<<(std::ostream &out, const TPlaneGroup &planeGroup);

@@ -2,19 +2,19 @@
 
 #include <iostream>
 
-TAircraftCarryingCruiser::TAircraftCarryingCruiser(): TAircraftCarrier(), TCoveringShip() {}
+TAircraftCarryingCruiser::TAircraftCarryingCruiser():  TAircraftCarrier(), TCoveringShip() {} 
 
 TAircraftCarryingCruiser::TAircraftCarryingCruiser(TWeaponry weaponry, TPlaneGroup planes, TBattleship &shipToCover, const std::string &name, 
     const std::string &captainName, const std::string &captainRank, const size_t experience, double survivability, double speed, 
     size_t crewMembersAmount, double fuelUsage) : 
-    TAircraftCarrier(weaponry, planes, name, captainName, captainRank, experience, survivability, speed, crewMembersAmount, fuelUsage), 
+    TAircraftCarrier(weaponry, planes, name, captainName, captainRank, experience, survivability, speed, crewMembersAmount, fuelUsage),
     TCoveringShip(shipToCover, weaponry, name, captainName, captainRank, experience, survivability, speed, crewMembersAmount, fuelUsage) {}
 
 TAircraftCarryingCruiser::TAircraftCarryingCruiser(const TAircraftCarryingCruiser &aircraftCarryingCruiser) : 
-    TAircraftCarrier(aircraftCarryingCruiser), TCoveringShip(aircraftCarryingCruiser) {}
+     TAircraftCarrier(aircraftCarryingCruiser), TCoveringShip(aircraftCarryingCruiser) {}
 
 TAircraftCarryingCruiser::TAircraftCarryingCruiser(TAircraftCarryingCruiser &&aircraftCarryingCruiser) : 
-    TAircraftCarrier(std::move(aircraftCarryingCruiser)), TCoveringShip(std::move(aircraftCarryingCruiser)) {}
+     TAircraftCarrier(std::move(aircraftCarryingCruiser)), TCoveringShip(std::move(aircraftCarryingCruiser)) {}
 
 void TAircraftCarryingCruiser::dump(std::ostream &out) const {
     TAircraftCarrier::dump(out);

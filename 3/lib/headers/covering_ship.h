@@ -7,6 +7,8 @@ class TCoveringShip : public TBattleship
 {
 public:
     TCoveringShip();
+    TCoveringShip(const TBattleship &shipToCover);
+    TCoveringShip(TBattleship &&shipToCover);
     TCoveringShip(TBattleship &shipToCover, TWeaponry weaponry, const std::string &name, const std::string &captainName, 
             const std::string &captainRank, const size_t experience, double survivability, double speed, size_t crewMembersAmount, double fuelUsage);
 

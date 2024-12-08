@@ -24,7 +24,7 @@ TPlaneGroup::TPlaneGroup(TPlaneGroup &&planeGroup) :
 void TPlaneGroup::addPlane(TPlane &plane) {
     TPlaneType planeType = plane.getType();
     std::string key = plane.getName() + std::to_string(static_cast<int>(planeType));
-    _planes.insert(plane.getName(), plane);
+    _planes.insert(key, plane);
     if (planeType == TPlaneType::bomber) {
         _bomberAmount++;
         _shipDamage += plane.getWeaponry().getDamage();
@@ -59,7 +59,7 @@ void TPlaneGroup::deletePlane(const std::string &name) {
 
 TPlane &TPlaneGroup::getPlane(std::string &name, TPlaneType planeType) {
     std::string key = name + std::to_string(static_cast<int>(planeType));
-    return _planes[name];
+    return _planes[key];
 }
 
 double TPlaneGroup::getTotalDamage() const {
@@ -115,7 +115,14 @@ void TPlaneGroup::read(std::istream &is) {
 }
 
 TPlane &TPlaneGroup::operator[](const std::string &name) {
-    return _planes[name];
+    try {
+    std::string key = name + std::to_string(static_cast<int>(TPlaneType::bomber));
+    return _planes[key];
+    }
+    catch (std::exception &e) {
+        std::string new_key = name + std::to_string(static_cast<int>(TPlaneType::fighter));
+        return _planes[new_key];
+    }
 }
 
 TPlaneGroup &TPlaneGroup::operator=(const TPlaneGroup &planeGroup) {

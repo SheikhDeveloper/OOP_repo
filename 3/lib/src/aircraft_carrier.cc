@@ -23,6 +23,14 @@ TPlaneGroup & TAircraftCarrier::getPlaneInfo() {
     return _planes;
 }
 
+void TAircraftCarrier::addPlane(TPlane &plane) {
+    _planes.addPlane(plane);
+}
+
+void TAircraftCarrier::deletePlane(const std::string &planeName) {
+    _planes.deletePlane(planeName);
+}
+
 double TAircraftCarrier::calcPlaneDamage() const {
     return _planes.getTotalDamage();
 }
@@ -36,10 +44,6 @@ void TAircraftCarrier::setWeaponry(TWeaponry &weaponry) {
 
 void TAircraftCarrier::setPlaneInfo(TPlaneGroup &planes) {
     _planes = planes;
-}
-
-void TAircraftCarrier::addPlane(TPlane &plane) {
-    _planes.addPlane(plane);
 }
 
 void TAircraftCarrier::dump(std::ostream &out) const {

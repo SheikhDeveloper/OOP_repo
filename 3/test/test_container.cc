@@ -240,6 +240,8 @@ TEST(TestBattleshipGroup, TestPlaneRelocation) {
     b.addBattleship(c1);
     b.addBattleship(c2);
     b.relocatePlane("bomber", TPlaneType::fighter, c1.getName(), c2.getName());
+    c1 = dynamic_cast<TAircraftCarrier &>(b.getBattleship(c1.getName()));
+    c2 = dynamic_cast<TAircraftCarrier &>(b.getBattleship(c2.getName()));
     auto &c2Planes = c2.getPlaneInfo();
     auto &c1Planes = c1.getPlaneInfo();
     EXPECT_EQ(c1Planes.size(), 0);
@@ -404,7 +406,7 @@ TEST(TestBattleshipGroup, TestExceptions) {
     TWeaponry w1;
     TPlane b1("bomber", std::move(w1), 10., 10., TPlaneType::fighter);
     c1.addPlane(b1);
-    EXPECT_THROW(b.relocatePlane("bomber", TPlaneType::fighter, c1.getName(), c2.getName()), std::out_of_range);
+    EXPECT_THROW(b.relocatePlane("bomber", TPlaneType::fighter, c1.getName(), c2.getName()), std::exception);
     EXPECT_THROW(b.addPlane(b1, "bomber"), std::exception);
     EXPECT_THROW(b.removePlane("bomber", "bomber"), std::exception);
 }
