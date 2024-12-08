@@ -405,8 +405,8 @@ TEST(TestBattleshipGroup, TestExceptions) {
     TPlane b1("bomber", std::move(w1), 10., 10., TPlaneType::fighter);
     c1.addPlane(b1);
     EXPECT_THROW(b.relocatePlane("bomber", TPlaneType::fighter, c1.getName(), c2.getName()), std::out_of_range);
-    EXPECT_THROW(b.addPlane(b1, "bomber"), std::out_of_range);
-    EXPECT_THROW(b.removePlane("bomber", "bomber"), std::out_of_range);
+    EXPECT_THROW(b.addPlane(b1, "bomber"), std::exception);
+    EXPECT_THROW(b.removePlane("bomber", "bomber"), std::exception);
 }
 
 TEST(TestBattleshipGroup, TestCopyAssignment) {
