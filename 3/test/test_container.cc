@@ -234,6 +234,7 @@ TEST(TestBattleshipGroup, TestPlaneRelocation) {
     double distance = 1000;
     TBattleshipGroup b(admiralName, admiralRank, admiralExperience, startingPoint, destination, distance);
     TAircraftCarrier c1, c2;
+    c2.setName("Carrier 2");
     TWeaponry w1;
     TPlane b1("bomber", std::move(w1), 10., 10., TPlaneType::fighter);
     c1.addPlane(b1);

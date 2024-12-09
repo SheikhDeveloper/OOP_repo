@@ -5,6 +5,7 @@
 #include "weaponry.h"
 #include "plane_group.h"
 
+/** @brief Class for Aircraft carrier */
 class TAircraftCarrier : public TBattleship {
 public:
     /** @brief default constructor */

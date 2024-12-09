@@ -3,13 +3,29 @@
 
 #include <string>
 
+/*@brief Captain info */
 struct TCaptainInfo {
+
+    /*@brief Captain name */
     std::string _name;
+
+    /*@brief Captain rank */
     std::string _rank;
+
+    /*@brief Captain experience */
     size_t _experience;
 
+    /*@brief Default constructor */
     TCaptainInfo();
+
+    /*@brief Parameterized constructor 
+     * @param name - captain name
+     * @param rank - captain rank
+     * @param experience - captain experience
+     * */
     TCaptainInfo(const std::string &name, const std::string &rank, size_t experience);
+
+    /*@brief Destructor */
     ~TCaptainInfo() = default;
 };
 
