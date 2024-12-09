@@ -20,30 +20,30 @@ public:
     TPlane();
 
     /* @brief Constructor with lvalue parameters 
-     * @param[in] name - name of plane 
-     * @param[in] weaponry - weaponry of plane 
-     * @param[in] survivability - survivability of plane 
-     * @param[in] fuelUsage - fuel usage of plane 
-     * @param[in] type - type of plane 
+     * @param name - name of plane 
+     * @param weaponry - weaponry of plane 
+     * @param survivability - survivability of plane 
+     * @param fuelUsage - fuel usage of plane 
+     * @param type - type of plane 
      * */
     TPlane(const std::string name, TWeaponry &weaponry, double survivability, double fuelUsage, TPlaneType type);
 
     /* @brief Constructor with rvalue parameters 
-     * @param[in] name - name of plane 
-     * @param[in] weaponry - weaponry of plane 
-     * @param[in] survivability - survivability of plane 
-     * @param[in] fuelUsage - fuel usage of plane 
-     * @param[in] type - type of plane 
+     * @param name - name of plane 
+     * @param weaponry - weaponry of plane 
+     * @param survivability - survivability of plane 
+     * @param fuelUsage - fuel usage of plane 
+     * @param type - type of plane 
      * */
     TPlane(std::string &&name, TWeaponry &&weaponry, double survivability, double fuelUsage, TPlaneType type);
 
     /* @brief Copy constructor 
-     * @param[in] other - plane to copy
+     * @param other - plane to copy
      * */
     TPlane(const TPlane &other) = default;
 
     /* @brief Move constructor 
-     * @param[in] other - plane to move
+     * @param other - plane to move
      * */
     TPlane(TPlane &&other) = default;
 
@@ -73,55 +73,55 @@ public:
     TPlaneType getType() const;
 
     /* @brief Set type of plane 
-     * @param[in] newType - new type of plane 
+     * @param newType - new type of plane 
      * */
     void setType(TPlaneType newType);
 
     /* @brief Set name of plane 
-     * @param[in] newName - new name of plane 
+     * @param newName - new name of plane 
      * */
     void setName(const std::string &newName);
 
     /* @brief Set weaponry of plane
-     * @param[in] newWeaponry - new weaponry of plane
+     * @param newWeaponry - new weaponry of plane
      * */
     virtual void setWeaponry(TWeaponry &newWeaponry);
 
     /* @brief Set survivability of plane
-     * @param[in] newSurvivability - new survivability of plane
+     * @param newSurvivability - new survivability of plane
      * */
     void setSurvivability(double newSurvivability);
 
     /* @brief Set fuel usage of plane
-     * @param[in] newFuelUsage - new fuel usage of plane
+     * @param newFuelUsage - new fuel usage of plane
      * */
     void setFuelUsage(double newFuelUsage);
 
     /* @brief Set type of plane
-     * @param[in] weaponryType - new type of weaponry of plane
+     * @param weaponryType - new type of weaponry of plane
      *
      * @throws std::logic_error when trying to set light type to bomber
      * */
     virtual void setWeaponryType(WeaponryType weaponryType);
 
     /* @brief Dump plane data to output stream
-     * @param[in] out - stream to dump into
+     * @param out - stream to dump into
      * */
     virtual void dump(std::ostream &out) const;
 
     /* @brief Read plane data from input stream
-     * @param[in] in - stream to read from
+     * @param in - stream to read from
      * */
     virtual void read(std::istream &in);
 
     /* @brieft Copy Assignment operator
-     * @param[in] other - plane to copy
+     * @param other - plane to copy
      * @return Copied plane
      * */
     TPlane &operator=(const TPlane &other) = default;
 
     /* @brieft Move Assignment operator
-     * @param[in] other - plane to move
+     * @param other - plane to move
      * @return Moved plane
      * */
     TPlane &operator=(TPlane &&other) = default;

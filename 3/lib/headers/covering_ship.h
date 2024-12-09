@@ -11,37 +11,37 @@ public:
     TCoveringShip();
 
     /*@brief Constructor with ship to cover const lvalue reference
-     * @param[in] shipToCover - TBattleship object 
+     * @param shipToCover - TBattleship object 
      * */
     TCoveringShip(const TBattleship &shipToCover);
 
     /*@brief Constructor with ship to cover rvalue reference
-     * @param[in] shipToCover - TBattleship object
+     * @param shipToCover - TBattleship object
      * */
     TCoveringShip(TBattleship &&shipToCover);
 
     /*@brief Constructor with all parameters
-     * @param[in] shipToCover - Battleship to cover
-     * @param[in] weaponry - Weaponry of the ship
-     * @param[in] name - name of the ship
-     * @param[in] captainName - name of the captain
-     * @param[in] captainRank - rank of the captain
-     * @param[in] experience - experience of the captain
-     * @param[in] survivability - survivability of the ship
-     * @param[in] speed - speed of the ship
-     * @param[in] crewMembersAmount - amount of crew members
-     * @param[in] fuelUsage - fuel usage of the ship
+     * @param shipToCover - Battleship to cover
+     * @param weaponry - Weaponry of the ship
+     * @param name - name of the ship
+     * @param captainName - name of the captain
+     * @param captainRank - rank of the captain
+     * @param experience - experience of the captain
+     * @param survivability - survivability of the ship
+     * @param speed - speed of the ship
+     * @param crewMembersAmount - amount of crew members
+     * @param fuelUsage - fuel usage of the ship
      * */
     TCoveringShip(TBattleship &shipToCover, TWeaponry weaponry, const std::string &name, const std::string &captainName, 
             const std::string &captainRank, const size_t experience, double survivability, double speed, size_t crewMembersAmount, double fuelUsage);
 
     /*@brief Copy constructor 
-     * @param[in] coveringShip - Covering ship to copy 
+     * @param coveringShip - Covering ship to copy 
      * */
     TCoveringShip(const TCoveringShip &coveringShip);
 
     /*@brief Move constructor
-     * @param[in] coveringShip - Covering ship to move
+     * @param coveringShip - Covering ship to move
      * */
     TCoveringShip(TCoveringShip &&coveringShip);
 
@@ -53,7 +53,7 @@ public:
 
     /* @brief Set weaponry damage
      *
-     * @param[in] damage - Weaponry damage
+     * @param damage - Weaponry damage
      * */
     void setWeaponryDamage(double damage);
 
@@ -71,25 +71,25 @@ public:
 
     /* @brief Set ship to cover
      *
-     * @param[in] shipToCover - Ship to cover
+     * @param shipToCover - Ship to cover
      * */
     virtual void setShipToCover(TBattleship &shipToCover);
 
     /* @brief Dump covering ship into output stream
      * 
-     * @param[in] out - Output stream
+     * @param out - Output stream
      * */
     virtual void dump(std::ostream &out) const override;
 
     /* @brief Read covering ship from input stream
      * 
-     * @param[in] in - Input stream
+     * @param in - Input stream
      * */
     virtual void read(std::istream &in) override;
 
     /* @brief Read ship to cover from input stream
      * 
-     * @param[in] in - Input stream
+     * @param in - Input stream
      * */
     virtual void readShipToCover(std::istream &in);
 
@@ -98,7 +98,7 @@ public:
 
     /* @brief Copy assignment operator
      * 
-     * @param[in] coveringShip - Covering ship to copy
+     * @param coveringShip - Covering ship to copy
      * 
      * @return Reference to this
      * */
@@ -106,7 +106,7 @@ public:
 
     /* @brief Move assignment operator
      * 
-     * @param[in] coveringShip - Covering ship to move
+     * @param coveringShip - Covering ship to move
      * 
      * @return Reference to this
      * */

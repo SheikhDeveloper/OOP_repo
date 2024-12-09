@@ -145,14 +145,14 @@ public:
     virtual ~TBattleship() = default;
 
     /* @brief Copy assignment operator 
-     * @param[in] battleship - Battleship to copy
+     * @param battleship - Battleship to copy
      *
      * @return Copied TBattleship object 
      * */
     TBattleship &operator=(const TBattleship &battleship);
 
     /* @brief Move assignment operator 
-     * @param[in] battleship - Battleship to move
+     * @param battleship - Battleship to move
      *
      * @return Moved TBattleship object 
      * */
