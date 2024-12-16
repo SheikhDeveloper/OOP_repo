@@ -1,22 +1,31 @@
 #ifndef LAB3_APP_CLOUD_H
 #define LAB3_APP_CLOUD_H
 
-#include <SDL2/SDL.h>
+#include <SFML/Graphics.hpp>
 #include <vector>
 
+class Cloud {
+public:
+    Cloud(const sf::Texture& texture, float x, float y) {
+        sprite.setTexture(texture);
+        sprite.setPosition(x, y);
+        sprite.setScale(0.05f, 0.05f); // Scale down the cloud if necessary
+    }
 
-struct Cloud {
-    int x;          // Position of the cloud
-    int y;          // Vertical position of the cloud
-    int radius;     // Radius of the cloud
-    int density;    // Number of pixels in the cloud
-    int speedX;     // Speed of movement in X direction
+    void update(float speed) {
+        sprite.move(-speed, 0); // Move left
+        if (sprite.getPosition().x + sprite.getGlobalBounds().width < 0) {
+            // Reset position to the right side if it goes off-screen
+            sprite.setPosition(1000, sprite.getPosition().y);
+        }
+    }
 
-    Cloud(int startX, int startY, int r, int d, int sX)
-        : x(startX), y(startY), radius(r), density(d), speedX(sX) {}
-};
+    void draw(sf::RenderWindow& window) {
+        window.draw(sprite);
+    }
 
-void drawPixelCloud(SDL_Renderer* renderer, const Cloud& cloud);
-void updateClouds(std::vector<Cloud>& clouds);
+private:
+    sf::Sprite sprite;
+};;
 
 #endif //LAB3_APP_CLOUD_H
