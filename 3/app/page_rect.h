@@ -6,9 +6,9 @@
 class PageRect {
 public:
 
-    PageRect(sf::Vector2f pos = sf::Vector2f(0.5f, 0.5f)) {
+    PageRect(sf::Vector2f pos = sf::Vector2f(0.5f, 0.5f), sf::Vector2f size = sf::Vector2f(0.5f, 0.5f)) {
         _rect.setPosition(pos);
-        _rect.setSize(sf::Vector2f(0.8f, 0.8f));
+        _rect.setSize(size);
         _rect.setFillColor(sf::Color(0, 0, 0, 128));
     }
 

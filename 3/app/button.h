@@ -47,6 +47,31 @@ public:
         buttonShape.setFillColor(color);
     }
 
+    void setTextColor(sf::Color color) {
+        buttonText.setFillColor(color);
+    }
+
+    void setPosition(float x, float y) {
+        buttonShape.setPosition(x, y);
+        buttonText.setPosition(x + 20, y + 10);
+    }
+
+    void setSize(sf::Vector2f size) {
+        buttonShape.setSize(size);
+    }
+
+    sf::Vector2f getPosition() {
+        return buttonShape.getPosition();
+    }
+
+    sf::FloatRect getGlobalBounds() {
+        return buttonShape.getGlobalBounds();
+    }
+
+    sf::FloatRect getLocalBounds() {
+        return buttonShape.getLocalBounds();
+    }
+
     void draw(sf::RenderWindow& window) {
         window.draw(buttonShape);
         window.draw(buttonText);

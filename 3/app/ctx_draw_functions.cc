@@ -3,9 +3,26 @@
 #include "button.h"
 #include "pop_out_menu.h"
 #include "input_field.h"
+#include "missile.h"
+#include "page_rect.h"
+#include "../lib/headers/battleship_group.h"
 
 const int SCREEN_WIDTH = 1000;
 const int SCREEN_HEIGHT = 800;
+const int INPUT_AMOUNT = 11;
+
+void drawInputScene(sf::RenderWindow& window, InputField& inputField, Button& quitButton, Button& submitButton, sf::Text& text, PageRect& pageRect) {
+            text.setPosition(SCREEN_WIDTH / 4 - text.getLocalBounds().width / 2, SCREEN_HEIGHT / 2 - text.getLocalBounds().height / 2);
+            text.setFillColor(sf::Color::White);
+            quitButton.setSize(sf::Vector2f(submitButton.getLocalBounds().width, submitButton.getLocalBounds().height));
+            pageRect.draw(window);
+            inputField.draw(window);
+            submitButton.setPosition(submitButton.getPosition().x, inputField.getPosition().y + 50);
+            window.draw(text);
+            quitButton.setPosition(submitButton.getPosition().x, submitButton.getPosition().y + submitButton.getLocalBounds().height + 20);
+            submitButton.draw(window);
+            quitButton.draw(window);
+}
 
 int main() {
 
@@ -13,6 +30,8 @@ int main() {
     // Create the main window
     sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Ocean and Sky Scene");
     window.setFramerateLimit(60);
+
+    //TBattleshipGroup baseGroup;
 
     // Create the sky
     sf::RectangleShape sky(sf::Vector2f(SCREEN_WIDTH, SCREEN_HEIGHT / 2));
@@ -39,10 +58,24 @@ int main() {
     if (!waterTexture.loadFromFile("/home/sheikh/oop2024/3/app/images/water.png")) {
         throw std::runtime_error("Failed to load water texture");
     }
+    sf::Texture planeTexture;
+    if (!planeTexture.loadFromFile("/home/sheikh/oop2024/3/app/images/plane.png")) {
+        throw std::runtime_error("Failed to load plane texture");
+    }
+    sf::Texture missileTexture;
+    if (!missileTexture.loadFromFile("/home/sheikh/oop2024/3/app/images/missile.png")) {
+        throw std::runtime_error("Failed to load missile texture");
+    }
 
     ProgramState programState = ProgramState::MAIN_MENU;
 
-    // Create the aircraft
+    sf::Font font;
+    if (!font.loadFromFile("/home/sheikh/oop2024/3/app/fonts/arial.ttf")) {
+        throw std::runtime_error("Failed to load font");
+    }
+
+    sf::Clock clock;
+
     sf::Sprite aircraftCarrierSprite(aircraftCarrierTexture);
     aircraftCarrierSprite.setScale(0.25f, 0.2f);
     aircraftCarrierSprite.setPosition(SCREEN_WIDTH / 20 + aircraftCarrierSprite.getGlobalBounds().width / 2, SCREEN_HEIGHT / 2 - aircraftCarrierSprite.getGlobalBounds().height / 2);
@@ -52,6 +85,11 @@ int main() {
     sf::Sprite coveringShipSprite(coveringShipTexture);
     coveringShipSprite.setScale(0.25f, 0.25f);
     coveringShipSprite.setPosition(SCREEN_WIDTH / 2 - coveringShipSprite.getGlobalBounds().width / 2, SCREEN_HEIGHT / 2 - coveringShipSprite.getGlobalBounds().height / 2 + aircraftCruiserSprite.getGlobalBounds().height);
+    sf::Sprite planeSprite(planeTexture);
+    planeSprite.setScale(0.1f, 0.1f);
+    planeSprite.setPosition(0, SCREEN_HEIGHT / 3);
+
+    Missile missile(missileTexture, planeSprite.getPosition(), sf::Vector2f(aircraftCruiserSprite.getPosition().x + aircraftCruiserSprite.getGlobalBounds().width / 2, aircraftCruiserSprite.getPosition().y + aircraftCruiserSprite.getGlobalBounds().height / 2));
 
     // Create two sprites for the scrolling effect
     sf::Sprite waterSprite1(waterTexture);
@@ -78,6 +116,7 @@ int main() {
     }
 
      float cloudSpeed = 2.0f;
+     float planeSpeed = 3.0f;
 
      waterSprite1.setScale(2.0f, 1.0f);
      waterSprite2.setScale(2.0f, 1.0f);
@@ -106,6 +145,11 @@ int main() {
 
     PopOutMenu menu(0, 100, buttonNames, buttonStates, 240);
 
+    InputField inputField(SCREEN_WIDTH / 2 - 150, SCREEN_HEIGHT / 2 - 10, 400, 30);
+    Button submitButton("Submit", SCREEN_WIDTH / 2 - 50, SCREEN_HEIGHT / 2 + 100, 150);
+
+    PageRect pageRect(sf::Vector2f(0.05 * SCREEN_WIDTH, 0.05 * SCREEN_HEIGHT), sf::Vector2f(0.9 * SCREEN_WIDTH, 0.9 * SCREEN_HEIGHT));
+
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event)) {
@@ -119,8 +163,29 @@ int main() {
                     programState = ProgramState::EXIT; // Quit the program
                 }
             }
-            else if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+            else if (programState == ProgramState::PASSIVE_STATE && event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
                 menu.handleMouseClick(sf::Mouse::getPosition(window), programState);
+            }
+            else if (programState == ProgramState::SHIP_TYPE_MENU) {
+                sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+                if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left && submitButton.isMouseOver(mousePos)) {
+                    std::string type = inputField.getUserInput();
+                    if (type == "Carrier") {
+                        programState = ProgramState::AIRCRAFTCARRIER_MENU;
+                    }
+                    else if (type == "Cruiser") {
+                        programState = ProgramState::AIRCRAFTCRUISER_MENU;
+                    }
+                    else if (type == "Covering ship") {
+                        programState = ProgramState::COVERINGSHIP_MENU;
+                    }
+                }
+                else if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left && quitButton.isMouseOver(mousePos)) {
+                    programState = ProgramState::PASSIVE_STATE;
+                }
+                else {
+                    inputField.handleEvent(event);
+                }
             }
         }
 
@@ -132,13 +197,27 @@ int main() {
         menu.update(mousePos);
         startButton.update(mousePos);
         quitButton.update(mousePos);
+        submitButton.update(mousePos);
+
+        float deltaTime = clock.restart().asSeconds();
+        inputField.update(deltaTime);
+
+        window.clear();
+
+        window.draw(waterSprite1);
+        window.draw(waterSprite2);
+        // Draw the sky and ocean
+        window.draw(sky);
+
+        for (auto& cloud : clouds) {
+            cloud.draw(window);
+        }
 
         if (programState == ProgramState::MAIN_MENU) {
-            
             startButton.draw(window);
             quitButton.draw(window);
         }
-        else if (programState == ProgramState::PASSIVE_STATE) {
+        else if (programState == ProgramState::PASSIVE_STATE || programState == ProgramState::ATTACK_STATE) {
             for (auto& cloud : clouds) {
                 cloud.update(cloudSpeed);
             }
@@ -159,25 +238,43 @@ int main() {
             window.draw(aircraftCruiserSprite);
             window.draw(coveringShipSprite);
 
-
-            for (auto& cloud : clouds) {
-                cloud.draw(window);
+            if (programState == ProgramState::ATTACK_STATE) {
+                planeSprite.move(planeSpeed, 0); 
+                missile.update(planeSpeed);
+                if (planeSprite.getPosition().x > SCREEN_WIDTH) {
+                    planeSprite.setPosition(0, SCREEN_HEIGHT / 3);
+                    programState = ProgramState::PASSIVE_STATE;
+                }
+                window.draw(planeSprite);
+                if (missile.getPosition().x < aircraftCruiserSprite.getPosition().x + aircraftCruiserSprite.getLocalBounds().width / 7 && 
+                    missile.getPosition().y < aircraftCruiserSprite.getPosition().y + aircraftCruiserSprite.getLocalBounds().height / 7) {
+                    missile.draw(window);
+                }
+                else missile.setPosition(planeSprite.getPosition());
             }
 
             menu.draw(window);
         }
+        else if (programState == ProgramState::SHIP_TYPE_MENU) {
+            sf::Text text("Select a ship type:", font, 23);
+            drawInputScene(window, inputField, quitButton, submitButton, text, pageRect);
+        }
+        else if (programState == ProgramState::AIRCRAFTCARRIER_MENU) {
+            std::vector<sf::Text> texts = {
+                sf::Text("Name: ", font, 23),
+                sf::Text("Captain name: ", font, 23),
+                sf::Text("Captain rank: ", font, 23),
+                sf::Text("Captain experience: ", font, 23),
+                sf::Text("Survivability: ", font, 23),
+                sf::Text("Speed: ", font, 23),
+                sf::Text("Crew members amount: ", font, 23),
+                sf::Text("Fuel usage: ", font, 23)
+            };
+        }
 
-        // Clear the window
-        window.draw(waterSprite1);
-        window.draw(waterSprite2);
-        // Draw the sky and ocean
-        window.draw(sky);
-
-        window.clear();
+        window.display();
 
     }
-        // Display the contents of the window
-        window.display();
 
     return 0;
 }
