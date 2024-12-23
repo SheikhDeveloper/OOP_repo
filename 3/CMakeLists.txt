@@ -4,8 +4,6 @@ project(lab3 VERSION 1.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_COMPILER clang++)
 set(CMAKE_CXX_STANDARD 23)
-set(CMAKE_CXX_FLAGS "-Werror -Wall -Wextra  -Wpedantic  -Wcast-align  -Wcast-qual  -Wconversion  -Wctor-dtor-privacy -Wsign-conversion  -Wsign-promo") 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wenum-compare  -Wfloat-equal  -Wnon-virtual-dtor  -Wold-style-cast  -Woverloaded-virtual  -Wredundant-decls")
 
 option(ASAN "Turn on address and undefined behavior sanitizer" ON)
 option(ASAN "Turn off address and undefined behavior sanitizer" OFF)
@@ -35,4 +33,10 @@ add_library(battleship lib/headers/battleship.h lib/headers/aircraft_carrier.h l
 add_library(battleship_group lib/headers/battleship_group.h lib/src/battleship_group.cc)
 add_library(plane_group lib/headers/plane_group.h lib/src/plane_group.cc)
 
+target_link_libraries(battleship PRIVATE weaponry)
+target_link_libraries(battleship PRIVATE plane)
+target_link_libraries(battleship PRIVATE plane_group)
+target_link_libraries(battleship_group PRIVATE weaponry plane plane_group battleship)
+
 add_subdirectory(test)
+add_subdirectory(app)

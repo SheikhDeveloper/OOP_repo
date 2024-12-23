@@ -25,6 +25,13 @@ struct TCaptainInfo {
      * */
     TCaptainInfo(const std::string &name, const std::string &rank, size_t experience);
 
+    TCaptainInfo &operator=(const TCaptainInfo &captain) {
+        _name = captain._name;
+        _rank = captain._rank;
+        _experience = captain._experience;
+        return *this;
+    }
+
     /*@brief Destructor */
     ~TCaptainInfo() = default;
 };

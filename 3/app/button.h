@@ -12,7 +12,7 @@ public:
         buttonShape.setFillColor(color);
         buttonShape.setPosition(x, y);
 
-        _font.loadFromFile("./fonts/arial.ttf");
+        _font.loadFromFile("/home/sheikh/oop2024/3/app/fonts/arial.ttf");
         buttonText.setFont(_font);
         buttonText.setString(text);
         buttonText.setCharacterSize(24);
@@ -28,7 +28,7 @@ public:
         buttonShape.setFillColor(color);
         buttonShape.setPosition(x, y);
 
-        _font.loadFromFile("./fonts/arial.ttf"); // Load a font file
+        _font.loadFromFile("/home/sheikh/oop2024/3/app/fonts/arial.ttf"); // Load a font file
         buttonText.setFont(_font);
         buttonText.setString(text);
         buttonText.setCharacterSize(24);

@@ -235,12 +235,12 @@ private:
         /* @brief Constructor with parameters
          * @param battleship - battleship to store
          * */
-        BattleshipVessel(TBattleship &battleship);
+        BattleshipVessel(TBattleship &battleship, bool dynamically_allocated = false);
 
         /* @brief Constructor with parameters
          * @param battleship_ptr - pointer to the battleship
          * */
-        BattleshipVessel(TBattleship *battleship_ptr);
+        BattleshipVessel(TBattleship *battleship_ptr, bool dynamically_allocated = false);
 
         /* @brief dereference operator */
         TBattleship &operator*();

@@ -6,10 +6,7 @@ add_executable(test_hash_table test_hash_table.cc)
 add_executable(test_non_container test_non_container.cc)
 add_executable(test_container test_container.cc)
 
-target_link_libraries(battleship PRIVATE weaponry)
-target_link_libraries(battleship PRIVATE plane)
-target_link_libraries(battleship PRIVATE plane_group)
-target_link_libraries(battleship_group PRIVATE weaponry plane plane_group battleship)
+
 target_link_libraries(test_non_container PRIVATE battleship)
 target_link_libraries(test_non_container PRIVATE plane)
 target_link_libraries(test_non_container PRIVATE weaponry)

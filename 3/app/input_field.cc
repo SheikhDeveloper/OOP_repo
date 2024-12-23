@@ -9,7 +9,7 @@ InputField::InputField(float x, float y, float width, float height) {
     _box.setOutlineColor(sf::Color::Black);
 
     // Load font
-    if (!_font.loadFromFile("./fonts/arial.ttf")) { // Ensure you have a font file
+    if (!_font.loadFromFile("/home/sheikh/oop2024/3/app/fonts/arial.ttf")) { // Ensure you have a font file
         throw std::runtime_error("Failed to load font");
     }
 

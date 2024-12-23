@@ -15,10 +15,18 @@ enum class ProgramState {
     NAME_MENU,
     CAPTAIN_NAME_MENU,
     CAPTAIN_RANK_MENU,
-    AMOUNTS_MENU,
+    EXPERIENCE_MENU,
+    CREW_SIZE_MENU,
     SURVIVABILITY_MENU,
     SPEED_MENU,
     FUEL_USAGE_MENU,
+    SHIP_TO_COVER_MENU,
+    PLANE_AMOUNT_MENU,
+    WEAPONRY_NAME_MENU,
+    WEAPONRY_DAMAGE_MENU,
+    WEAPONRY_AMMO_MENU,
+    WEAPONRY_TYPE_MENU,
+    WEAPONRY_AMMO_AMOUNT_MENU,
     SHIP_MENU,
     PLANE_MENU,
     DELETE_SHIP_MENU,
@@ -48,7 +56,7 @@ public:
         toggleButton.setFillColor(sf::Color(0, 0, 0, 128));
         toggleButton.setPosition(x, 0);
 
-        if (!font.loadFromFile("./fonts/arial.ttf")) { // Ensure you have this font or change the path
+        if (!font.loadFromFile("/home/sheikh/oop2024/3/app/fonts/arial.ttf")) { // Ensure you have this font or change the path
             throw std::runtime_error("Failed to load font");
         }
 

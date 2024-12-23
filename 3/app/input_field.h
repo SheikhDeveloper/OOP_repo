@@ -11,6 +11,12 @@ public:
     void update(float deltaTime);
     void draw(sf::RenderWindow& window);
 
+    void clearInput() {
+        _inputString.clear();
+        _text.setString(_inputString);
+        updateCursorPosition();
+    }
+
     std::string getUserInput() {
         return _inputString;
     }

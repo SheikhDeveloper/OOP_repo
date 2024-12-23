@@ -7,8 +7,8 @@
 
 class Missile {
 public:
-    Missile(const sf::Texture& texture, const sf::Vector2f& startPos, const sf::Vector2f& targetPos)
-        : target(targetPos), isExploding(false), explosionTime(0.f) {
+    Missile(const sf::Texture& texture, const sf::Vector2f& startPos, const sf::Vector2f& targetPos, const sf::Vector2f& targetSize)
+        : target(targetPos), targetSize(targetSize), isExploding(false), explosionTime(0.f) {
         missileSprite.setTexture(texture);
         missileSprite.setPosition(startPos);
         missileSprite.setScale(0.08f, 0.08f);
@@ -21,12 +21,17 @@ public:
 
     void update(float deltaTime) {
         if (!isExploding) {
+
+            direction = target - missileSprite.getPosition();
+            float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
+            direction /= length; // Normalize
+
             // Move the missile towards the target
             missileSprite.move(direction * speed * deltaTime);
 
             // Check if the missile has reached the target
-            if (std::abs(missileSprite.getPosition().x - target.x) < 10.0f &&
-                std::abs(missileSprite.getPosition().y - target.y) < 10.0f) {
+            if (std::abs(missileSprite.getPosition().x - target.x) < 5.0f &&
+                std::abs(missileSprite.getPosition().y - target.y) < 5.0f) {
                 isExploding = true; // Trigger explosion
             }
         } else {
@@ -48,6 +53,22 @@ public:
 
     void setPosition(const sf::Vector2f& pos) {
         missileSprite.setPosition(pos);
+    }
+
+    void setTarget(const sf::Vector2f& targetPos, const sf::Vector2f& targetS) {
+        target = targetPos;
+        targetSize = targetS;
+        direction = target - missileSprite.getPosition();
+        float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
+        direction /= length;
+    }
+
+    sf::Vector2f getTarget() const {
+        return target;
+    }
+
+    sf::Vector2f getTargetSize() const {
+        return targetSize;
     }
 
     sf::Vector2f getPosition() const {
@@ -78,6 +99,7 @@ private:
 
     sf::Sprite missileSprite;
     sf::Vector2f target;
+    sf::Vector2f targetSize;
     sf::Vector2f direction;
     const float speed = 2.f; // Speed of the missile
     bool isExploding;

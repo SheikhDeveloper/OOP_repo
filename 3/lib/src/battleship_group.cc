@@ -31,9 +31,9 @@ std::ostream &operator<<(std::ostream &out, const ShipType &shipType) {
     return out;
 }
 
-TBattleshipGroup::BattleshipVessel::BattleshipVessel(TBattleship &battleship) : battleshipPtr_(&battleship) {}
+TBattleshipGroup::BattleshipVessel::BattleshipVessel(TBattleship &battleship, bool isDynamicallyCreated) : battleshipPtr_(&battleship){}
 
-TBattleshipGroup::BattleshipVessel::BattleshipVessel(TBattleship *battleship_ptr) : battleshipPtr_(battleship_ptr) {}
+TBattleshipGroup::BattleshipVessel::BattleshipVessel(TBattleship *battleship_ptr, bool isDynamicallyCreated) : battleshipPtr_(battleship_ptr) {}
 
 TBattleship &TBattleshipGroup::BattleshipVessel::operator*() {
     return *battleshipPtr_;
@@ -143,6 +143,9 @@ size_t TBattleshipGroup::getShipAmount(ShipType shipType) const {
             case ShipType::COVERING_SHIP:
                 try {
                     TCoveringShip *ship = dynamic_cast<TCoveringShip *>(battleship.value_.battleshipPtr_);
+                    if (ship == nullptr) {
+                        throw std::bad_cast();
+                    }
                     amount++;
                     ship->getShipToCover();
                 }
@@ -153,6 +156,10 @@ size_t TBattleshipGroup::getShipAmount(ShipType shipType) const {
             case ShipType::AIRCRAFT_CARRYING_CRUISER:
                 try {
                     TAircraftCarryingCruiser *cruiser = dynamic_cast<TAircraftCarryingCruiser *>(battleship.value_.battleshipPtr_);
+                    TAircraftCarrier *carrier = dynamic_cast<TAircraftCarrier *>(battleship.value_.battleshipPtr_);
+                    if (carrier == nullptr) {
+                        throw std::bad_cast();
+                    }
                     amount++;
                     cruiser->getPlaneInfo();
                     cruiser->getShipToCover();
