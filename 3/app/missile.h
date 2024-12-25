@@ -14,7 +14,7 @@ public:
         missileSprite.setScale(0.08f, 0.08f);
         
         // Calculate direction
-        direction = target - startPos;
+        direction = (target + targetSize / 2.f) - startPos;
         float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
         direction /= length; // Normalize
     }
@@ -22,7 +22,7 @@ public:
     void update(float deltaTime) {
         if (!isExploding) {
 
-            direction = target - missileSprite.getPosition();
+            direction = (target + targetSize / 2.f) - missileSprite.getPosition();
             float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
             direction /= length; // Normalize
 
@@ -30,8 +30,8 @@ public:
             missileSprite.move(direction * speed * deltaTime);
 
             // Check if the missile has reached the target
-            if (std::abs(missileSprite.getPosition().x - target.x) < 5.0f &&
-                std::abs(missileSprite.getPosition().y - target.y) < 5.0f) {
+            if (std::abs(missileSprite.getPosition().x - target.x - targetSize.x / 2) < 5.0f &&
+                std::abs(missileSprite.getPosition().y - target.y - targetSize.y / 2) < 5.0f) {
                 isExploding = true; // Trigger explosion
             }
         } else {
@@ -58,9 +58,13 @@ public:
     void setTarget(const sf::Vector2f& targetPos, const sf::Vector2f& targetS) {
         target = targetPos;
         targetSize = targetS;
-        direction = target - missileSprite.getPosition();
+        direction = (target + targetSize / 2.f) - (getPosition() + getSize() / 2.f);
         float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
         direction /= length;
+    }
+
+    sf::Vector2f getSize() const {
+        return sf::Vector2f(missileSprite.getLocalBounds().width, missileSprite.getLocalBounds().height);
     }
 
     sf::Vector2f getTarget() const {

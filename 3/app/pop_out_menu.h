@@ -71,9 +71,11 @@ public:
     void update(const sf::Vector2f& mousePos) {
         if (toggleButton.getGlobalBounds().contains(mousePos)) {
             toggleButton.setFillColor(sf::Color(255, 255, 255, 128));
+            toggleText.setFillColor(sf::Color(0, 0, 0));
         }
         else {
             toggleButton.setFillColor(sf::Color(0, 0, 0, 128));
+            toggleText.setFillColor(sf::Color::White);
         }
         if (isVisible) {
             for (auto& button : buttons) {

@@ -49,7 +49,22 @@ void InputField::handleEvent(const sf::Event& event) {
             } else {
                 _inputString += static_cast<char>(event.text.unicode);
             }
-            _text.setString(_inputString);
+            if (_text.getLocalBounds().width >= _box.getLocalBounds().width - 15 && event.text.unicode != '\b') {
+                size_t prev_width = _text.getLocalBounds().width;
+                _text.setString(_inputString);
+                while (_text.getLocalBounds().width > prev_width) {
+                    std::string substring = _text.getString().toAnsiString().substr(1, _text.getString().getSize() - 1);
+                    _text.setString(substring);
+                }
+            }
+            else {
+                if (sf::Text(_inputString, _font, _text.getCharacterSize()).getLocalBounds().width < _box.getLocalBounds().width - 20)
+                    _text.setString(_inputString);
+                else {
+                    std::string substring = _inputString.substr(_inputString.size() - 1 - (_text.getString().getSize() - 1), _inputString.size() - 1);
+                    _text.setString(substring);
+                }
+            }
             updateCursorPosition();
         }
     }

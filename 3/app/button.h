@@ -41,6 +41,7 @@ public:
     void update(const sf::Vector2f& mousePos) {
         _isHovered = buttonShape.getGlobalBounds().contains(mousePos);
         buttonShape.setFillColor(_isHovered ? sf::Color(255, 255, 255, 128) : sf::Color(0, 0, 0, 128));
+        buttonText.setFillColor(_isHovered ? sf::Color::Black : sf::Color::White);
     }
 
     void setColor(sf::Color color) {
