@@ -97,6 +97,12 @@ public:
      * */
     TBattleship &getBattleship(const std::string &battleshipName);
 
+    TAircraftCarrier &getCarrier(const std::string &carrierName);
+
+    TCoveringShip &getCoveringShip(const std::string &coverShipName);
+
+    TAircraftCarryingCruiser &getAircraftCruiser(const std::string &cruiserName);
+
     /* @brief get amount of ships of specified type
      * @param shipType - type of the ship
      *
@@ -144,6 +150,8 @@ public:
      * @param battleship - battleship to add
      * */
     void addBattleship(TBattleship &battleship);
+
+    void addBattleship(TBattleship *battleship);
 
     /* @brief Remove plane
      * @param planeName - name of the plane
@@ -235,18 +243,20 @@ private:
         /* @brief Constructor with parameters
          * @param battleship - battleship to store
          * */
-        BattleshipVessel(TBattleship &battleship, bool dynamically_allocated = false);
+        BattleshipVessel(TBattleship &battleship);
+
+        TBattleship *getPtr() {
+            return battleshipPtr_;
+        }
 
         /* @brief Constructor with parameters
          * @param battleship_ptr - pointer to the battleship
          * */
-        BattleshipVessel(TBattleship *battleship_ptr, bool dynamically_allocated = false);
+        BattleshipVessel(TBattleship *battleship_ptr);
 
         /* @brief dereference operator */
         TBattleship &operator*();
 
-        /* @brief Destructor */
-        ~BattleshipVessel() = default;
     };
 
     /* @brief Hash table of the vessels */

@@ -5,23 +5,136 @@
 #include "input_field.h"
 #include "missile.h"
 #include "page_rect.h"
+#include "dropdown_field.h"
 #include "../lib/headers/battleship_group.h"
 
 const int SCREEN_WIDTH = 1000;
 const int SCREEN_HEIGHT = 800;
-const int INPUT_AMOUNT = 11;
+
+void drawPageRectWithText(sf::RenderWindow& window, PageRect& pageRect, sf::Text& text) {
+    pageRect.draw(window);
+    text.setFillColor(sf::Color::White);
+    window.draw(text);
+}
 
 void drawInputScene(sf::RenderWindow& window, InputField& inputField, Button& quitButton, Button& submitButton, sf::Text& text, PageRect& pageRect) {
             text.setPosition(inputField.getPosition().x - text.getLocalBounds().width - 10, SCREEN_HEIGHT / 2 - text.getLocalBounds().height / 2);
-            text.setFillColor(sf::Color::White);
             quitButton.setSize(sf::Vector2f(submitButton.getLocalBounds().width, submitButton.getLocalBounds().height));
-            pageRect.draw(window);
+            drawPageRectWithText(window, pageRect, text);
             inputField.draw(window);
             submitButton.setPosition(submitButton.getPosition().x, inputField.getPosition().y + 50);
-            window.draw(text);
             quitButton.setPosition(submitButton.getPosition().x, submitButton.getPosition().y + submitButton.getLocalBounds().height + 20);
             submitButton.draw(window);
             quitButton.draw(window);
+}
+
+void drawOptionsScene(sf::RenderWindow& window, Dropdown& dropdown, Button& quitButton, Button& submitButton, sf::Text& text, PageRect& pageRect) {
+    text.setPosition(dropdown.getPosition().x - text.getLocalBounds().width - 10, SCREEN_HEIGHT / 2 - text.getLocalBounds().height / 2);
+    quitButton.setSize(sf::Vector2f(submitButton.getLocalBounds().width, submitButton.getLocalBounds().height));
+    drawPageRectWithText(window, pageRect, text);
+    submitButton.setPosition(submitButton.getPosition().x, dropdown.getPosition().y + 50);
+    quitButton.setPosition(submitButton.getPosition().x, submitButton.getPosition().y + submitButton.getLocalBounds().height + 20);
+    submitButton.draw(window);
+    quitButton.draw(window);
+    dropdown.draw(window);
+}
+
+void drawWeaponryStats(sf::RenderWindow& window, TWeaponry &&weaponry, sf::Font& font, std::vector<sf::Text>& texts, size_t Ind) {
+    sf::Text text(weaponry.getName(), font, 23);
+    text.setFillColor(sf::Color::White);
+    text.setPosition(texts[Ind].getPosition().x + 10, texts[Ind].getPosition().y);
+    window.draw(text);
+    sf::Text text2(weaponry.getType() == WeaponryType::heavy ? "Heavy" : "Light" , font, 23);
+    text2.setFillColor(sf::Color::White);
+    text2.setPosition(texts[Ind + 1].getPosition().x + 10, texts[Ind + 1].getPosition().y);
+    window.draw(text2);
+    sf::Text text3(std::to_string(weaponry.getAmmoAmount()), font, 23);
+    text3.setFillColor(sf::Color::White);
+    text3.setPosition(texts[Ind + 2].getPosition().x + 10, texts[Ind + 2].getPosition().y);
+    window.draw(text3);
+    sf::Text text4(std::to_string(weaponry.getDamage()), font, 23);
+    text4.setFillColor(sf::Color::White);
+    text4.setPosition(texts[Ind + 3].getPosition().x + 10, texts[Ind + 3].getPosition().y);
+    window.draw(text4);
+    sf::Text text5(weaponry.getAmmoName(), font, 23);
+    text5.setFillColor(sf::Color::White);
+    text5.setPosition(texts[Ind + 4].getPosition().x + 10, texts[Ind + 4].getPosition().y);
+    window.draw(text5);
+}
+
+void drawPlaneStats(sf::RenderWindow& window, TPlane& plane, sf::Font& font, std::vector<sf::Text>& texts, size_t Ind) {
+    
+}
+
+void drawShipStatisticsScene(sf::RenderWindow& window, PageRect& pageRect, std::vector<sf::Text>& texts, TBattleship *battleship, sf::Font& font, Button& quitButton) {
+    pageRect.draw(window);
+    for (int i = 0; i < texts.size(); i++) {
+        texts[i].setPosition(SCREEN_WIDTH / 2 - texts[i].getLocalBounds().width / 2, pageRect.getPos().y + 20 * (i + 1));
+        texts[i].setFillColor(sf::Color::White);
+        window.draw(texts[i]);
+    }
+    sf::Text name(battleship->getName(), font, 23);
+    name.setFillColor(sf::Color::White);
+    name.setPosition(texts[0].getPosition().x + 10, texts[0].getPosition().y);
+    window.draw(name); 
+    sf::Text captain(battleship->getCaptain()._name, font, 23);
+    captain.setFillColor(sf::Color::White);
+    captain.setPosition(texts[1].getPosition().x + 10, texts[1].getPosition().y);
+    window.draw(captain);
+    sf::Text rank(battleship->getCaptain()._rank, font, 23);
+    rank.setFillColor(sf::Color::White);
+    captain.setPosition(texts[2].getPosition().x + 10, texts[2].getPosition().y);
+    window.draw(rank);
+    sf::Text experience(std::to_string(battleship->getCaptain()._experience), font, 23);
+    experience.setFillColor(sf::Color::White);
+    experience.setPosition(texts[3].getPosition().x + 10, texts[3].getPosition().y);
+    window.draw(experience);
+    sf::Text speed(std::to_string(battleship->getSpeed()), font, 23);
+    speed.setFillColor(sf::Color::White);
+    speed.setPosition(texts[4].getPosition().x + 10, texts[4].getPosition().y);
+    window.draw(speed);
+    sf::Text survivability(std::to_string(battleship->getSurvivability()), font, 23);
+    survivability.setFillColor(sf::Color::White);
+    survivability.setPosition(texts[5].getPosition().x + 10, texts[5].getPosition().y);
+    window.draw(survivability);
+    sf::Text crewMembersAmount(std::to_string(battleship->getCrewMembersAmount()), font, 23);
+    crewMembersAmount.setFillColor(sf::Color::White);
+    crewMembersAmount.setPosition(texts[6].getPosition().x + 10, texts[6].getPosition().y);
+    window.draw(crewMembersAmount);
+    sf::Text fuelUsage(std::to_string(battleship->getFuelUsage()), font, 23);
+    fuelUsage.setFillColor(sf::Color::White);
+    fuelUsage.setPosition(texts[7].getPosition().x + 10, texts[7].getPosition().y);
+    window.draw(fuelUsage);
+    drawWeaponryStats(window, battleship->getWeaponry(), font, texts, 8);
+    sf::Text type;
+    type.setFillColor(sf::Color::White);
+    type.setPosition(texts[13].getPosition().x + 10, texts[13].getPosition().y);
+    type.setFont(font);
+    type.setCharacterSize(23);
+    TCoveringShip* coveringShip = dynamic_cast<TCoveringShip *>(battleship);
+    TAircraftCarrier* carrier = dynamic_cast<TAircraftCarrier *>(battleship);
+    if (coveringShip != nullptr && carrier != nullptr) {
+        type.setString("Aircraft Cruiser");
+    }
+    else if (coveringShip != nullptr) {
+        type.setString("Covering Ship");
+    }
+    else if (carrier != nullptr) {
+        type.setString("Aircraft Carrier");
+    }
+    window.draw(type);
+    if (coveringShip != nullptr) {
+        sf::Text coveredShip(coveringShip->getShipToCover().getName(), font, 23); 
+        coveredShip.setFillColor(sf::Color::White);
+        coveredShip.setPosition(texts[14].getPosition().x + 10, texts[14].getPosition().y);
+        window.draw(coveredShip);
+    }
+    if (carrier != nullptr) {
+        sf::Text numberOfPlanes(std::to_string(carrier->getPlaneInfo().size()), font, 23);
+        numberOfPlanes.setFillColor(sf::Color::White);
+        numberOfPlanes.setPosition(texts[15].getPosition().x + 10, texts[15].getPosition().y);
+        window.draw(numberOfPlanes);
+    }
 }
 
 int main() {
@@ -32,8 +145,9 @@ int main() {
     window.setFramerateLimit(60);
 
     TBattleshipGroup baseGroup;
-    TBattleship *battleship;
-    TPlaneGroup attackGroup;
+    TBattleship *battleship{};
+    TPlaneGroup attackGroup = TPlaneGroup();
+    TPlane plane;
 
     // Create the sky
     sf::RectangleShape sky(sf::Vector2f(SCREEN_WIDTH, SCREEN_HEIGHT / 2));
@@ -76,6 +190,8 @@ int main() {
         throw std::runtime_error("Failed to load font");
     }
 
+    size_t planeCounter = 0;
+
     sf::Clock clock;
 
     sf::Sprite aircraftCarrierSprite(aircraftCarrierTexture);
@@ -96,6 +212,8 @@ int main() {
     // Create two sprites for the scrolling effect
     sf::Sprite waterSprite1(waterTexture);
     sf::Sprite waterSprite2(waterTexture);
+
+    bool addingToCarrier = false;
 
     // Position the first sprite at the left half of the screen
     waterSprite1.setPosition(0, SCREEN_HEIGHT / 2);
@@ -129,33 +247,33 @@ int main() {
     startButton.setColor(sf::Color(0, 0, 0, 128));
     quitButton.setColor(sf::Color(0, 0, 0, 128));
 
-    std::vector<std::string> buttonNames({"Add a battleship", "Add a plane", "Change battleship", "Change name", 
-                                          "Lookup battleships", "Lookup planes", "Delete a battleship", "Delete a plane",
+    std::vector<std::string> buttonNames({"Add a battleship", "Add a plane", 
+                                          "Search battleship", "Search plane", "Delete a battleship", "Delete a plane",
                                           "Simulate attack", "Exit"});
 
     std::vector<ProgramState> buttonStates({
     ProgramState::SHIP_TYPE_MENU,
-    ProgramState::PLANE_MENU,
-    ProgramState::SHIP_INFO_MENU,
-    ProgramState::PLANE_INFO_MENU,
-    ProgramState::SHIP_INFO_MENU,
-    ProgramState::PLANE_INFO_MENU,
+    ProgramState::CARRIER_MENU,
+    ProgramState::SHIP_SEARCH_MENU,
+    ProgramState::CARRIER_MENU,
     ProgramState::DELETE_SHIP_MENU,
-    ProgramState::PLANE_INFO_MENU,
-    ProgramState::ATTACK_STATE,
+    ProgramState::CARRIER_MENU,
+    ProgramState::PLANE_AMOUNT_MENU,
     ProgramState::EXIT });
+
+    std::vector<std::string> shipStats({ "Name:", "Captain:", "Captain rank:" "Survivability:",  
+                                         "Speed:", "Crew members amount:", "Fuel usage:", "Weaponry name:",
+                                         "Weaponry type:", "Ammo amount", "Damage", "Ammo name:" });
 
     PopOutMenu menu(0, 100, buttonNames, buttonStates, 240);
 
     InputField inputField(SCREEN_WIDTH / 2 - 150, SCREEN_HEIGHT / 2 - 10, 400, 30);
     Button submitButton("Submit", SCREEN_WIDTH / 2 - 50, SCREEN_HEIGHT / 2 + 100, 150);
+    Dropdown dropdown(sf::Vector2f(SCREEN_WIDTH / 2 - 150, SCREEN_HEIGHT / 2 - 10), font, 400, 30);
 
     PageRect pageRect(sf::Vector2f(0.05 * SCREEN_WIDTH, 0.05 * SCREEN_HEIGHT), sf::Vector2f(0.9 * SCREEN_WIDTH, 0.9 * SCREEN_HEIGHT));
 
     while (window.isOpen()) {
-        TAircraftCarrier helperCarrier;
-        TAircraftCarryingCruiser helperCruiser;
-        TCoveringShip helperCoveringShip;
         TPlane helperPlane;
         sf::Event event;
         while (window.pollEvent(event)) {
@@ -172,31 +290,19 @@ int main() {
                 }
                 else if (programState == ProgramState::PASSIVE_STATE) {
                     menu.handleMouseClick(sf::Mouse::getPosition(window), programState);
-                    if (programState == ProgramState::ATTACK_STATE) {
-                        if (baseGroup.getShipAmount(ShipType::AIRCRAFT_CARRYING_CRUISER) == 0) {
-                            if (baseGroup.getShipAmount(ShipType::AIRCRAFT_CARRIER) == 0) {
-                                missile.setTarget(coveringShipSprite.getPosition(), sf::Vector2f(4 * coveringShipSprite.getGlobalBounds().width / 3, coveringShipSprite.getGlobalBounds().height));
-                            }
-                            else {
-                                missile.setTarget(aircraftCarrierSprite.getPosition(), sf::Vector2f(aircraftCarrierSprite.getGlobalBounds().width / 2, aircraftCarrierSprite.getGlobalBounds().height));
-                            }
-                        }
-                        else {
-                            missile.setTarget(aircraftCruiserSprite.getPosition(), sf::Vector2f(aircraftCruiserSprite.getGlobalBounds().width / 2, aircraftCruiserSprite.getGlobalBounds().height));
-                        }
-                        missile.setPosition(planeSprite.getPosition());
+                    if (programState == ProgramState::SHIP_TYPE_MENU) {
+                        dropdown.setOptions({"Carrier", "Cruiser", "Covering ship"});
                     }
                 }
                 else if (programState == ProgramState::SHIP_TYPE_MENU) {
                     if (submitButton.isMouseOver(mousePos)) {
-                        std::string type = inputField.getUserInput();
+                        std::string type = dropdown.getSelectedText();
                         if (type == "Carrier") {
                             battleship = new TAircraftCarrier();
                             programState = ProgramState::NAME_MENU;
                         }
                         else if (type == "Cruiser") {
-                            TAircraftCarrier *helper = new TAircraftCarryingCruiser(); 
-                            battleship = helper;
+                            battleship = new TAircraftCarryingCruiser();
                             programState = ProgramState::NAME_MENU;
                         }
                         else if (type == "Covering ship") {
@@ -207,10 +313,12 @@ int main() {
                     else if (quitButton.isMouseOver(mousePos)) {
                         programState = ProgramState::PASSIVE_STATE;
                     }
+                    dropdown.handleClick(static_cast<sf::Vector2f>(mousePos));
                 }
                 else if (programState == ProgramState::NAME_MENU) {
                     if (submitButton.isMouseOver(mousePos)) {
                         std::string name = inputField.getUserInput();
+                        battleship->setName(name);
                         programState = ProgramState::CAPTAIN_NAME_MENU;
                     }
                     else if (quitButton.isMouseOver(mousePos)) {
@@ -333,7 +441,8 @@ int main() {
                         try {
                             size_t crewSizeInt = std::stoi(crewSize);
                             battleship->setCrewMembersAmount(crewSizeInt);
-                            programState = ProgramState::WEAPONRY_NAME_MENU;
+                            programState = ProgramState::WEAPONRY_TYPE_MENU;
+                            dropdown.setOptions({"Heavy", "Light"});
                         }
                         catch (std::exception &e) {
                             programState = ProgramState::CREW_SIZE_MENU;
@@ -349,15 +458,15 @@ int main() {
                     if (submitButton.isMouseOver(mousePos)) {
                         std::string weaponName = inputField.getUserInput();
                         programState = ProgramState::WEAPONRY_AMMO_MENU;
-                        if (battleship != nullptr) {
+                        if (battleship != nullptr && !addingToCarrier) {
                             TWeaponry weapon = battleship->getWeaponry();
                             weapon.setName(weaponName);
                             battleship->setWeaponry(weapon);
                         }
                         else {
-                            TWeaponry planeWeapon = helperPlane.getWeaponry();
+                            TWeaponry planeWeapon = plane.getWeaponry();
                             planeWeapon.setName(weaponName);
-                            helperPlane.setWeaponry(planeWeapon);
+                            plane.setWeaponry(planeWeapon);
                         }
                     }
                     else if (quitButton.isMouseOver(mousePos)) {
@@ -365,22 +474,25 @@ int main() {
                         if (battleship != nullptr) {
                             delete(battleship);
                             battleship = nullptr;
+                        }
+                        if (addingToCarrier) {
+                            addingToCarrier = false;
                         }
                     }
                 }
                 else if (programState == ProgramState::WEAPONRY_AMMO_MENU) {
                     if (submitButton.isMouseOver(mousePos)) {
                         std::string weaponAmmo = inputField.getUserInput();
-                        programState = ProgramState::WEAPONRY_TYPE_MENU;
-                        if (battleship != nullptr) {
+                        programState = ProgramState::WEAPONRY_DAMAGE_MENU;
+                        if (battleship != nullptr && !addingToCarrier) {
                             TWeaponry weapon = battleship->getWeaponry();
                             weapon.setAmmoName(weaponAmmo);
                             battleship->setWeaponry(weapon);
                         }
                         else {
-                            TWeaponry planeWeapon = helperPlane.getWeaponry();
+                            TWeaponry planeWeapon = plane.getWeaponry();
                             planeWeapon.setAmmoName(weaponAmmo);
-                            helperPlane.setWeaponry(planeWeapon);
+                            plane.setWeaponry(planeWeapon);
                         }
                     }
                     else if (quitButton.isMouseOver(mousePos)) {
@@ -389,41 +501,47 @@ int main() {
                             delete(battleship);
                             battleship = nullptr;
                         }
+                        if (addingToCarrier) {
+                            addingToCarrier = false;
+                        }
                     }
                 }
                 else if (programState == ProgramState::WEAPONRY_TYPE_MENU) {
                     if (submitButton.isMouseOver(mousePos)) {
-                        std::string weaponType = inputField.getUserInput();
-                        programState = ProgramState::WEAPONRY_AMMO_AMOUNT_MENU;
+                        std::string weaponType = dropdown.getSelectedText();
                         if (weaponType == "Heavy") {
-                            if (battleship != nullptr) {
+                            if (battleship != nullptr && !addingToCarrier) {
                                 TWeaponry weapon = battleship->getWeaponry();
                                 weapon.setType(WeaponryType::heavy);
                                 TCoveringShip *coverShip = dynamic_cast<TCoveringShip *>(battleship);
                                 if (coverShip != nullptr) {
                                     battleship->setWeaponry(weapon);
-                                    programState = ProgramState::WEAPONRY_DAMAGE_MENU;
+                                    programState = ProgramState::WEAPONRY_NAME_MENU;
                                 }
                             }
                             else {
-                                TWeaponry planeWeapon = helperPlane.getWeaponry();
+                                TWeaponry planeWeapon = plane.getWeaponry();
                                 planeWeapon.setType(WeaponryType::heavy);
-                                if (helperPlane.getType() == TPlaneType::bomber) {
-                                    helperPlane.setWeaponry(planeWeapon);
-                                    programState = ProgramState::WEAPONRY_DAMAGE_MENU;
+                                if (plane.getType() == TPlaneType::bomber) {
+                                    plane.setWeaponry(planeWeapon);
+                                    programState = ProgramState::WEAPONRY_NAME_MENU;
                                 }
                             }
                         }
                         else if (weaponType == "Light") {
-                            if (battleship != nullptr) {
+                            if (battleship != nullptr && !addingToCarrier) {
                                 TWeaponry weapon = battleship->getWeaponry();
                                 weapon.setType(WeaponryType::light);
                                 battleship->setWeaponry(weapon);
+                                programState = ProgramState::WEAPONRY_NAME_MENU;
                             }
                             else {
-                                TWeaponry planeWeapon = helperPlane.getWeaponry();
-                                planeWeapon.setType(WeaponryType::light);
-                                helperPlane.setWeaponry(planeWeapon);
+                                TWeaponry planeWeapon = plane.getWeaponry();
+                                if (plane.getType() == TPlaneType::fighter) {
+                                    planeWeapon.setType(WeaponryType::light);
+                                    plane.setWeaponry(planeWeapon);
+                                    programState = ProgramState::WEAPONRY_NAME_MENU;
+                                }
                             } 
                         }
                     }
@@ -433,22 +551,26 @@ int main() {
                             delete(battleship);
                             battleship = nullptr;
                         }
+                        if (addingToCarrier) {
+                            addingToCarrier = false;
+                        }
                     }
+                    dropdown.handleClick(static_cast<sf::Vector2f>(mousePos));
                 }
                 else if (programState == ProgramState::WEAPONRY_DAMAGE_MENU) {
                     if (submitButton.isMouseOver(mousePos)) {
                         std::string weaponDamage = inputField.getUserInput();
                         try {
                             double weaponDamageDouble = std::stod(weaponDamage);
-                            if (battleship != nullptr) {
+                            if (battleship != nullptr && !addingToCarrier) {
                                 TWeaponry weapon = battleship->getWeaponry();
                                 weapon.setDamage(weaponDamageDouble);
                                 battleship->setWeaponry(weapon);
                             }
                             else {
-                                TWeaponry planeWeapon = helperPlane.getWeaponry();
+                                TWeaponry planeWeapon = plane.getWeaponry();
                                 planeWeapon.setDamage(weaponDamageDouble);
-                                helperPlane.setWeaponry(planeWeapon);
+                                plane.setWeaponry(planeWeapon);
                             }
                             programState = ProgramState::WEAPONRY_AMMO_AMOUNT_MENU;
                         }
@@ -462,6 +584,9 @@ int main() {
                             delete(battleship);
                             battleship = nullptr;
                         }
+                        if (addingToCarrier) {
+                            addingToCarrier = false;
+                        }
                     }
                 }
                 else if (programState == ProgramState::WEAPONRY_AMMO_AMOUNT_MENU) {
@@ -469,22 +594,33 @@ int main() {
                         std::string weaponAmmoAmount = inputField.getUserInput();
                         try {
                             size_t weaponAmmoAmountInt = std::stoi(weaponAmmoAmount);
-                            if (battleship != nullptr) {
+                            if (battleship != nullptr && !addingToCarrier) {
                                 TWeaponry weapon = battleship->getWeaponry();
                                 weapon.setAmmoAmount(weaponAmmoAmountInt);
                                 battleship->setWeaponry(weapon);
+                                TAircraftCarrier *carrierShip = dynamic_cast<TAircraftCarrier *>(battleship);
+                                if (carrierShip != nullptr) {
+                                    programState = ProgramState::PLANE_AMOUNT_MENU;
+                                }
+                                else {
+                                    programState = ProgramState::SHIP_TO_COVER_MENU;
+                                }
                             }
                             else {
-                                TWeaponry planeWeapon = helperPlane.getWeaponry();
+                                TWeaponry planeWeapon = plane.getWeaponry();
                                 planeWeapon.setAmmoAmount(weaponAmmoAmountInt);
-                                helperPlane.setWeaponry(planeWeapon);
-                            }
-                            TAircraftCarrier *carrierShip = dynamic_cast<TAircraftCarrier *>(battleship);
-                            if (carrierShip != nullptr) {
-                                programState = ProgramState::PLANE_AMOUNT_MENU;
-                            }
-                            else {
-                                programState = ProgramState::SHIP_TO_COVER_MENU;
+                                plane.setWeaponry(planeWeapon);
+                                if (addingToCarrier) {
+                                    TAircraftCarrier *carrierShip = dynamic_cast<TAircraftCarrier *>(battleship);
+                                    TPlaneGroup &carrierPlanes = carrierShip->getPlaneInfo();
+                                    carrierPlanes.addPlane(plane);
+                                }
+                                else {
+                                    attackGroup.addPlane(plane);
+                                }
+                                planeCounter--;
+                                programState = ProgramState::PLANE_TYPE_MENU;
+                                dropdown.setOptions({ "Bomber", "Fighter" });
                             }
                         }
                         catch (std::exception &e) {
@@ -497,25 +633,21 @@ int main() {
                             delete(battleship);
                             battleship = nullptr;
                         }
+                        if (addingToCarrier) {
+                            addingToCarrier = false;
+                        }
                     }
                 }
                 else if (programState == ProgramState::PLANE_AMOUNT_MENU) {
                     if (submitButton.isMouseOver(mousePos)) {
                         std::string planeAmount = inputField.getUserInput();
                         try {
-                            size_t planeAmountInt = std::stoi(planeAmount);
-                            TAircraftCarrier *carrierShip = dynamic_cast<TAircraftCarrier *>(battleship);
-                            TCoveringShip *covShip = dynamic_cast<TCoveringShip *>(battleship);
-                            if (covShip != nullptr) {
-                                programState = ProgramState::SHIP_TO_COVER_MENU;
+                            planeCounter = std::stoi(planeAmount);
+                            if (battleship != nullptr) {
+                                addingToCarrier = true;
                             }
-                            else {
-                                helperCarrier = *carrierShip;
-                                baseGroup.addBattleship(helperCarrier);
-                                programState = ProgramState::PASSIVE_STATE;
-                                delete(battleship);
-                                battleship = nullptr;
-                            }
+                            programState = ProgramState::PLANE_TYPE_MENU;
+                            dropdown.setOptions({ "Bomber", "Fighter" });
                         }
                         catch (std::exception &e) {
                             programState = ProgramState::PLANE_AMOUNT_MENU;
@@ -527,6 +659,93 @@ int main() {
                         battleship = nullptr;
                     }
                 }
+                else if (programState == ProgramState::PLANE_TYPE_MENU) {
+                    if (submitButton.isMouseOver(mousePos)) {
+                        plane = TPlane();
+                        std::string planeType = dropdown.getSelectedText();
+                        if (planeType == "Bomber") {
+                            plane.setType(TPlaneType::bomber);
+                        }
+                        else {
+                            plane.setType(TPlaneType::fighter);
+                        }
+                        programState = ProgramState::PLANE_NAME_MENU;
+                    }
+                    else if (quitButton.isMouseOver(mousePos)) {
+                        programState = ProgramState::PASSIVE_STATE;
+                        if (battleship != nullptr) {
+                            delete(battleship);
+                            battleship = nullptr;
+                        }
+                        if (addingToCarrier) {
+                            addingToCarrier = false;
+                        }
+                    }
+                    dropdown.handleClick(static_cast<sf::Vector2f>(mousePos));
+                }
+                else if (programState == ProgramState::PLANE_NAME_MENU) {
+                    if (submitButton.isMouseOver(mousePos)) {
+                        plane.setName(inputField.getUserInput());
+                        programState = ProgramState::PLANE_SURVIVABILITY_MENU;
+                    }
+                    else if (quitButton.isMouseOver(mousePos)) {
+                        programState = ProgramState::PASSIVE_STATE;
+                        if (battleship != nullptr) {
+                            delete(battleship);
+                            battleship = nullptr;
+                        }
+                        if (addingToCarrier) {
+                            addingToCarrier = false;
+                        }
+                    }
+                }
+                else if (programState == ProgramState::PLANE_SURVIVABILITY_MENU) {
+                    if (submitButton.isMouseOver(mousePos)) {
+                        std::string planeSurvivability = inputField.getUserInput();
+                        try {
+                            double planeSurvivabilityDouble = std::stod(planeSurvivability);
+                            plane.setSurvivability(planeSurvivabilityDouble);
+                            programState = ProgramState::PLANE_FUEL_USAGE_MENU;
+                        }
+                        catch (std::exception &e) {
+                            programState = ProgramState::PLANE_SURVIVABILITY_MENU;
+                        }
+                    }
+                    else if (quitButton.isMouseOver(mousePos)) {
+                        programState = ProgramState::PASSIVE_STATE;
+                        if (battleship != nullptr) {
+                            delete(battleship);
+                            battleship = nullptr;
+                        }
+                        if (addingToCarrier) {
+                            addingToCarrier = false;
+                        }
+                    }
+                }
+                else if (programState == ProgramState::PLANE_FUEL_USAGE_MENU) {
+                    if (submitButton.isMouseOver(mousePos)) {
+                        std::string planeFuelUsage = inputField.getUserInput();
+                        try {
+                            double planeFuelUsageDouble = std::stod(planeFuelUsage);
+                            plane.setFuelUsage(planeFuelUsageDouble);
+                            programState = ProgramState::WEAPONRY_TYPE_MENU;
+                            dropdown.setOptions({"Heavy", "Light"});
+                        }
+                        catch (std::exception &e) {
+                            programState = ProgramState::PLANE_FUEL_USAGE_MENU;
+                        }
+                    }
+                    else if (quitButton.isMouseOver(mousePos)) {
+                        programState = ProgramState::PASSIVE_STATE;
+                        if (battleship != nullptr) {
+                            delete(battleship);
+                            battleship = nullptr;
+                        }
+                        if (addingToCarrier) {
+                            addingToCarrier = false;
+                        }
+                    }
+                }
                 else if (programState == ProgramState::SHIP_TO_COVER_MENU) {
                     if (submitButton.isMouseOver(mousePos)) {
                         std::string shipToCover = inputField.getUserInput();
@@ -535,11 +754,7 @@ int main() {
                                 TBattleship &coveredShip = baseGroup.getBattleship(shipToCover);
                                 TCoveringShip *coveringShip = dynamic_cast<TCoveringShip *>(battleship);
                                 coveringShip->setShipToCover(coveredShip);
-                                programState = ProgramState::PASSIVE_STATE;
-                                helperCoveringShip = *coveringShip;
-                                baseGroup.addBattleship(helperCoveringShip);
-                                delete(battleship);
-                                battleship = nullptr;
+                                baseGroup.addBattleship(battleship);
                             }
                             catch (std::exception &e) {
                                 programState = ProgramState::SHIP_TO_COVER_MENU;
@@ -547,9 +762,7 @@ int main() {
                         }
                         else {
                             programState = ProgramState::PASSIVE_STATE;
-                            helperCoveringShip = *battleship;
-                            baseGroup.addBattleship(helperCoveringShip);
-                            delete(battleship);
+                            baseGroup.addBattleship(battleship);
                             battleship = nullptr;
                         }
                     }
@@ -574,6 +787,75 @@ int main() {
                         programState = ProgramState::PASSIVE_STATE;
                     }
                 }
+                else if (programState == ProgramState::DELETE_PLANE_MENU) {
+                   if (submitButton.isMouseOver(mousePos)) {
+                       std::string planeToDelete = inputField.getUserInput();
+                       baseGroup.removePlane(planeToDelete, battleship->getName());
+                       programState = ProgramState::PASSIVE_STATE;                           
+                       battleship = nullptr;
+                   } 
+                   else if (quitButton.isMouseOver(mousePos)) {
+                       programState = ProgramState::PASSIVE_STATE;
+                       battleship = nullptr;
+                   }
+                }
+                else if (programState == ProgramState::CARRIER_MENU) {
+                    if (submitButton.isMouseOver(mousePos)) {
+                        try {
+                            std::string carrierName = inputField.getUserInput();
+                            TAircraftCarrier carrier = baseGroup.getCarrier(carrierName);
+                        }
+                        catch (std::exception &e) {
+                            programState = ProgramState::CARRIER_MENU;
+                        }
+                    }
+                    if (quitButton.isMouseOver(mousePos)) {
+                        programState = ProgramState::PASSIVE_STATE;
+                    }
+                }
+                else if (programState == ProgramState::SHIP_SEARCH_MENU) {
+                    if (submitButton.isMouseOver(mousePos)) {
+                        std::string shipName = inputField.getUserInput();
+                        try {
+                            battleship = &baseGroup.getBattleship(shipName);
+                        }
+                        catch (std::exception &e) {
+                            programState = ProgramState::SHIP_SEARCH_MENU;
+                        }
+                    }
+                    if (quitButton.isMouseOver(mousePos)) {
+                        programState = ProgramState::PASSIVE_STATE;
+                    }
+                }
+                else if (programState == ProgramState::PLANE_SEARCH_MENU) {
+                    if (submitButton.isMouseOver(mousePos)) {
+                        std::string planeName = inputField.getUserInput();
+                        try {
+                            plane = baseGroup.getPlane(planeName, TPlaneType::fighter, battleship->getName());
+                        }
+                        catch (std::exception &e) {
+                            try {
+                                plane = baseGroup.getPlane(planeName, TPlaneType::bomber, battleship->getName());
+                            }
+                            catch (std::invalid_argument &e) {
+                                programState = ProgramState::PLANE_SEARCH_MENU;
+                            }
+                        }
+                    }
+                    if (quitButton.isMouseOver(mousePos)) {
+                        programState = ProgramState::PASSIVE_STATE;
+                    }
+                }
+                else if (programState == ProgramState::SHIP_INFO_MENU) {
+                    if (quitButton.isMouseOver(mousePos)) {
+                        programState = ProgramState::PASSIVE_STATE;
+                    }
+                }
+                else if (programState == ProgramState::PLANE_INFO_MENU) {
+                    if (quitButton.isMouseOver(mousePos)) {
+                        programState = ProgramState::PASSIVE_STATE;
+                    }
+                }
                 if ((programState != ProgramState::MAIN_MENU || programState != ProgramState::PASSIVE_STATE) && 
                         (quitButton.isMouseOver(sf::Mouse::getPosition(window)) || submitButton.isMouseOver(sf::Mouse::getPosition(window)))) {
                     inputField.clearInput();
@@ -591,6 +873,7 @@ int main() {
         startButton.update(mousePos);
         quitButton.update(mousePos);
         submitButton.update(mousePos);
+        dropdown.update(mousePos);
 
         float deltaTime = clock.restart().asSeconds();
         inputField.update(deltaTime);
@@ -627,7 +910,6 @@ int main() {
                     waterSprite2.setPosition(waterSprite1.getPosition().x + waterTexture.getSize().x, SCREEN_HEIGHT / 2);
                 }
 
-
             // Draw the ships
                 if (baseGroup.getShipAmount(ShipType::AIRCRAFT_CARRIER) > 0) {
                     window.draw(aircraftCarrierSprite);
@@ -645,6 +927,8 @@ int main() {
                     if (planeSprite.getPosition().x > SCREEN_WIDTH) {
                         planeSprite.setPosition(0, SCREEN_HEIGHT / 3);
                         programState = ProgramState::PASSIVE_STATE;
+                        baseGroup.simulateAttack(attackGroup);
+                        attackGroup = TPlaneGroup();
                     }
                     window.draw(planeSprite);
                     if (missile.getPosition().x < missile.getTarget().x + missile.getTargetSize().x / 3 || 
@@ -662,7 +946,7 @@ int main() {
         }
         else if (programState == ProgramState::SHIP_TYPE_MENU) {
             sf::Text text("Select a ship type:", font, 23);
-            drawInputScene(window, inputField, quitButton, submitButton, text, pageRect);
+            drawOptionsScene(window, dropdown, quitButton, submitButton, text, pageRect);
         }
         else if (programState == ProgramState::NAME_MENU) {
             sf::Text text("Enter ship name:", font, 23);
@@ -710,7 +994,7 @@ int main() {
         }
         else if (programState == ProgramState::WEAPONRY_TYPE_MENU) {
             sf::Text text("Enter weapon type:", font, 23);
-            drawInputScene(window, inputField, quitButton, submitButton, text, pageRect);
+            drawOptionsScene(window, dropdown, quitButton, submitButton, text, pageRect);
         }
         else if (programState == ProgramState::WEAPONRY_AMMO_AMOUNT_MENU) {
             sf::Text text("Enter weapon ammo amount:", font, 23);
@@ -727,6 +1011,71 @@ int main() {
         else if (programState == ProgramState::DELETE_SHIP_MENU) {
             sf::Text text("Enter ship name to delete:", font, 23);
             drawInputScene(window, inputField, quitButton, submitButton, text, pageRect);
+        }
+        else if (programState == ProgramState::SHIP_SEARCH_MENU) {
+            sf::Text text("Enter ship name to search:", font, 23);
+            drawInputScene(window, inputField, quitButton, submitButton, text, pageRect);
+        }
+        else if (programState == ProgramState::DELETE_PLANE_MENU) {
+            sf::Text text("Enter plane name to delete:", font, 23);
+            drawInputScene(window, inputField, quitButton, submitButton, text, pageRect);
+        }
+        else if (programState == ProgramState::CARRIER_MENU) {
+            sf::Text text("Enter carrier name:", font, 23);
+            drawInputScene(window, inputField, quitButton, submitButton, text, pageRect);
+        }
+        else if (programState == ProgramState::PLANE_TYPE_MENU) {
+            if (planeCounter > 0) {
+                sf::Text text("Enter plane type:", font, 23);
+                drawOptionsScene(window, dropdown, quitButton, submitButton, text, pageRect);
+            }
+            else if (addingToCarrier) {
+                TCoveringShip *covShip = dynamic_cast<TCoveringShip*>(battleship);
+                if (covShip != nullptr) {
+                    programState = ProgramState::SHIP_TO_COVER_MENU;
+                }
+                else {
+                    programState = ProgramState::PASSIVE_STATE;
+                    baseGroup.addBattleship(battleship);
+                    battleship = nullptr;
+                }
+                addingToCarrier = false;
+                continue;
+            }
+            else if (attackGroup.size() > 0) {
+                programState = ProgramState::ATTACK_STATE;
+                if (baseGroup.getShipAmount(ShipType::AIRCRAFT_CARRYING_CRUISER) == 0) {
+                    if (baseGroup.getShipAmount(ShipType::AIRCRAFT_CARRIER) == 0) {
+                        missile.setTarget(coveringShipSprite.getPosition(), sf::Vector2f(4 * coveringShipSprite.getGlobalBounds().width / 3, coveringShipSprite.getGlobalBounds().height));
+                    }
+                    else {
+                        missile.setTarget(aircraftCarrierSprite.getPosition(), sf::Vector2f(aircraftCarrierSprite.getGlobalBounds().width / 2, aircraftCarrierSprite.getGlobalBounds().height));
+                    }
+                }
+                else {
+                    missile.setTarget(aircraftCruiserSprite.getPosition(), sf::Vector2f(aircraftCruiserSprite.getGlobalBounds().width / 2, aircraftCruiserSprite.getGlobalBounds().height));
+                }
+                missile.setPosition(planeSprite.getPosition());
+                continue;
+            }
+            else programState = ProgramState::PASSIVE_STATE;
+        }
+        else if (programState == ProgramState::PLANE_NAME_MENU) {
+            sf::Text text("Enter plane name:", font, 23);
+            drawInputScene(window, inputField, quitButton, submitButton, text, pageRect);
+        }
+        else if (programState == ProgramState::PLANE_FUEL_USAGE_MENU) {
+            sf::Text text("Enter plane fuel usage:", font, 23);
+            drawInputScene(window, inputField, quitButton, submitButton, text, pageRect);
+        }
+        else if (programState == ProgramState::PLANE_SURVIVABILITY_MENU) {
+            sf::Text text("Enter plane survivability:", font, 23);
+            drawInputScene(window, inputField, quitButton, submitButton, text, pageRect);
+        }
+        else if (programState == ProgramState::SHIP_INFO_MENU) {
+            std::vector<sf::Text> shipStatTexts(shipStats.size());
+            for (auto &stat : shipStats) {
+            }
         }
         window.display();
 

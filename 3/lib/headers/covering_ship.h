@@ -4,7 +4,7 @@
 #include "battleship.h"
 
 /*@brief TCovering Ship class */
-class TCoveringShip : public TBattleship
+class TCoveringShip : virtual public TBattleship
 {
 public:
     /*@brief Default constructor */

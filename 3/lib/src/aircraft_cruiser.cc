@@ -8,13 +8,14 @@ TAircraftCarryingCruiser::TAircraftCarryingCruiser(TWeaponry weaponry, TPlaneGro
     const std::string &captainName, const std::string &captainRank, const size_t experience, double survivability, double speed, 
     size_t crewMembersAmount, double fuelUsage) : 
     TAircraftCarrier(weaponry, planes, name, captainName, captainRank, experience, survivability, speed, crewMembersAmount, fuelUsage),
-    TCoveringShip(shipToCover, weaponry, name, captainName, captainRank, experience, survivability, speed, crewMembersAmount, fuelUsage) {}
+    TCoveringShip(shipToCover, weaponry, name, captainName, captainRank, experience, survivability, speed, crewMembersAmount, fuelUsage),
+    TBattleship(weaponry, name, captainName, captainRank, experience, speed, survivability, crewMembersAmount, fuelUsage) {}
 
 TAircraftCarryingCruiser::TAircraftCarryingCruiser(const TAircraftCarryingCruiser &aircraftCarryingCruiser) : 
-     TAircraftCarrier(aircraftCarryingCruiser), TCoveringShip(aircraftCarryingCruiser) {}
+     TAircraftCarrier(aircraftCarryingCruiser), TCoveringShip(aircraftCarryingCruiser), TBattleship(aircraftCarryingCruiser) {}
 
 TAircraftCarryingCruiser::TAircraftCarryingCruiser(TAircraftCarryingCruiser &&aircraftCarryingCruiser) : 
-     TAircraftCarrier(std::move(aircraftCarryingCruiser)), TCoveringShip(std::move(aircraftCarryingCruiser)) {}
+     TAircraftCarrier(std::move(aircraftCarryingCruiser)), TCoveringShip(std::move(aircraftCarryingCruiser)), TBattleship(std::move(aircraftCarryingCruiser)) {}
 
 void TAircraftCarryingCruiser::dump(std::ostream &out) const {
     TAircraftCarrier::dump(out);
@@ -26,14 +27,19 @@ void TAircraftCarryingCruiser::read(std::istream &in) {
     TCoveringShip::readShipToCover(in);
 }
 
+void TAircraftCarryingCruiser::setWeaponry(TWeaponry &weaponry) {
+    TBattleship::setWeaponry(weaponry);
+}
+
 TAircraftCarryingCruiser &TAircraftCarryingCruiser::operator=(const TAircraftCarryingCruiser &aircraftCarryingCruiser) {
     TAircraftCarrier::operator=(aircraftCarryingCruiser);
     TCoveringShip::operator=(aircraftCarryingCruiser);
+    TBattleship::operator=(aircraftCarryingCruiser);
     return *this;
 }
 
 TAircraftCarryingCruiser &TAircraftCarryingCruiser::operator=(TAircraftCarryingCruiser &&aircraftCarryingCruiser) {
-    TAircraftCarrier::operator=(std::move(aircraftCarryingCruiser));
+    TAircraftCarrier::operator=(std::move(aircraftCarryingCruiser.getPlaneInfo()));
     TCoveringShip::operator=(std::move(aircraftCarryingCruiser));
     return *this;
 }

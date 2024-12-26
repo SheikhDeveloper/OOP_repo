@@ -5,7 +5,7 @@
 #include "covering_ship.h"
 
 /*@brief class Aircraft-carrying Cruiser class. */
-class TAircraftCarryingCruiser : virtual public TAircraftCarrier, virtual public TCoveringShip {
+class TAircraftCarryingCruiser : public TAircraftCarrier, public TCoveringShip {
 public:
     /* @brief Default Constructor. */
     TAircraftCarryingCruiser();
@@ -46,6 +46,8 @@ public:
      * @param in - input stream.
      * */
     virtual void read(std::istream &in) override;
+
+    virtual void setWeaponry(TWeaponry &weaponry) override;
 
     /* @brief Destructor. */
     virtual ~TAircraftCarryingCruiser() = default;

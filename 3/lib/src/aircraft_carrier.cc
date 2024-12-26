@@ -19,7 +19,13 @@ TAircraftCarrier::TAircraftCarrier(TAircraftCarrier &&aircraftCarrier) :
             std::move(aircraftCarrier.getSurvivability()), std::move(aircraftCarrier.getCrewMembersAmount()), std::move(aircraftCarrier.getFuelUsage())),
     _planes(std::move(aircraftCarrier._planes)) {}
 
+TAircraftCarrier::TAircraftCarrier(TPlaneGroup planes): TBattleship(), _planes(planes) {}
+
 TPlaneGroup & TAircraftCarrier::getPlaneInfo() {
+    return _planes;
+}
+
+TPlaneGroup TAircraftCarrier::getPlaneInfo() const {
     return _planes;
 }
 

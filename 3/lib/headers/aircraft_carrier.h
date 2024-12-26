@@ -6,7 +6,7 @@
 #include "plane_group.h"
 
 /** @brief Class for Aircraft carrier */
-class TAircraftCarrier : public TBattleship {
+class TAircraftCarrier : virtual public TBattleship {
 public:
     /** @brief default constructor */
     TAircraftCarrier();
@@ -26,6 +26,9 @@ public:
     TAircraftCarrier(TWeaponry weaponry, TPlaneGroup planes, const std::string &name, const std::string &captainName, 
             const std::string &captainRank, const size_t experience, double survivability, double speed, size_t crewMembersAmount, double fuelUsage);
 
+
+    TAircraftCarrier(TPlaneGroup planes);
+
     /** @brief copy constructor 
      * @param aircraftCarrier - aircraft carrier to copy
      * */
@@ -41,6 +44,8 @@ public:
      * @return planes 
      * */
     virtual TPlaneGroup &getPlaneInfo();
+
+    virtual TPlaneGroup getPlaneInfo() const;
 
     /** @brief getter for plane damage
      * 
