@@ -23,6 +23,10 @@ public:
     sf::Vector2f getPos() {
         return _rect.getPosition();
     }
+
+    sf::Vector2f getSize() {
+        return _rect.getSize();
+    }
     
 private:
     sf::RectangleShape _rect;

@@ -58,6 +58,10 @@ public:
         }
     }
 
+    bool isOpened() const {
+        return isOpen;
+    }
+
     void draw(sf::RenderWindow& window) {
         window.draw(button);
         window.draw(selectedText);
