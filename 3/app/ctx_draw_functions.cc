@@ -40,7 +40,7 @@ void drawOptionsScene(sf::RenderWindow& window, Dropdown& dropdown, Button& quit
     dropdown.draw(window);
 }
 
-void drawWeaponryStats(sf::RenderWindow& window, TWeaponry &&weaponry, sf::Font& font, std::vector<sf::Text>& texts, size_t Ind) {
+void drawWeaponryStats(sf::RenderWindow& window, TWeaponry weaponry, sf::Font& font, std::vector<sf::Text>& texts, size_t Ind) {
     sf::Text text(weaponry.getName(), font, 23);
     text.setFillColor(sf::Color::White);
     text.setPosition(texts[Ind].getPosition().x + DELTA_STATS + texts[Ind].getLocalBounds().width, texts[Ind].getPosition().y);
@@ -63,13 +63,37 @@ void drawWeaponryStats(sf::RenderWindow& window, TWeaponry &&weaponry, sf::Font&
     window.draw(text5);
 }
 
-void drawPlaneStats(sf::RenderWindow& window, TPlane& plane, sf::Font& font, std::vector<sf::Text>& texts, size_t Ind) {
+void drawPlaneStats(sf::RenderWindow& window, TPlane& plane, sf::Font& font, std::vector<sf::Text>& texts, Button &quitButton, PageRect &pageRect) {
+    pageRect.draw(window);
+    for (size_t i = 0; i < texts.size(); i++) {
+        texts[i].setPosition(50, pageRect.getPos().y + DELTA_STATS * (i + 1));
+        texts[i].setFillColor(sf::Color::White);
+        window.draw(texts[i]);
+    }
+    sf::Text name(plane.getName(), font, 23);
+    name.setFillColor(sf::Color::White);
+    name.setPosition(texts[0].getPosition().x + texts[0].getLocalBounds().width + DELTA_STATS, texts[0].getPosition().y);
+    window.draw(name); 
+    sf::Text survivability(std::to_string(plane.getSurvivability()), font, 23);
+    survivability.setFillColor(sf::Color::White);
+    survivability.setPosition(texts[1].getPosition().x + DELTA_STATS + texts[1].getLocalBounds().width, texts[1].getPosition().y);
+    window.draw(survivability);
+    sf::Text fuelUsage(std::to_string(plane.getFuelUsage()), font, 23);
+    fuelUsage.setFillColor(sf::Color::White);
+    fuelUsage.setPosition(texts[2].getPosition().x + DELTA_STATS + texts[2].getLocalBounds().width, texts[2].getPosition().y);
+    window.draw(fuelUsage);
+    sf::Text planeType(plane.getType() == TPlaneType::bomber ? "Bomber" : "Fighter", font, 23);
+    planeType.setFillColor(sf::Color::White);
+    fuelUsage.setPosition(texts[3].getPosition().x + DELTA_STATS + texts[3].getLocalBounds().width, texts[3].getPosition().y);
+    drawWeaponryStats(window, plane.getWeaponry(), font, texts, 4);
+    quitButton.setPosition(SCREEN_WIDTH / 2 - quitButton.getLocalBounds().width / 2, texts[texts.size() - 1].getPosition().y + 3 * DELTA_STATS);
+    quitButton.draw(window);
 }
 
 void drawShipStatisticsScene(sf::RenderWindow& window, PageRect& pageRect, std::vector<sf::Text>& texts, TBattleship *battleship, sf::Font& font, Button& quitButton) {
     pageRect.draw(window);
     for (int i = 0; i < texts.size(); i++) {
-        texts[i].setPosition(SCREEN_WIDTH / 2 - texts[i].getLocalBounds().width / 2, pageRect.getPos().y + 20 * (i + 1));
+        texts[i].setPosition(50, pageRect.getPos().y + 40 * (i + 1));
         texts[i].setFillColor(sf::Color::White);
         window.draw(texts[i]);
     }
@@ -255,17 +279,21 @@ int main() {
 
     std::vector<ProgramState> buttonStates({
     ProgramState::SHIP_TYPE_MENU,
-    ProgramState::CARRIER_MENU,
+    ProgramState::CARRIER_ADD_MENU,
     ProgramState::SHIP_SEARCH_MENU,
-    ProgramState::CARRIER_MENU,
+    ProgramState::CARRIER_SEARCH_MENU,
     ProgramState::DELETE_SHIP_MENU,
-    ProgramState::CARRIER_MENU,
+    ProgramState::CARRIER_DELETE_MENU,
     ProgramState::PLANE_AMOUNT_MENU,
     ProgramState::EXIT });
 
     std::vector<std::string> shipStats({ "Name:", "Captain:", "Captain rank:" , "Captain experience:", "Survivability:",  
                                          "Speed:", "Crew members amount:", "Fuel usage:", "Weaponry name:",
                                          "Weaponry type:", "Ammo amount:", "Damage:", "Ammo name:", "Ship type:", "Covered ship:", "Plane amount:"});
+
+    std::vector<std::string> planeStats({ "Name:", "Survivability:",  
+                                         "Fuel usage:", "Plane type:", "Weaponry name:",
+                                         "Weaponry type:", "Ammo amount:", "Damage:", "Ammo name:"});
 
     PopOutMenu menu(0, 100, buttonNames, buttonStates, 240);
 
@@ -759,6 +787,7 @@ int main() {
                                 TCoveringShip *coveringShip = dynamic_cast<TCoveringShip *>(battleship);
                                 coveringShip->setShipToCover(coveredShip);
                                 baseGroup.addBattleship(battleship);
+                                programState = ProgramState::PASSIVE_STATE;
                             }
                             catch (std::exception &e) {
                                 programState = ProgramState::SHIP_TO_COVER_MENU;
@@ -819,6 +848,8 @@ int main() {
                     }
                     if (quitButton.isMouseOver(mousePos)) {
                         programState = ProgramState::PASSIVE_STATE;
+                        if (addingToCarrier)
+                            addingToCarrier = false;
                     }
                 }
                 else if (programState == ProgramState::CARRIER_DELETE_MENU) {
@@ -891,11 +922,13 @@ int main() {
                 }
                 else if (programState == ProgramState::SHIP_INFO_MENU) {
                     if (quitButton.isMouseOver(mousePos)) {
+                        battleship = nullptr;
                         programState = ProgramState::PASSIVE_STATE;
                     }
                 }
                 else if (programState == ProgramState::PLANE_INFO_MENU) {
                     if (quitButton.isMouseOver(mousePos)) {
+                        battleship = nullptr;
                         programState = ProgramState::PASSIVE_STATE;
                     }
                 }
@@ -1063,7 +1096,15 @@ int main() {
             sf::Text text("Enter plane name to delete:", font, 23);
             drawInputScene(window, inputField, quitButton, submitButton, text, pageRect);
         }
-        else if (programState == ProgramState::CARRIER_MENU) {
+        else if (programState == ProgramState::CARRIER_ADD_MENU) {
+            sf::Text text("Enter carrier name:", font, 23);
+            drawInputScene(window, inputField, quitButton, submitButton, text, pageRect);
+        }
+        else if (programState == ProgramState::CARRIER_SEARCH_MENU) {
+            sf::Text text("Enter carrier name:", font, 23);
+            drawInputScene(window, inputField, quitButton, submitButton, text, pageRect);
+        }
+        else if (programState == ProgramState::CARRIER_DELETE_MENU) {
             sf::Text text("Enter carrier name:", font, 23);
             drawInputScene(window, inputField, quitButton, submitButton, text, pageRect);
         }
@@ -1127,6 +1168,23 @@ int main() {
                 shipStatTexts[i].setPosition(50, pageRect.getPos().y + 4 * DELTA_STATS * (i + 1));
             }
             drawShipStatisticsScene(window, pageRect, shipStatTexts, battleship, font, quitButton);
+        }
+        else if (programState == ProgramState::PLANE_INFO_MENU) {
+            std::vector<sf::Text> planeStatTexts(shipStats.size());
+            for (auto &stat : planeStatTexts) {
+                stat.setFont(font);
+                stat.setCharacterSize(23);
+                stat.setFillColor(sf::Color::White);
+            }
+            for (size_t i = 0; i < planeStats.size(); i++) {
+                planeStatTexts[i].setString(shipStats[i]);
+                planeStatTexts[i].setPosition(50, pageRect.getPos().y + 4 * DELTA_STATS * (i + 1));
+            }
+            drawPlaneStats(window, plane, font, planeStatTexts, quitButton, pageRect);
+        }
+        else if (programState == ProgramState::PLANE_SEARCH_MENU) {
+            sf::Text text("Enter plane name to search:", font, 23);
+            drawInputScene(window, inputField, quitButton, submitButton, text, pageRect);
         }
         window.display();
 
